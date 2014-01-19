@@ -1,0 +1,103 @@
+<ul id="nav-content">
+	<li>
+		<a href="#" id="sldshw-prev" title="Previous" data-bind-to-key="left">&larr;&nbsp;Prev</a>
+	</li>
+	<li>
+		<a href="#" id="sldshw-play" title="Pause" data-bind-to-key="space">Pause</a>
+	</li>
+	<li>
+		<a href="#" id="sldshw-next" title="Next" data-bind-to-key="right">Next&nbsp;&rarr;</a>
+	</li>
+</ul>
+
+<div class="main-content">
+
+	<koken:pulse jsvar="pulse" group="albums" next="#sldshw-next" previous="#sldshw-prev" toggle="#sldshw-play" link_to="advance" />
+
+</div>
+
+<div class="text-content">
+
+	<koken:if true="settings.show_album_exif">
+		<ol id="exif_meta"></ol>
+	</koken:if>
+
+	<koken:if true="settings.show_title">
+
+		<a id="content_link" href="#" title="">
+			<h2>&nbsp;</h2>
+		</a>
+
+	</koken:if>
+
+	<koken:if true="settings.show_caption">
+
+	<div id="caption-content">
+		&nbsp;
+	</div>
+
+	</koken:if>
+
+</div>
+
+<script>
+	pulse.on( 'start', function() {
+		$('#sldshw-play').addClass('waiting');
+		playState(pulse.options.autostart);
+	});
+	pulse.on( 'dataloaded', function() {
+		$('#sldshw-play').removeClass('waiting');
+	});
+	pulse.on( 'playing', function(isPlaying) {
+		var el = $('#sldshw-play');
+		playState(isPlaying);
+	});
+	pulse.on( 'transitionstart', function(e) {
+		var data = e.data,
+			title = $('.text-content h2'),
+			caption = $('#caption-content');
+			link = $('#content_link');
+
+		currUrl = e.data.presets.medium_large.url;
+
+		link.attr("href", data.url);
+
+		if (title) {
+			title.html( data.title || data.filename );
+			link.attr("title", data.title || data.filename);
+		}
+		if (caption) {
+			caption.html( data.caption );
+		}
+		$('#sldshw-play').removeClass('waiting');
+
+		var exif_fields = ['aperture','exposure','focal_length','iso_speed_ratings'],
+			exif_element = $('#exif_meta'),
+			wrap = $('<li/>');
+
+		var fields = $.map(e.data.exif_fields, function(field) {
+			if ($.inArray(field,exif_fields) !== -1) {
+				return $.map(e.data.exif, function (exif_val) {
+					if (exif_val.key === field) {
+						return (exif_val.clean) ? exif_val.clean : exif_val.raw;
+					}
+				});
+			}
+		});
+
+		exif_element.html($.map(fields, function(field) {
+			return wrap.clone().text(field);
+		}));
+	});
+	pulse.on( 'waiting', function() {
+		$('#sldshw-play').addClass('waiting');
+	});
+	function playState(playing) {
+		var el = $('#sldshw-play');
+		if (playing) {
+			el.html('Pause');
+		} else {
+			el.html('Play');
+		}
+	}
+</script>

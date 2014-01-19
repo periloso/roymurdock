@@ -1,0 +1,13 @@
+<div id="sets-layout" class="col_{{ settings.albums_cols }}">
+
+	<koken:loop>
+
+		<div class="item">
+			<koken:link><koken:img size="3:2" lazy="true" /></koken:link>
+			<koken:if true="settings.show_albums_album_title"><h2><koken:link>{{ album.title }}</koken:link></h2></koken:if>
+			<koken:if true="settings.show_albums_album_summary"><p>{{ album.summary }}</p></koken:if>
+		</div>
+
+	</koken:loop>
+
+</div>

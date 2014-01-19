@@ -1,0 +1,83 @@
+<koken:include file="inc/header.html" />
+
+<div id="content">
+
+	<!-- Load this template's source data (timeline). Limit to 20 days. -->
+	<koken:load limit="20">
+
+		<!-- Add Facebook Open Graph tags for nicer sharing -->
+        <koken:head>
+          <meta property="og:site_name" content="{{ site.title }}" />
+          <meta property="og:description" content="{{ site.description strip_html='true' }}" />
+          <meta property="og:title" content="{{ labels.timeline.plural }}" />
+          <meta property="og:type" content="blog" />
+          <meta property="og:url" content="{{ location.site_url }}{{ location.here }}" />
+        </koken:head>
+
+		<div class="lcol">
+
+			<!-- Loop over each day -->
+			<koken:loop>
+
+				<h2>
+					<!-- Display the day (eg, January 1, 2014) -->
+					<koken:time />
+				</h2>
+
+				<!-- Render each event in each day -->
+				<koken:include file="inc/events.html" />
+
+			</koken:loop>
+
+			<!-- Display pagination links -->
+			<p>
+				<koken:include file="inc/pagination.html" />
+			</p>
+
+		</div> <!-- close lcol -->
+
+		<div class="rcol">
+
+			<!-- Display timeline archive links -->
+			<h3>View {{ labels.timeline.singular case="lower" }} by date</h3>
+			<koken:dates filter:scope="month">
+				<koken:select label="Select month" />
+			</koken:dates>
+
+			<!-- Display links to view all content by tag -->
+			<koken:tags>
+				<h3>View everything by {{ labels.tag.singular case="lower" }}</h3>
+				<koken:loop>
+					<koken:link title="View everything in {{ tag.title }}">
+						{{ tag.title }} ({{ tag.counts.total }})
+					</koken:link>
+					<br>
+				</koken:loop>
+			</koken:tags>
+
+			<!-- Display links to view all content by category -->
+			<koken:categories>
+				<h3>View everything by {{ labels.category.singular case="lower" }}</h3>
+				<koken:loop>
+					<koken:link title="View everything in {{ category.title }}">
+						{{ category.title }} ({{ category.counts.total }})
+					</koken:link>
+					<br>
+				</koken:loop>
+			</koken:categories>
+
+		</div>
+
+	<!-- Fallback content if no data was loaded by koken:load -->
+	<koken:else>
+
+		<!-- Use koken:note to display this message in the Site editor only -->
+		<koken:note>
+			No timeline events found
+		</koken:note>
+
+	</koken:load>
+
+</div> <!-- close #content -->
+
+<koken:include file="inc/footer.html" />

@@ -1,0 +1,66 @@
+<koken:load>
+
+<div id="grid">
+
+	<ul id="img-grid">
+
+		<koken:loop>
+
+			<li>
+
+				<koken:if true="settings.grid_link_lightbox">
+
+					<koken:link lightbox="true" title="View {{ content.title | content.filename }} in lightbox"><koken:img lazy="true" /></koken:link>
+
+				<koken:else>
+
+					<koken:link title="View {{ content.title | content.filename }}"><koken:img lazy="true" /></koken:link>
+
+				</koken:if>
+
+				<koken:if true="settings.show_grid_title">
+
+					<h3>
+						{{ content.title | content.filename }}
+					</h3>
+
+				</koken:if>
+
+			</li>
+
+		</koken:loop>
+
+	</ul>
+
+</div>
+
+<koken:include file="layouts/pagination.html" />
+
+<koken:else>
+
+	<koken:note>
+		<strong>No content found.</strong> Upload some to the Library.
+	</koken:note>
+
+</koken:load>
+
+<koken:asset file="js/jquery.wookmark.min.js" />
+
+<script type="text/javascript">
+
+	$(function() {
+		var options = {
+	        container: $('#grid'),
+	        offset: {{ settings.grid_img_off }},
+	        itemWidth: {{ settings.grid_img_w }}
+	      };
+      	var handler = $('#img-grid li');
+      	function layout() {
+      		handler.wookmark(options);
+      	}
+      	$(window).on('k-resize', function() {
+	        layout();
+	    });
+      	layout();
+	});
+</script>

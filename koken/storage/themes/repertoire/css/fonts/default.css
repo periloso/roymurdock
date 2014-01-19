@@ -1,0 +1,57 @@
+@import url(//fonts.googleapis.com/css?family=Oswald:400,300,700);
+@import url(//fonts.googleapis.com/css?family=Karla:400,700,400italic,700italic);
+
+body {
+	font-family: Georgia, Times New Roman, sans-serif;
+}
+
+h1,h2,h3 {
+	font-family: 'Oswald', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.main h4 {
+	font-family: Georgia, Times New Roman, sans-serif;
+}
+
+h5 {
+	font-family: 'Karla', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+header span.tagline {
+	font-family: 'Karla', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+header h6 {
+	font-family: 'Karla', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+nav li {
+	font-family: 'Karla', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+footer.main {
+	font-family: 'Karla', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+div#albums div.pulse-links a, ul.neighbor-links a, div.essay-pag a.title {
+	font-family: 'Oswald', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+div#albums div.pulse-count {
+	font-family: Georgia, Times New Roman, sans-serif;
+}
+
+div#albums-detail p.caption {
+	font-family: Georgia, Times New Roman, sans-serif;
+}
+
+.meta,
+.k-content-title,
+div.paginate a,
+div.essay-page footer,
+ul.neighbor-links li,
+span.k-note,
+.smallsans
+{
+	font-family: 'Karla', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}

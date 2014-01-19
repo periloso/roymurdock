@@ -1,0 +1,369 @@
+	<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="description" content="" />
+	<meta name="author" content="Roy Murdock" />
+	<meta name="keywords" content="photography, Roy Murdock" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+	
+
+	<link rel="stylesheet" type="text/css" href="/koken/app/site/themes/common/css/reset.css?0.11.2" />
+	<link rel="stylesheet" type="text/css" href="/koken/app/site/themes/common/css/animate.css?0.11.2" />
+	<link rel="stylesheet" type="text/css" href="/koken/storage/themes/madison/css/screen.css?1.4.2" />
+	<link rel="stylesheet" type="text/css" href="/koken/storage/themes/madison/css/kicons.css?1.4.2" />
+	<link rel="stylesheet" type="text/css" href="/koken/storage/themes/madison/css/kshare.css?1.4.2" />
+	<link id="koken_settings_css_link" rel="stylesheet" type="text/css" href="/settings.css.lens" />
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+	<link rel="canonical" href="http://roymurdock.com/essays/2013/11/snapchat-is-intrinsically-worthless/">
+	<title>Am I Going Insane? Snapchat is Intrinsically Worthless - Roy Murdock</title>
+	
+	<meta property="og:site_name" content="Roy Murdock" />
+	<meta property="og:title" content="Am I Going Insane? Snapchat is Intrinsically Worthless" />
+	<meta property="og:description" content="While Snapchat's valuation is nowhere close to that of Apple and Facebook, it is surprisingly close to stable, established companies with actual revenue streams. Why have investors put such a high price tag on what seems to be a silly messaging app?" />
+	<meta property="og:url" content="http://roymurdock.com/essays/2013/11/snapchat-is-intrinsically-worthless/" />
+	<meta property="og:type" content="article" />
+	<meta property="og:image" content="http://roymurdock.com/koken/storage/cache/images/000/022/snapchatbanner,medium_large.png?1383598234" />
+	<meta property="og:image:width" content="705" />
+	<meta property="og:image:height" content="344" />
+	<meta name="medium" content="article" />
+	
+
+	<!--[if IE]>
+	<script src="/koken/app/site/themes/common/js/html5shiv.js"></script>
+	<![endif]-->
+
+	<meta name="generator" content="Koken 0.11.2" />
+	<meta name="theme" content="Madison 1.4.2" />
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="/koken/app/site/themes/common/js/jquery.min.js"><\/script>')</script>
+	<script src="/koken.js?0.11.2"></script>
+	<script>$K.location = $.extend($K.location, {"here":"\/essays\/2013\/11\/snapchat-is-intrinsically-worthless\/","parameters":{"page":1,"url":"\/essays\/2013\/11\/snapchat-is-intrinsically-worthless\/","base_folder":"\/"},"page_class":"k-source-essay k-lens-essay"});</script>
+
+	<link rel="alternate" type="application/atom+xml" title="Roy Murdock: All uploads" href="/feed/content/recent.rss" />
+	<link rel="alternate" type="application/atom+xml" title="Roy Murdock: Essays" href="/feed/essays/recent.rss" />
+	<link rel="alternate" type="application/atom+xml" title="Roy Murdock: Timeline" href="/feed/timeline/recent.rss" />
+<script src="/koken/storage/themes/madison/js/jquery.smooth-scroll.min.js?1.4.2"></script>
+<script src="/koken/storage/themes/madison/js/jquery.sidr.min.js?1.4.2"></script>
+<script src="/koken/app/site/themes/common/js/jquery.pjax.js?0.11.2"></script>
+<script>
+	$(function() {
+
+	var navClassSets = function() {
+	$('.k-nav-current').parentsUntil('nav').each(function(i,element) {
+	if ($(element).get(0).tagName === 'UL') {
+	$(element).prev().addClass('k-nav-open');
+	}
+	});
+	}
+	navClassSets();
+
+	$(window).bind('resize', function() {
+	$('#strip').css({
+	left: $('#main').offset().left + $('#main').width() + 40 + 'px'
+	});
+	})
+	.trigger('resize');
+
+	$(document).pjax('nav a:not(.k-nav-set), header h1 a', '#target', {
+	timeout: 2000
+	});
+
+	$(document)
+	.on('pjax:start', function(e) {
+	$('#target').empty();
+	$K.navigation.setCurrent($(e.relatedTarget).attr('href'));
+	window.scrollTo(0,0);
+	})
+	.on('pjax:click', function() {
+	navClassSets();
+	$('.k-nav-current').parentsUntil('nav').each(function(i,element) {
+	if ($(element).hasClass('k-nav-root')) {
+	if ($('.k-nav-current').closest('ul').prev().hasClass('k-nav-open')) {
+	$(element).addClass('paused');
+	} else {
+	$(element).removeClass('paused');
+	}
+	}
+	});
+	})
+	.on('scroll', function() {
+	$('.item').each(function() {
+	if ( ($(this).offset().top+$('body').offset().top) > $(window).scrollTop() ) {
+	$('#strip .current').removeClass('current');
+	$('#strip a[href="#' + $(this).attr('id') + '"]').addClass('current');
+	return false;
+	}
+	});
+	})
+	.trigger('scroll');
+
+	function createStrip() {
+	$('#strip a').smoothScroll({
+	offset: -50,
+	afterScroll: function() {
+	$('#strip .current').removeClass('current');
+	$(this).addClass('current');
+	}
+	});
+	}
+
+	window.pjaxReload = function() {
+	createStrip();
+	$K.responsiveImages();
+	$K.loadImages();
+	$(window).trigger('resize');
+	$(document).trigger('scroll');
+	}
+
+	createStrip();
+
+	});
+	</script>
+<script>
+	$(function() {
+	$('time').timeago();
+	});
+</script>
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-44114303-1']);
+ 	_gaq.push(['_trackPageview']);
+ 	_gaq.push(['_anonymizeIP', false]);
+
+ 	(function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ 	})();
+
+</script>
+</head>
+
+<body class="k-source-essay k-lens-essay">
+	
+	<div id="sidr-left" class="mob">
+ 	<ul class="k-nav-list k-nav-root "><li><a data-koken-internal title="Home" href="/">Home</a></li><li><a data-koken-internal title="About" href="/pages/about/">About</a></li></ul><ul class="k-nav-list k-nav-root "><li><a title="+TWITTER" href="https://twitter.com/RoyMurdock">+TWITTER</a></li><li><a target="_blank" title="+LINKEDIN" href="http://www.linkedin.com/pub/roy-murdock/40/8ab/7b3">+LINKEDIN</a></li></ul><ul class="k-nav-list k-nav-root "><li><a target="_blank" title="SUBSCRIBE" href="http://eepurl.com/MFi0L">SUBSCRIBE</a></li><li><a data-koken-internal title="RSS" href="/feed/essays/recent.rss">RSS</a></li></ul>	</div>
+
+	<div id="mob-bttn-row"><a id="mob-menu" href="#mob-menu" title="Open mobile menu"><i class="kicon-mob-menu"></i></a></div>
+
+	<div id="page">
+
+	<div id="col">
+
+	<div class="in">
+
+	<header class="top">
+	<a href="/" title="Home" data-koken-internal><img src="http://roymurdock.com/koken/RMLogo.png" alt="Roy Murdock" class="custom_logo"></a>	</header>
+
+	<nav>
+	<ul class="k-nav-list k-nav-root "><li><a data-koken-internal title="Home" href="/">Home</a></li><li><a data-koken-internal title="About" href="/pages/about/">About</a></li></ul><ul class="k-nav-list k-nav-root "><li><a title="+TWITTER" href="https://twitter.com/RoyMurdock">+TWITTER</a></li><li><a target="_blank" title="+LINKEDIN" href="http://www.linkedin.com/pub/roy-murdock/40/8ab/7b3">+LINKEDIN</a></li></ul><ul class="k-nav-list k-nav-root "><li><a target="_blank" title="SUBSCRIBE" href="http://eepurl.com/MFi0L">SUBSCRIBE</a></li><li><a data-koken-internal title="RSS" href="/feed/essays/recent.rss">RSS</a></li></ul>	</nav>
+
+	<div id="col-xtra">
+
+	<div id="col-xtra-content">
+
+	
+	
+	</div>
+
+	</div>
+
+	</div>
+
+	</div> <!-- close col -->
+
+	<div id="target">
+
+	
+	
+
+	<div id="main">
+
+	<article>
+
+	<header>
+	<div>
+	<a href="/essays/2013/11/snapchat-is-intrinsically-worthless/" class="essay_title k-nav-current" title="Am I Going Insane? Snapchat is Intrinsically Worthless" data-koken-internal>Am I Going Insane? Snapchat is Intrinsically Worthless</a>
+	</div>
+</header>
+
+<a href="http://online.wsj.com/news/articles/SB10000872396390443684104578066811794775602" target="_blank"></a>
+
+<figure class="k-content-embed">
+	<div class="k-content">
+	
+	<noscript>
+	<img width="100%" alt="Snapchat Header" src="http://roymurdock.com/koken/storage/cache/images/000/022/snapchatbanner,large.png?1383598234" />
+</noscript>
+<img data-alt="Snapchat Header" data-respond-to="width" data-presets="tiny,60,29 small,100,49 medium,480,234 medium_large,705,344 large,705,344 xlarge,705,344 huge,705,344" data-base="http://roymurdock.com/koken/storage/cache/images/000/022/snapchatbanner," data-extension="png?1383598234"/>
+
+	
+	</div>
+	
+	</figure><p class=""><a href="http://allthingsd.com/20131029/snapchats-giant-funding-from-tencent-at-valuation-of-up-to-4-billion-could-click-this-week/" target="_blank" style="font-size: 1em;">Snapchat’s latest valuation puts it at $4 billion dollars</a>. Let’s compare that to the market cap of some other well-known tech companies: <br></p><ul><li><a href="http://uk.finance.yahoo.com/q?s=aapl&amp;ql=1" target="_blank" style="font-size: 1em;">Apple</a><span style="font-size: 1em;"> - $480bn</span><br></li><li><a href="http://ycharts.com/companies/FB/market_cap" target="_blank" style="font-size: 1em;">Facebook</a><span style="font-size: 1em;"> - $125bn</span><span style="font-size: 1em;"> </span><br></li><li><a href="http://uk.finance.yahoo.com/q?s=NFLX" target="_blank" style="font-size: 1em;">Netflix</a><span style="font-size: 1em;"> - $18.6bn</span><br></li><li><span style="font-size: 1em;"><a href="http://wallblog.co.uk/2013/03/03/with-200-million-members-linkedin-is-now-valued-at-more-than-18-billion/" target="_blank">LinkedIn</a> - $18bn</span></li><li><a href="http://uk.reuters.com/article/2013/10/24/uk-twitter-ipo-idUKBRE99N1AD20131024" style="font-size: 1em;">Twitter (IPO)</a><span style="font-size: 1em;"> - $11bn</span><br></li><li><a href="http://uk.finance.yahoo.com/q?s=P" target="_blank" style="font-size: 1em;">Pandora</a><span style="font-size: 1em;"> - $4.7bn</span><br></li><li><a href="http://finance.yahoo.com/q?s=YELP" target="_blank" style="font-size: 1em;">Yelp</a><span style="font-size: 1em;"> - $4.4bn</span><br></li><li><span style="font-size: 1em;"><b>Snapchat - $4.0bn</b><br></span></li><li><span style="font-size: 1em;"><a href="http://www.bbc.co.uk/news/business-24649021" target="_blank">Pinterest</a> -$3.8bn</span></li><li><a href="http://online.wsj.com/news/articles/SB10000872396390443684104578066811794775602" target="_blank" style="font-size: 1em;">AirBNB</a><span style="font-size: 1em;"> - $2.5bn</span><br></li><li><a href="http://www.quora.com/WhatsApp-Messenger/Whats-the-valuation-of-WhatsApp" target="_blank" style="font-size: 1em;">Whatsapp</a><span style="font-size: 1em;"> - $2.0bn</span></li></ul><p class="">Here's an <a href="http://techcrunch.com/2013/11/02/welcome-to-the-unicorn-club/" target="_blank">awesome graph put together by Tech Crunch</a> that I have altered to include Snapchat at a conservative valuation of $3.5bn.</p>
+
+<figure class="k-content-embed">
+	<div class="k-content">
+	
+	<noscript>
+	<img width="100%" alt="Snapchat Valuation Graph" src="http://roymurdock.com/koken/storage/cache/images/000/016/snapchat-unicorn,large.png?1383484074" />
+</noscript>
+<img data-alt="Snapchat Valuation Graph" data-respond-to="width" data-presets="tiny,60,45 small,100,75 medium,480,360 medium_large,800,600 large,1024,768 xlarge,1360,1020 huge,1360,1020" data-base="http://roymurdock.com/koken/storage/cache/images/000/016/snapchat-unicorn," data-extension="png?1383484074"/>
+
+	
+	</div>
+	<figcaption class="k-content-text"><span class="k-content-caption"></span></figcaption>
+	</figure><p class=""><span style="font-size: 1em;">Investors aren't dumb. In fact, if we look at profits as an i</span><span style="font-size: 1em;">ndicator of intelligence, investors and VC’s are generally among the smartest people in the world. 
+
+Their job is to see the future. They invest in the gap between the present and future values of ideas as well as the people behind those ideas. Then they provide an appropriate amount of capital to help these ideas realize their potential.
+
+The key adjective here is </span><b style="font-size: 1em;">appropriate</b><span style="font-size: 1em;">.</span></p><p class=""><span style="font-size: 1em;">While Snapchat's valuation is nowhere close t</span><span style="font-size: 1em;">o that of Apple and Facebook, it is surprisingly close to stable, established companies with actual revenue streams. Why have investors put such a high price tag on what seems to be a silly messaging app with no source of revenue?</span></p><p class="">I want to know why Snapchat is worth $4bn in the eyes of an investor. In order to evaluate where this forecasted value is coming from I will do the following:</p><ol><li><span style="font-size: 1em;">Give a brief overview of the service. <b>What</b> is it?</span><br></li><li>Understand why people use Snapchat by contrasting it with similar media sharing platforms - Facebook, Twitter, Picture SMS, Email. <b>Why</b> do people use it?<br></li><li>Look at any available statistics on usage to determine user demographics and engagement. <b>Who</b> is using it and <b>how much</b> are they using it?<br></li><li>Compile and rate Snapchat's assets to figure out what is contributing value to the company. <b>What </b>gives Snapchat it's $4bn price tag?</li><li>Look at the different strategies Snapchat might use to extract money from its users. <b>How</b> are they going to monetize their service? Is monetization even possible?<br></li></ol><p class=""><b>1. Snapchat Summarized</b></p><p class="">Snapchat is an application that allows a user to take a photo, draw on it and/or add a caption, then send it to his or her friends. The taker also gets to choose a lifespan for the image; it is displayed for anywhere from 1-10 seconds, after which it is no longer viewable by the receiver (unless the receiver takes a screenshot). The "Snap" is deleted from Snapchat's servers after it is opened.</p><p class=""><b>2. Why do people use Snapchat? </b></p><p class=""><span style="font-size: 1em;">- Snapchat is</span><b style="font-size: 1em;"> low-pressure</b><span style="font-size: 1em;">.</span></p><p class="">Let’s start by comparing Snapchat to other social networks. The key difference is selectivity: Facebook and Twitter uploads are pinned to your persona and judged by all of your friends, forever. This puts pressure on you to pick only the “best” images and posts, or the images and posts that correspond with your curated online identity. As silly as it sounds, Facebook and twitter have become high-pressure environments. A picture without any likes is a failure and, therefore, you are a failure for wasting your friends' time and thinking that your content was funny or pleasing. It’s trial by jury of your peers, each of whom wields the all-important power of the "like".</p><p class="">Conversely, an image that garners a lot of attention and “likes" produces an inward feeling of social recognition and acceptance. Outwardly, you’re proud to display your liked content as a badge of honor for the world to see how popular you are. Basically, Facebook and Twitter have quantified your social status, turning social interaction into a game that can be measured, and “won". As with any well-structured game, competition, engagement, and stress ensue. There will always be losers.</p><p class="">Snapchat is not a competition. It’s an outlet from the competitive nature of modern content sharing. You choose a select group of people to see your low-fi picture, and you don’t feel pressured to create a masterpiece. Everyone is a winner. Everyone can have fun.</p><p class="">- Snapchat is <b>easy</b> and <b>ephemeral</b>. </p><p class="">Text messages and emails are also inherently selective services as you choose the recipients before the message is sent, so why not text instead? The big difference between snap and a picture SMS or email is its ephemeral nature. I had trouble understanding this difference the first time I saw my friends using the app. </p><blockquote><p class="">“Why don’t you just send that picture as a text?” <br><span style="font-size: 1em;">“You don’t understand. It gets deleted so I don’t have to deal with taking and storing pictures. Plus I can add doodles to my pictures. My dog looks fabulous with this green mustache.” <br></span>“You’re right, I don’t understand.” </p></blockquote><p class="">Now, hundreds of sent and received Snaps later, I think I finally understand. </p><p class="">It’s low quality so your snap doesn't have to be a masterpiece; you can do everything from taking the picture to doodling on it to sending it right within the app; the receiver doesn’t feel any pressure to respond. It’s just so easy.</p><p class=""><span style="font-size: 1em;">It’s also about letting go of pictures, messages, data, and ideas in general. Your phone currently saves every picture you take and message you send, forcing you to go through and delete the things that make you uncomfortable. Snapchat is one of the first tech companies that's built around <b>letting things go - </b>a revolutionary idea given the ease with which your phone can track and store your information. </span></p><p class=""><span style="font-size: 1em;">I wonder why every other company in the world saves its data, doing everything in its power to collect as much data as possible...<i>it couldn't have something to do with money, could it? </i>More on monetization to come - let's get back to what attracts users to the service.</span></p><p class=""><span style="font-size: 1em;">- Snapchat is<b> fun </b>(and occasionally<b> frisky</b>). </span></p><p class=""><span style="font-size: 1em;">Self-expression is fun and rewarding. Snapchat provides an unfiltered outlet for self-expression.</span><span style="font-size: 1em;"> I’m not going to explore the topic of sexting because it’s really just another form of the (perceived) freedom of expression Snapchat provides to its users. Naughty Snapchatters should be aware that a) it’s very easy to screenshot a snap and b) the </span><a href="http://blog.snapchat.com/post/64036804085/who-can-view-my-snaps-and-stories" target="_blank">government can retrieve unopened snaps</a><span style="font-size: 1em;"> with a warrant. </span></p><p class=""><span style="font-size: 1em;">To summarize: Snapchat is just a quicker, easier way to be creative and goofy with your friends. There’s no pressure to create a picture that will be universally enjoyed on a larger social media network. Snapchat lets you be your weird, goofy self for a couple of seconds every day, and it feels pretty good. </span></p><p class=""><b>3. Who uses Snapchat? How much do they use it?</b> </p><p class="">It’s hard to find data on Snapchat users, but here are some stats I was able to dig up from interviews with Snapchat co-founder Evan Spiegel: <br></p><ul><li>Main demographic is 13-23 year olds <br></li><li>80% of users are located in the US <br></li><li><span style="font-size: 1em;">350m snaps sent a day (compare this to </span><a href="http://instagram.com/press/" target="_blank" style="font-size: 1em;">55m on Instagram</a><span style="font-size: 1em;"> and </span><a href="http://techcrunch.com/2013/05/29/snapchat-accounts-for-more-photo-shares-than-instagram-as-pic-sharing-set-to-double-in-2013/" target="_blank" style="font-size: 1em;">400m photos shared on Facebook</a>)<b style="font-size: 1em;"></b></li></ul><p class=""><b>4. What is driving the Value behind Snapchat?</b><br></p><p class="">Snapchat's assets are primarily intangible. They include the following:<br><span style="font-size: 1em;"><i>a)</i> Data<br></span><i>b)</i> User Base<br><i>c)</i> Brand<br><i>d)</i> Patents/Tech Processes<br><i>e)</i> Threat to Established Companies </p><p class=""><span style="font-size: 1em;">I’ll rate these sources of value as objectively as possible on a scale from 0-5 so we can get a better sense of the actual value behind the company. </span></p><div><p class=""><span style="font-size: 1em;"><i>a) Data</i> – <b>1/5</b></span></p><p class=""><span style="font-size: 1em;">Data is the currency of the digital economy. We exchange our data for useful services. Data is the reason I’ve </span><a href="http://roymurdock.com/essays/2013/10/google-is-taking-apples-niche/" target="_blank" style="font-size: 1em;">sold AAPL and bought GOOG</a><span style="font-size: 1em;">.</span><span style="font-size: 1em;">  What kind of data does Snapchat get from its users, and can this data be monetized? </span></p><blockquote><p class=""><span style="font-size: 1em;"><i>“The types of information we may collect include your username, password, email address, phone number, age and any other information you choose to provide. When you send or receive Snaps, we also temporarily collect, process and store the contents of the Snaps (such as photos, videos and/or captions) on our servers.” - </i></span><a href="http://www.snapchat.com/privacy/" target="_blank" style="font-style: italic;">Snapchat Privacy Policy</a></p></blockquote><p class=""><span style="font-size: 1em;">All that Snapchat gets in the way of useful data is your email address, phone number, age, location/time/frequency of Snaps, and any text you include with your message. With the exception of Snapchat captions, all of this data is already being exploited by other internet services. The location/time/frequency and text data can only really be useful for internal user base and engagement monitoring. Unless Snapchat develops software that can recognize the subject matter of Snaps, there isn't much potential for data exploitation here. </span><span style="font-size: 1em;">This is also where the ephemeral nature of the service comes back to bite Snapchat in the ass.</span></p><p class=""><span style="font-size: 1em;">Text mining is much easier: see the trending section on Twitter. Captions could be monitored and exploited to suggest relevant ads. For example, say I Snap a friend with the caption “HUNGRY!!!!”. Snapchat reads my caption and communicates with the the official Taco Bell Snapchat account. Taco Bell sends me a Snap of a steaming burrito or a coupon to entice me to get off my phone and get into their restaurant.</span></p><p class=""><span style="font-size: 1em;">I would have to be Snapchat friends with these corporations which would be a one way relationship, much like Twitter and Facebook users following and liking brands to receive discounts and news about their favorite products. This monetization scheme also assumes that the caption is referring to me and not the hungry cat I might be taking a picture of.</span></p><p class=""><span style="font-size: 1em;"><i>b) User Base</i> – <b>4/5</b></span></p><p class=""><span style="font-size: 1em;">Snapchat enjoys a first to move position in the market and with 350m Snaps a day, it clearly has a healthy (yet undisclosed) user base. This user base is extremely specific at the moment. 80% of users are within the U.S. and the vast majority fall within the 13-23 age demographic. This leaves an awful lot of room for growth both regionally and demographically. There are millions of untapped phones out there in Europe, India, China, and (soon to be) </span><a href="http://qz.com/140467/why-apples-first-retail-store-in-brazil-is-actually-a-really-big-deal/" target="_blank" style="font-size: 1em;">South America</a>&nbsp;- this is a massive horizontal growth opportunity<span style="font-size: 1em;">.&nbsp;</span><span style="font-size: 1em;">There are millions of untapped phones in the U.S. owned and operated by the 23-50 age demographic - this is a massive vertical growth opportunity. What do you get when you add millions horizontally with millions vertically? Lots of millions. With&nbsp;</span><a href="http://techcrunch.com/2013/05/29/snapchat-accounts-for-more-photo-shares-than-instagram-as-pic-sharing-set-to-double-in-2013/" target="_blank" style="font-size: 1em;">Snapchat poised to become the worlds largest image sharing network</a><span style="font-size: 1em;">&nbsp;by volume (slide 14 in the link's slideshow</span><span style="font-size: 1em;">) it’s no wonder that investors are licking their lips in anticipation.&nbsp;</span></p><p class=""><i>c)&nbsp;Brand </i>- <b>2/5</b></p><p class="">Snapchat has built a strong brand. The yellow icon featuring “Ghostface Chillah” is easily recognizable and the app has its own terminology: "Snaps", "Snapping", etc. The naughty nature of the app has also garnered it much attention and a kind of endearingly unspoken *wink* *nudge* reputation among its loyal user base.&nbsp;</p><p class="">Yet a brand without a unique and useful product is…still useless. Take Kodak for example – it became one of the&nbsp;<a href="http://strategyaudit.wordpress.com/2012/02/03/the-kodak-brand-story/" target="_blank">strongest brands in the world</a>&nbsp;after the invention of the Kodak line of cameras and film. Then, starting in the 80’s, it failed to make a successful transition from the film to the digital era. Last year&nbsp;<a href="http://www.bbc.co.uk/news/business-16625725" target="_blank">Kodak filed for bankruptcy</a>.&nbsp;A strong brand can’t pull a company without a useful product.&nbsp;</p><p class=""><span style="font-size: 1em;">Brand adds value to an acquisition. Let's look at Yahoo’s acquisition of Tumblr. Yahoo was going for horizontal integration: Tumblr’s blogging platform provides a complementary service to Yahoo’s news-oriented service that generates revenue from ads displayed to a totally different user base. If Yahoo can figure out a way to get the previously untapped but extremely loyal users flowing from Tumblr to Yahoo, then the acquisition might prove to be very lucrative indeed.&nbsp;</span></p><p class=""><span style="font-size: 1em;">Again, <b>the key here is user base</b>. Users know and trust Snapchat just as they know and trust Tumblr, so they will be more loyal and less likely to jump to another service, maintaining the strong value of the user base. They can then be funneled to a parent service that will actually generate revenue. Strong brand = loyal users = engaged user base = acquisition potential.</span></p><p class=""><i>d) Tech innovation/patents</i> – <b>0/5</b></p><p class="">There is nothing technologically advanced about Snapchat and it holds little to no value in terms of intellectual property. This rules out acquisition for vertical integration – when one company absorbs another for the technology and patents of the smaller company. E.g.&nbsp;<a href="http://online.wsj.com/news/articles/SB10001424053111903392904576509953821437960" target="_blank">Google buys Motorola</a>&nbsp;for its hardware patents and smartphone technology.</p><p class=""><span style="font-size: 1em;"><i>e) Competition</i>&nbsp;</span>–<span style="font-size: 1em;">&nbsp;</span><span style="font-size: 1em;"><b>0/5</b></span></p><p class=""><span style="font-size: 1em;">Large companies want to protect their market share. New services are a threat to their user base and consequently, their market share. If they can acquire these companies they can funnel their users into the larger service, preserving and enlarging their market share.</span></p><p class=""><span style="font-size: 1em;">Snapchat founder Evan Spiegel likes to believe Snapchat is largely competitor-free, and that the service actually the king of a new market:&nbsp;</span></p><blockquote><p class=""><span style="font-size: 1em;">“I think in general we’re going a totally different direction than traditional social media so I’m not sure that we view them as a direct competitor…so I don’t think we’re necessarily going head to head with anyone. I think we’re going a different direction.”&nbsp;</span></p></blockquote><p class=""><span style="font-size: 1em;">He goes so far as to call Snapchat and Instagram complementary services. Really? I think they're rubbing elbows in the media sharing world. Perhaps not direct competition, but they compete for user's time and pictures nonetheless.&nbsp;</span></p><p class=""><span style="font-size: 1em;">He expresses how “fortunate [Snapchat is] to have really, really great long term investors” multiple times throughout the interview:</span></p></div><blockquote><div><p class=""><span style="font-size: 1em;">“We tend to build those [investor] relationships over long periods of time to make sure that our investors really understand and support the vision of the company, so it’s less of the ‘pressure’s on, get into the deal’ and more of like ‘we really need to have spent time with each other over the past year – like a lot’ for us to bring you into our family.”&nbsp;</span></p></div></blockquote><div><p class=""><span style="font-size: 1em;">Snapchat's willingness to be acquired seems to be very low given its large emphasis on long-term investment and vision. This is a change from October 2012, when&nbsp;</span><a href="http://en.wikipedia.org/wiki/Snapchat#Business" target="_blank">Snapchat full out stated that it was unwilling to be acquired</a><span style="font-size: 1em;">. Spiegel's delusions of grandeur regarding the "different direction" Snapchat is headed in smell of an inflated ego and rotten revenue streams - which brings us to our next and arguably most pertinent question: How is Snapchat going to make any money?</span></p><p class="" style="font-size: 1.5em;" <="" p=""><b>MONETIZATION STRATEGIES</b></p><p class="">I will concede that Snapchat has an amazing amount of potential in terms of gathering a large user base. Yet in this case I think that any move on Snapchat’s part to realize this potential will destroy the fundamental attractiveness of the app.&nbsp;</p><p class="">Let's take a look at possible monetization strategies:</p><p class=""><span style="font-size: 1em;"><b>1) Brand Support/Native Advertising&nbsp;</b></span></p><p class=""><a href="http://www.vocus.com/blog/snapchat-marketing/" target="_blank">This is little more than a joke at the moment</a>.<span style="font-size: 1em;">&nbsp;Basically, brands can send users pictures of their products and disappearing coupons that “add a sense of urgency” to the purchase. A quote from the Vocus article: “Pro tip: Promote new products and let your followers on Snapchat be the first to know about it. Add text to personalize each snap.” How is this Vocus website still in existence? Yes, this is how you use the application. No, this is not any more innovative or engaging than a tweet or a Facebook picture.</span></p></div><blockquote><div><p class=""><span style="font-size: 1em;"><i>“In the future we’d like to support [brand advertising] efforts but I’m not sure we’re gonna do it directly.” - Evan Spiegel&nbsp;</i></span></p></div></blockquote><div><p class=""><span style="font-size: 1em;">Basically, Snapchat is not going to resort to native advertising (see Facebook) until it has no other choice. Everyone hates it and Snapchat knows it will drive people away from the service and build resentment towards the brand. People tolerate Facebook native advertising because they’re hooked to the addictive and competitive nature of the service. That, and&nbsp;</span><a href="https://adblockplus.org/en/chrome" target="_blank">they haven’t heard of AdBlock</a><span style="font-size: 1em;">.&nbsp;</span></p><p class="">Snapchat is not providing a unique service. The moment they start to annoy their users with subscriptions or obtrusive ads, users can easily switch to another service or simply stop using Snapchat. They'll avoid annoying their users at all costs.</p><p class=""><span style="font-size: 1em;"><b>2) Content Discovery</b></span></p><blockquote><p class=""><span style="font-size: 1em;">“Our team is really interested in supporting people who don’t have a marketing team and a big voice. Upcoming artists, people who are trying to be actors, etc. That to us is a lot more exciting [than brands].” - Evan Spiegel</span></p></blockquote><p class=""><span style="font-size: 1em;">Sounds a lot like YouTube, which generates $4bn yearly revenue through…native ads. This is an altruistic way of thinking (which I admire) but it is also quite unprofitable. Who are you going to charge in this situation: the users who just wants to send and receive free, low-quality pictures from their friends? Or are you charging the starving artists who have nothing to their name but talent and dreams?&nbsp;</span></p><p class=""><span style="font-size: 1em;">You're going to get paid by the big corporations because they have the money and they want to reach your users. So where's the value for the big boys with the bankroll in this whole content discovery scheme? Nowhere.</span></p><p class=""><span style="font-size: 1em;"><b>3) In-App Purchases</b>&nbsp;</span></p><blockquote><p class=""><span style="font-size: 1em;">“We’ve looked to a role model of ours - Tencent - which is a really, really big company in China. They make the vast majority of their revenue off of in-app transactions, and what’s fascinating about that is when Tencent really had to make money there wasn’t really a huge brand advertising market, so they couldn’t just say 'here’s this bucket of billions of dollars - I’m gonna take 5% of it, we’re gonna be a big company'. They had to build things that people wanted buy. I think that’s a really scary challenge, to sit in a board meeting and say rather than taking 5% of these billions of dollars in display ads, we’re going to make things that people want – and that’s a question mark.”&nbsp;</span></p></blockquote><p class=""><span style="font-size: 1em;">Again, Speigel reiterates that Snapchat is <b>not looking to make money from ad revenue</b>. He wants to emulate the Tencent model: Tencent makes money by providing a free messaging service, then peddling add-ons such as MMORPG’s and avatar accessories to its gigantic messaging service user base. Tencent has&nbsp;</span><a href="http://www.tencent.com/zh-cn/content/ir/fs/attachments/ProductlistofTencent.pdf" target="_blank">over 800 million active monthly users</a><span style="font-size: 1em;">. That's almost 3x the population of the good old US of A.&nbsp;</span><b>Competition</b> to see who can get the best gear for their characters or the coolest clothing for their avatars drives purchases among these hundreds of millions of users.&nbsp;</p><p class="">This element of <b>competition</b> would destroy the fun, easygoing nature of Snapchat; the fundamental element of the service that makes it so attractive in the first place.</p>
+
+<figure class="k-content-embed">
+	<div class="k-content">
+	
+	<noscript>
+	<img width="100%" alt="Weebo Avatars" src="http://roymurdock.com/koken/storage/cache/images/000/020/Screen-Shot-2013-11-04-at-82305-PM,large.png?1383596617" />
+</noscript>
+<img data-alt="Weebo Avatars" data-respond-to="width" data-presets="tiny,60,27 small,100,45 medium,480,215 medium_large,800,359 large,1024,459 xlarge,1264,567 huge,1264,567" data-base="http://roymurdock.com/koken/storage/cache/images/000/020/Screen-Shot-2013-11-04-at-82305-PM," data-extension="png?1383596617"/>
+
+	
+	</div>
+	<figcaption class="k-content-text"><span class="k-content-caption"></span></figcaption>
+	</figure>
+<p class=""><br>Other in-app purchases that might generate negligible streams of revenue would be stickers à&nbsp;la Facebook or Snap limits, where users would be charged to send more than say, 100 Snaps a day. Stickers are lame and unreliable as a source of income, and Snap limits would destroy the usability of the app which would cause users to disengage from the service.</p>
+
+<figure class="k-content-embed">
+	<div class="k-content">
+	
+	<noscript>
+	<img width="100%" alt="Facebook Stickers" src="http://roymurdock.com/koken/storage/cache/images/000/018/facebook-stickers-web,large.jpg?1383569719" />
+</noscript>
+<img data-alt="Facebook Stickers" data-respond-to="width" data-presets="tiny,60,31 small,100,52 medium,480,250 medium_large,550,286 large,550,286 xlarge,550,286 huge,550,286" data-base="http://roymurdock.com/koken/storage/cache/images/000/018/facebook-stickers-web," data-extension="jpg?1383569719"/>
+
+	
+	</div>
+	<figcaption class="k-content-text"><span class="k-content-caption"></span></figcaption>
+	</figure><p class=""><span style="font-size: 1.5em;"><b>IN SUMMARY</b></span></p><p class=""><span style="font-size: 1em;">People use Snapchat because it's fun and easy. Unlike Facebook and Twitter, which are competitive and quantified (likes, followers, friend count), Snapchat is not used to curate an online persona for all to see and judge. People use the app to express themselves naturally with their friends. This is made possible by the ephemeral nature of the Snaps, which aren't saved so they can't be collected, compared, and judged.&nbsp;</span></p><p class=""><span style="font-size: 1em;">Snapchat can be used as a funnel to bring its large (and growing) user base to another website. This is the only way the company can retain its attractive qualities and generate revenue at the same time. The unfortunate reality that Snapchat faces is that it <b>can generate revenue for another company, but not for itself</b>. This is the first selfless service I've ever seen valued at 4 billion dollars.</span></p><p class="">If we return to the graph at the beginning of the article we see that the value of Youtube is $1.5bn - this is the price Google bought it at in 2006. It's now estimated to be worth anywhere from&nbsp;<a href="http://www.musicweek.com/news/read/youtube-value-estimated-between-15-6-billion-and-21-3-billion/055563" target="_blank">$15</a>&nbsp;-&nbsp;<a href="http://www.valuewalk.com/2012/03/google-inc-goog-youtube/" target="_blank">$45bn</a>. This is the power of combining a great funneling service with an ad giant like Google. This is Snapchat's only hope of creating value for its board and investors, and <b>it can only be realized by another company</b>.&nbsp;</p><p class="">Facebook is already seeing the benefits of its Instagram acquisition, and with the the&nbsp;<a href="http://pandodaily.com/2013/11/01/surprise-instagram-users-hate-the-new-ads/" target="_blank">introduction of native ads on Instagram</a>&nbsp;we can be will most definitely be seeing profit growth in Facebook's future. Following its disastrous IPO, shares of Facebook have gained 250% from a low of ~$20 to a recent high of ~$54 due to a strong mobile push aided by, you guessed it, Instagram. Worth the $1bn acquisition? I think so.</p>
+
+<figure class="k-content-embed">
+	<div class="k-content">
+	
+	<noscript>
+	<img width="100%" alt="Facebook Stock Price" src="http://roymurdock.com/koken/storage/cache/images/000/019/Screen-Shot-2013-11-04-at-11649-PM,large.png?1383571038" />
+</noscript>
+<img data-alt="Facebook Stock Price" data-respond-to="width" data-presets="tiny,60,41 small,100,68 medium,480,326 medium_large,800,543 large,810,550 xlarge,810,550 huge,810,550" data-base="http://roymurdock.com/koken/storage/cache/images/000/019/Screen-Shot-2013-11-04-at-11649-PM," data-extension="png?1383571038"/>
+
+	
+	</div>
+	<figcaption class="k-content-text"><span class="k-content-caption"></span></figcaption>
+	</figure>
+
+<p class=""><span style="font-size: 1em;">Spiegel, you nailed it when you said that Tencent makes money by building "things that people want". You’ve developed an application that people want, and if you try to change it through any type of monetization scheme you’ll end up with an application that people don’t want. You’ve got no data, no infrastructure, no patents, no cutting-edge tech, no wiggle-room for monetization, and yet you’re still looking down your nose at acquisition?&nbsp;</span></p><p class=""><span style="font-size: 1em;">No, you're smarter than that. I think you and your team are playing a dangerous game. As long as the investor money keeps coming in, you'll let the good times roll! You've bought yourself another year or so before acquisition, and every round of funding fluffs up the value of the company for the inevitable buyout.</span></p><p class=""><span style="font-size: 1em;">But what happens when you realize that most of your user base is already on Facebook and Twitter, and that the extra traffic from your service is not worth $4bn to advertisers who are toying with a dangerously-close-to-broken revenue model? The bubble bursts, and you're left paying the server bills and the wages of the&nbsp;</span><a href="http://www.quora.com/Snapchat/How-many-employees-does-Snapchat-have" target="_blank">21 employees</a><span style="font-size: 1em;">&nbsp;that will never see any monetary returns on their work.</span></p><p class="">Sometimes I feel like I'm going crazy. $4bn for an easily replaceable service that is little more than Microsoft Paint duct taped to a disposable camera? A service that voluntarily throws away its own data in the golden age of data hoarding? A service devoid of the nature of competition that is the driving force behind every other profitable company in the world? A service that is intrinsically worthless? Please Snapchat, or anybody for that matter, prove me wrong and restore my faith in investors and humanity in general.</p></div>
+<br>
+<p class=""><a href="https://news.ycombinator.com/item?id=6671371" target="_blank">Further Discussion on Hacker News</a><br></p>
+<br><footer>
+
+	<div>
+
+	<i class="kicon-clock"></i><time class="publish_date" datetime="2013-11-04T20:43:06+00:00" >
+	November 4, 2013
+</time>&nbsp;&nbsp;&nbsp;&nbsp;<i class="kicon-link"></i><a href="/essays/2013/11/snapchat-is-intrinsically-worthless/" class="k-nav-current" data-koken-internal>Permalink</a>&nbsp;&nbsp;&nbsp;&nbsp;<div class="share_content"><i class="kicon-plus"></i><span class="share_button">Share</span><div class="kshare"><input type="text" class="kshare-input" value="http://roymurdock.com/essays/2013/11/snapchat-is-intrinsically-worthless/" /><ul class="kshare-items"><li><a href="https://twitter.com/intent/tweet?text=Am+I+Going+Insane%3F+Snapchat+is+Intrinsically+Worthless&url=http%3A%2F%2Froymurdock.com%2Fessays%2F2013%2F11%2Fsnapchat-is-intrinsically-worthless%2F" class="share-twitter" title="Share Am+I+Going+Insane%3F+Snapchat+is+Intrinsically+Worthless on Twitter"><i class="kicon-twitter"></i></a></li><li><a href="https://www.facebook.com/sharer.php?u=http%3A%2F%2Froymurdock.com%2Fessays%2F2013%2F11%2Fsnapchat-is-intrinsically-worthless%2F" class="share-facebook"><i class="kicon-facebook"></i></a></li><li><a href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Froymurdock.com%2Fessays%2F2013%2F11%2Fsnapchat-is-intrinsically-worthless%2F" class="share-pinterest"><i class="kicon-pinterest"></i></a></li><li><a href="http://www.tumblr.com/share/photo?source=http%3A%2F%2Froymurdock.com%2Fkoken%2Fstorage%2Fcache%2Fimages%2F000%2F022%2Fsnapchatbanner%2Cmedium_large.png%3F1383598234&caption=%3Cp%3E%3Cstrong%3E%3Ca href=&quot;http%3A%2F%2Froymurdock.com%2Fessays%2F2013%2F11%2Fsnapchat-is-intrinsically-worthless%2F&quot; title=&quot;Am+I+Going+Insane%3F+Snapchat+is+Intrinsically+Worthless&quot;%3EAm+I+Going+Insane%3F+Snapchat+is+Intrinsically+Worthless%3C/a%3E%3C%2Fstrong%3E%3C%2Fp%3E%3Cp%3EWhile+Snapchat%27s+valuation+is+nowhere+close+to+that+of+Apple+and+Facebook%2C+it+is+surprisingly+close+to+stable%2C+established+companies+with+actual+revenue+streams.+Why+have+investors+put+such+a+high+price+tag+on+what+seems+to+be+a+silly+messaging+app%3F%3C%2Fp%3E&click_thru=http%3A%2F%2Froymurdock.com%2Fessays%2F2013%2F11%2Fsnapchat-is-intrinsically-worthless%2F" class="share-tumblr" title="Share Am+I+Going+Insane%3F+Snapchat+is+Intrinsically+Worthless on Tumblr"><i class="kicon-tumblr"></i></a></li><li><a href="https://plus.google.com/share?url=http%3A%2F%2Froymurdock.com%2Fessays%2F2013%2F11%2Fsnapchat-is-intrinsically-worthless%2F" class="share-google"><i class="kicon-gplus"></i></a></li></ul></div></div>
+	</div>
+
+	
+	
+	
+</footer>
+
+	
+	
+	<div id="kdiscuss">
+
+	
+	<script>var disqus_identifier = "koken_disqus_essay_3";</script><div id="disqus_thread"></div>
+	
+	</div>
+
+	
+	</article>
+
+	</div>
+
+	
+	
+	</div>
+
+	</div>	<!-- close container -->
+
+	<script src="/koken/app/site/themes/common/js/share.js?0.11.2"></script>
+	<footer class="main"></footer>
+
+	<script src="/koken/storage/themes/madison/js/madison.js?1.4.2"></script>
+
+	<script>
+	$(document).ready(function() {
+	$('#mob-menu').sidr({
+	name: 'sidr-left'
+	});
+	});
+	</script>
+
+<script type="text/javascript">
+	var disqus_shortname = 'roymurdock';
+	(function() {
+	var disqus = function() {
+	if ($('#disqus_thread').length) {
+	(function() {
+	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+	} else if ($('[data-disqus-identifier]').length) {
+	(function() {
+	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+	}
+	}
+
+	$(function() {
+	if ($.pjax) {
+	$(document).on('pjax.success', function() {
+	window.setTimeout(function() {
+	if (window.DISQUS && $('#disqus_thread').length) {
+	window.DISQUS.reset({
+	reload: true,
+	config: function() {
+	this.page.url = window.location.href;
+	this.page.identifier = disqus_identifier;
+	}
+	});
+	} else {
+	disqus();
+	}
+	}, 250)
+	});
+	}
+	disqus();
+	});
+	}());
+</script></body>
+
+</html>
+

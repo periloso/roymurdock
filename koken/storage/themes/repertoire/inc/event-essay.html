@@ -1,0 +1,115 @@
+<koken:event_essay>
+
+	<div class="row scroll-me">
+
+		<div class="four columns">
+
+			<aside>
+
+				<h4>Published</h4>
+				<p>
+					<span class="meta">
+						<koken:link to="date">
+							<koken:time relative="{{ settings.show_event_date_relative }}" />
+						</koken:link>
+					</span>
+				</p>
+
+				<koken:if true="{{ settings.event_show_tags }}">
+
+					<koken:tags>
+						<h4>{{ labels.tag.plural }}</h4>
+						<p>
+							<span class="meta">
+								<koken:loop separator="&nbsp;">
+									<koken:link class="tag" to="tag" title="View everything in {{ tag.title }}">
+										{{ tag.title }}
+									</koken:link>
+								</koken:loop>
+							</span>
+						</p>
+					</koken:tags>
+
+				</koken:if>
+
+				<koken:if true="{{ settings.event_show_cats }}">
+
+					<koken:categories>
+						<h4>{{ labels.category.plural }}</h4>
+						<p>
+							<span class="meta">
+								<koken:loop separator=", ">
+									<koken:link class="norm" to="category" title="View everything in {{ category.title }}">
+										{{ category.title }}
+									</koken:link>
+								</koken:loop>
+							</span>
+						</p>
+					</koken:categories>
+
+				</koken:if>
+
+				<koken:if true="{{ settings.event_show_share }}">
+
+					<h4>Share</h4>
+					<ul class="social-links">
+						<li><koken:if empty="profile.twitter"><a href="https://twitter.com/intent/tweet?text={{ essay.title url_encode="true" }}&url={{ essay.url url_encode="true" }}" class="share-twitter" title="Share {{ essay.title url_encode="true" }} on Twitter"><koken:else><a href="https://twitter.com/intent/tweet?text={{ essay.title url_encode="true" }}&url={{ essay.url url_encode="true" }}&via={{ profile.twitter }}" class="share-twitter" title="Share {{ essay.title url_encode="true" }} on Twitter"></koken:if><i class="kicon-twitter"></i></a></li><li><a href="https://www.facebook.com/sharer.php?u={{ essay.url url_encode="true" }}" class="share-facebook" title="Share {{ essay.title url_encode="true" }} on Facebook"><i class="kicon-facebook"></i></a></li><li><a href="http://www.tumblr.com/share/photo?source={{ essay.featured_image.presets.medium_large.url url_encode="true" }}&caption=%3Cp%3E%3Cstrong%3E%3Ca href=&quot;{{ essay.url url_encode="true" }}&quot; title=&quot;{{ essay.title url_encode="true" }}&quot;%3E{{ essay.title url_encode="true" }}%3C/a%3E%3C%2Fstrong%3E%3C%2Fp%3E%3Cp%3E{{ essay.excerpt url_encode="true" }}%3C%2Fp%3E&click_thru={{ essay.url url_encode="true" }}" class="share-tumblr" title="Share {{ essay.title url_encode="true" }} on Tumblr"><i class="kicon-tumblr"></i></a></li><li><a href="https://plus.google.com/share?url={{ essay.url url_encode="true" }}" class="share-google" title="Share {{ essay.url url_encode="true" }} on Google+"><i class="kicon-gplus"></i></a></li>
+					</ul>
+
+					<koken:asset file="sharelite.js" common="true" />
+
+				</koken:if>
+
+				<koken:if true="settings.show_comment_counts">
+
+					<koken:discussion_count>
+
+						<p>
+							<span class="meta comment_count">{{ discussion_count }}</span>
+						</p>
+
+					</koken:discussion_count>
+
+				</koken:if>
+
+			</aside>
+
+		</div>
+
+		<div class="twelve columns">
+
+			<div class="event">
+
+				<koken:featured_image>
+
+					<div class="media">
+
+						<koken:link title="View {{ essay.title }}">
+
+							<koken:img lazy="true" />
+
+						</koken:link>
+
+					</div>
+
+				</koken:featured_image>
+
+				<div class="event-data">
+
+					<h3>
+						<koken:link title="View {{ essay.title }}">
+							{{ essay.title }}
+						</koken:link>
+					</h3>
+
+					{{ essay.content truncate="600" paragraphs="true" }} <koken:link title="View {{ essay.title }}">more</koken:link>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</koken:event_essay>

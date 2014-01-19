@@ -1,0 +1,50 @@
+<koken:load infinite="true">
+
+<koken:loop>
+
+	<div class="item">
+
+		<koken:if true="settings.contents_show_date"><koken:time /></koken:if>
+
+		<div class="main-content">
+			<koken:if true="settings.contents_link_lbox">
+				<koken:link lightbox="true" title="View {{ content.title | content.filename }}"><koken:img lazy="true" fade="true" /></koken:link>
+			<koken:else>
+				<koken:link title="View {{ content.title | content.filename }}"><koken:img lazy="true" fade="true" /></koken:link>
+			</koken:if>
+		</div>
+
+		<div class="caption-content">
+			<h2>{{ content.title | content.filename }}</h2>
+			{{ content.caption paragraphs="true" }}
+		</div>
+
+	</div>
+
+	<br>
+
+</koken:loop>
+
+<div id="infinite_load_msg">
+	<span>Loading more...</span>
+</div>
+
+<koken:keyboard_scroll element="div.item" offset="-20" />
+
+<script>
+	$(window).on('k-infinite-loading', function() {
+		$('#infinite_load_msg').show();
+	});
+
+	$(window).on('k-infinite-loaded', function() {
+		$('#infinite_load_msg').hide();
+	});
+</script>
+
+<koken:else>
+
+	<koken:note>
+		<strong>No content found.</strong> Upload some to the Library.
+	</koken:note>
+
+</koken:load>

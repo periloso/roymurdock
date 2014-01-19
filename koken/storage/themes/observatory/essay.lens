@@ -1,0 +1,124 @@
+<koken:include file="inc/header.html" />
+
+<koken:load>
+
+	<koken:head>
+		<meta property="og:site_name" content="{{ site.title }}" />
+		<meta property="og:title" content="{{ essay.title strip_html="true" }}" />
+		<meta property="og:description" content="{{ essay.excerpt strip_html="true" }}" />
+		<meta property="og:url" content="{{ essay.url }}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:image" content="{{ essay.featured_image.presets.medium_large.url }}" />
+		<meta property="og:image:width" content="{{ essay.featured_image.presets.medium_large.width }}" />
+		<meta property="og:image:height" content="{{ essay.featured_image.presets.medium_large.height }}" />
+		<meta name="medium" content="article" />
+		<koken:not empty="profile.twitter">
+			<meta name="twitter:card" content="summary_large_image" />
+			<meta name="twitter:title" content="{{ essay.title truncate="70" }}" />
+			<meta name="twitter:site" content="@{{ profile.twitter }}" />
+			<meta name="twitter:creator" content="@{{ profile.twitter }}" />
+			<meta name="twitter:description" content="{{ essay.excerpt truncate="200" strip_html="true" }}" />
+			<meta name="twitter:image" content="{{ essay.featured_image.presets.medium_large.url }}" />
+		</koken:not>
+	</koken:head>
+
+	<div id="mob-pag" class="content-row">
+
+		<div class="content-wrap">
+
+			<koken:previous>
+				<koken:link title="Read {{ essay.title }}" class="pag" title="Previous" bind_to_key="left">&larr; Previous</koken:link>
+			</koken:previous>
+
+			&nbsp;&nbsp;
+
+			<koken:next>
+				<koken:link title="Read {{ essay.title }}" class="pag" title="Next" bind_to_key="right">Next &rarr;</koken:link>
+			</koken:next>
+
+		</div>
+
+	</div>
+
+	<article>
+
+		<header>
+
+			<ul class="detail-nav">
+
+				<li>
+					<span class="l">
+						<koken:next>
+							<koken:link title="Read {{ essay.title }}" class="title">&larr; Previous</koken:link>
+						</koken:next>
+					</span>
+					<span class="m">
+						<h2>{{ essay.title }}</h2>
+						<koken:link to="archive">
+							<koken:time />
+						</koken:link>
+					</span>
+					<span class="r">
+						<koken:previous>
+							<koken:link title="Read {{ essay.title }}" class="title">Next &rarr;</koken:link>
+						</koken:previous>
+					</span>
+				</li>
+
+			</ul>
+
+		</header>
+
+		<koken:include file="inc/article.html" />
+
+		<koken:if true="settings.social_bttns_show_one">
+
+			<ul class="social-links">
+				<li><koken:if empty="profile.twitter"><a href="https://twitter.com/intent/tweet?text={{ essay.title url_encode="true" }}&url={{ essay.url url_encode="true" }}" class="share-twitter" title="Share {{ essay.title url_encode="true" }} on Twitter"><koken:else><a href="https://twitter.com/intent/tweet?text={{ essay.title url_encode="true" }}&url={{ essay.url url_encode="true" }}&via={{ profile.twitter }}" class="share-twitter" title="Share {{ essay.title url_encode="true" }} on Twitter"></koken:if><i class="kicon-twitter"></i></a></li><li><a href="https://www.facebook.com/sharer.php?u={{ essay.url url_encode="true" }}" class="share-facebook" title="Share {{ essay.title url_encode="true" }} on Facebook"><i class="kicon-facebook"></i></a></li><li><a href="http://www.tumblr.com/share/photo?source={{ essay.featured_image.presets.medium_large.url url_encode="true" }}&caption=%3Cp%3E%3Cstrong%3E%3Ca href=&quot;{{ essay.url url_encode="true" }}&quot; title=&quot;{{ essay.title url_encode="true" }}&quot;%3E{{ essay.title url_encode="true" }}%3C/a%3E%3C%2Fstrong%3E%3C%2Fp%3E%3Cp%3E{{ essay.excerpt url_encode="true" }}%3C%2Fp%3E&click_thru={{ essay.url url_encode="true" }}" class="share-tumblr" title="Share {{ essay.title url_encode="true" }} on Tumblr"><i class="kicon-tumblr"></i></a></li><li><a href="https://plus.google.com/share?url={{ essay.url url_encode="true" }}" class="share-google" title="Share {{ essay.url url_encode="true" }} on Google+"><i class="kicon-gplus"></i></a></li>
+			</ul>
+
+			<koken:asset file="sharelite.js" common="true" />
+
+		</koken:if>
+
+		<koken:include file="inc/like-tweet.html" />
+
+		<koken:if true="settings.show_disc_essay">
+
+			<div id="kdiscuss">
+
+				<koken:discussion>
+
+					{{ discussion }}
+
+				</koken:discussion>
+
+			</div>
+
+		</koken:if>
+
+		<koken:load source="featured_essays">
+			<div id="feat-essays">
+				<h2>Featured {{ labels.essay.plural case="lower" }}</h2>
+				<div id="essay-list">
+					<koken:loop>
+						<div>
+							<koken:featured_image>
+								<koken:link title="Read {{ essay.title }}"><koken:img size="16:9" /></koken:link>
+							</koken:featured_image>
+							<koken:time />
+							<h3>
+								<koken:link title="Read {{ essay.title }}">{{ essay.title }}</koken:link>
+							</h3>
+							{{ essay.excerpt }} <koken:link title="Read {{ essay.title }}">more</koken:link>
+						</div>
+					</koken:loop>
+				</div>
+			</div>
+		</koken:load>
+
+	</article>
+
+</koken:load>
+
+<koken:include file="inc/footer.html" />

@@ -1,0 +1,63 @@
+<koken:event_essay>
+
+<span class="text">
+
+			<h1>
+				<koken:link class="essay_title" title="View {{ essay.title }}">{{ essay.title }}</koken:link><koken:if true="settings.show_comment_counts">&nbsp;&nbsp;<span class="item_meta"><koken:discussion_count>({{ discussion_count }})</koken:discussion_count></span></koken:if>
+			</h1>
+
+	<div class="item">
+
+		<koken:link title="View {{ essay.title }}" class=".top">
+
+			<koken:featured_image>
+
+				<div class="media">
+
+						<koken:if true="settings.show_img_spinner">
+
+							<koken:img lazy="true" />
+
+						<koken:else>
+
+							<koken:img />
+
+						</koken:if>
+
+					</koken:link>
+
+				</div>
+
+		</koken:featured_image>
+
+			<p class="caption">
+				{{ essay.excerpt }}
+				<koken:link class="read_more" title="View {{ essay.title }}">more</koken:link>
+			</p>
+
+			<koken:categories>
+				<p class="tagscats">
+					View more in:
+					<koken:loop separator=", ">
+						<koken:link to="category" title="View everything in {{ category.title }}">
+							{{ category.title }}
+						</koken:link>
+					</koken:loop>
+				</p>
+			</koken:categories>
+
+			<koken:tags>
+				<p class="tagscats tags">
+					<koken:loop separator="&nbsp;">
+						<koken:link to="tag" title="View everything in #{{ tag.title }}">
+							#{{ tag.title }}
+						</koken:link>
+					</koken:loop>
+				</p>
+			</koken:tags>
+
+		</span>
+
+	</div>
+
+</koken:event_essay>

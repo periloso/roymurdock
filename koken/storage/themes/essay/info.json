@@ -1,0 +1,14 @@
+{
+  "name": "essay",
+  "version": "1.0",
+  "description": "Minimal, Easy Text Viewing",
+  "demo": "http://yoursite.com/demo",
+  "author": {
+    "name": "Roy Murdock",
+    "link": "http://roymurdock.com"
+  },
+
+  "settings": {
+
+  }
+}

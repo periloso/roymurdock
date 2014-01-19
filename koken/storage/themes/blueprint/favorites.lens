@@ -1,0 +1,106 @@
+<koken:include file="inc/header.html" />
+
+<div id="content">
+
+	<!-- Load this template's source data (favorites) and limit for pagination -->
+	<koken:load limit="50">
+
+		<!-- Add Facebook Open Graph and Twitter Cards metadata for nicer sharing -->
+		<koken:head>
+			<meta property="og:site_name" content="{{ site.title }}" />
+			<meta property="og:title" content="{{ labels.favorite.plural }}" />
+			<meta property="og:description" content="{{ site.description strip_html='true' }}" />
+			<meta property="og:type" content="website" />
+			<koken:first>
+			<meta property="og:image" content="{{ content.presets.medium_large.url }}" />
+			<meta property="og:image:width" content="{{ content.presets.medium_large.width }}" />
+			<meta property="og:image:height" content="{{ content.presets.medium_large.height }}" />
+			</koken:first>
+			<meta property="og:url" content="{{ location.site_url }}{{ location.here }}" />
+			<koken:not empty="profile.twitter">
+			<meta name="twitter:card" content="gallery" />
+			<meta name="twitter:site" content="@{{ profile.twitter }}" />
+			<meta name="twitter:creator" content="@{{ profile.twitter }}" />
+			<koken:loop limit="4">
+			<meta name="twitter:image{{ index }}" content="{{ content.presets.medium_large.cropped.url }}">
+			</koken:loop>
+			</koken:not>
+		</koken:head>
+
+		<div class="lcol">
+
+			<!-- Loop over all favorited content, display info about each, link to content.lens -->
+			<koken:loop>
+
+				<h2>
+					<koken:link title="View {{ content.title | content.filename }}">
+						{{ content.title | content.filename }}
+					</koken:link>
+				</h2>
+
+				<koken:link title="View {{ content.title | content.filename }}">
+					<koken:img />
+				</koken:link>
+
+				<p>
+					{{ content.caption }}
+				</p>
+
+				<p>
+					<strong>Uploaded:</strong> {{ content.uploaded_on }}
+				</p>
+
+			</koken:loop>
+
+			<!-- Display pagination links -->
+			<p>
+				<koken:include file="inc/pagination.html" />
+			</p>
+
+		</div> <!-- close .lcol -->
+
+		<div class="rcol">
+
+			<!-- Links to view content by publish date in archive.contents.lens -->
+	       <h3>View {{ labels.content.plural case="lower" }} by date</h3>
+	        <koken:dates limit_to="content">
+	          <koken:select label="Select month" />
+	        </koken:dates>
+
+	       <!-- Links to view content by category in archive.contents.lens -->
+	        <koken:categories limit_to="content" order_by="content_count">
+	          <h3>View {{ labels.content.plural case="lower" }} by {{ labels.category.singular case="lower" }}</h3>
+	          <koken:loop>
+	            <koken:link title="View all {{ labels.content.plural case='lower' }} in {{ category.title }}">
+	            {{ category.title }} ({{ category.counts.total }})
+	            </koken:link>
+	            <br>
+	          </koken:loop>
+	        </koken:categories>
+
+	        <!-- Links to view content by tag in archive.contents.lens -->
+	         <koken:tags limit_to="content" order_by="content_count">
+	         <h3>View {{ labels.content.plural case="lower" }} by {{ labels.tag.singular case="lower" }}</h3>
+	         <koken:loop>
+	            <koken:link title="View all {{ labels.content.plural case='lower' }} in #{{ tag.title }}">
+	              {{ tag.title }} ({{ tag.counts.total }})
+	            </koken:link>
+	            <br>
+	         </koken:loop>
+	       </koken:tags>
+
+		</div> <!-- close .rcol -->
+
+		<!-- Fallback content if no data was loaded by koken:load -->
+		<koken:else>
+
+			<!-- Display fallback message in Site editor only -->
+			<koken:note>
+				No favorites found. Assign some in the Library.
+			</koken:note>
+
+	</koken:load>
+
+</div> <!-- close #content -->
+
+<koken:include file="inc/footer.html" />

@@ -1,0 +1,67 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:georss="http://www.georss.org/georss" xmlns:media="http://search.yahoo.com/mrss/" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+	<channel>
+		<title><![CDATA[{{ site.title }}: {{ labels.timeline.plural }}]]></title>
+		<link><![CDATA[<koken:link to="timeline" echo="true" />]]></link>
+		<description><![CDATA[Recent activity from {{ site.title }}]]></description>
+		<generator>http://koken.me</generator>
+		<lastBuildDate><koken:time rss="true" /></lastBuildDate>
+		<atom:link href="{{location.host}}{{location.root_folder}}{{ location.here }}" rel="self" type="application/rss+xml" />
+		<koken:load limit="10">
+			<koken:loop>
+				<koken:event>
+					<koken:event_content>
+						<koken:include file="inc/content.rss.lens" />
+					</koken:event_content>
+					<koken:event_album>
+						<item>
+							<title><![CDATA[{{ album.title }}]]></title>
+							<link><![CDATA[<koken:permalink />]]></link>
+							<description><![CDATA[<koken:covers><koken:shift><img alt="{{ content.filename|content.title }}" src="{{ content.presets.medium_large.url }}" width="{{ content.presets.medium.width }}" height="{{ content.presets.medium.height }}" /></koken:shift></koken:covers><p>{{ album.summary|album.description }}</p>]]></description>
+							<guid><![CDATA[<koken:permalink />]]></guid>
+							<pubDate><koken:time rss="true" /></pubDate>
+							<media:title><![CDATA[{{ album.title }}]]></media:title>
+							<koken:covers>
+								<koken:shift>
+									<media:content url="{{ content.presets.medium_large.url }}" width="{{ content.presets.medium_large.width }}" height="{{ content.presets.medium_large.height }}" type="{{ content.mime_type }}" />
+									<media:thumbnail url="{{ content.presets.small.url }}" width="{{ content.presets.small.width }}" height="{{ content.presets.small.height }}" />
+								</koken:shift>
+							</koken:covers>
+							<media:credit role="photographer"><![CDATA[{{ profile.name }}]]></media:credit>
+							<dc:creator><![CDATA[{{ profile.name }}]]></dc:creator>
+						</item>
+					</koken:event_album>
+					<koken:event_album_update>
+						<item>
+							<title><![CDATA[{{ album.title }} ({{ content.length }} new {{ content.length plural="items" singular="item" }})]]></title>
+							<link><![CDATA[<koken:permalink />]]></link>
+							<description><![CDATA[<koken:loop><p><img alt="{{ content.filename|content.title }}" src="{{ content.presets.medium_large.url }}" width="{{ content.presets.medium.width }}" height="{{ content.presets.medium.height }}" /></p></koken:loop><p>{{ album.summary|album.description }}</p>]]></description>
+							<koken:if data="content.license.raw" equals="all">
+							<media:copyright><![CDATA[{{ site.copyright }}]]></media:copyright>
+							<koken:else>
+							<media:license url="{{ content.license.url }}"><![CDATA[{{ content.license.clean }}]]></media:license>
+							</koken:if>
+							<guid><![CDATA[<koken:permalink />]]></guid>
+							<pubDate><koken:time rss="true" /></pubDate>
+							<media:title><![CDATA[{{ album.title }} ({{ content.length }} new {{ content.length plural="items" singular="item" }})]]></media:title>
+							<koken:if condition="{{ content.length }} > 1">
+							<media:group>
+							</koken:if>
+							<koken:loop>
+								<media:content url="{{ content.presets.medium_large.url }}" width="{{ content.presets.medium_large.width }}" height="{{ content.presets.medium_large.height }}" type="{{ content.mime_type }}" />
+								<media:thumbnail url="{{ content.presets.small.url }}" width="{{ content.presets.small.width }}" height="{{ content.presets.small.height }}" />
+							</koken:loop>
+							<koken:if condition="{{ content.length }} > 1">
+							</media:group>
+							</koken:if>
+							<media:credit role="photographer"><![CDATA[{{ profile.name }}]]></media:credit>
+							<dc:creator><![CDATA[{{ profile.name }}]]></dc:creator>
+						</item>
+					</koken:event_album_update>
+					<koken:event_essay>
+						<koken:include file="inc/essay.rss.lens" />
+					</koken:event_essay>
+				</koken:event>
+			</koken:loop>
+		</koken:load>
+	</channel>
+</rss>

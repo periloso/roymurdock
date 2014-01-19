@@ -1,0 +1,105 @@
+<koken:include file="layouts/header.html" />
+
+<koken:load>
+
+<koken:head>
+	<meta property="og:site_name" content="{{ site.title }}" />
+	<meta property="og:title" content="{{ album.title strip_html="true" }}" />
+	<meta property="og:description" content="{{ album.summary | album.description strip_html="true" }}" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="{{ album.url }}" />
+	<koken:covers><koken:shift>
+	<meta property="og:image" content="{{ content.presets.medium_large.url }}" />
+	<meta property="og:image:width" content="{{ content.presets.medium_large.width }}" />
+	<meta property="og:image:height" content="{{ content.presets.medium_large.height }}" />
+	</koken:shift></koken:covers>
+	<koken:not empty="profile.twitter">
+		<meta name="twitter:card" content="gallery" />
+		<meta name="twitter:site" content="@{{ profile.twitter }}" />
+		<meta name="twitter:creator" content="@{{ profile.twitter }}" />
+		<koken:covers minimum="4" limit="4">
+			<koken:loop>
+				<meta name="twitter:image{{ index }}" content="{{ content.presets.medium_large.cropped.url }}">
+			</koken:loop>
+		</koken:covers>
+	</koken:not>
+</koken:head>
+
+<koken:if true="settings.show_album_title">
+
+	<div id="album-title">
+		<h1>
+			{{ album.title }}
+		</h1>
+	</div>
+
+</koken:if>
+
+<koken:if true="settings.show_album_desc">
+
+	<div id="album-desc">
+		{{ album.description paragraphs="true" }}
+	</div>
+
+</koken:if>
+
+<koken:if data="settings.album_layout" equals="slideshow">
+
+	<koken:include file="layouts/album-slideshow.html" />
+
+</koken:if>
+
+<koken:if data="settings.album_layout" equals="grid">
+
+	<koken:include file="layouts/album-grid.html" />
+
+</koken:if>
+
+<koken:topics>
+
+	<div id="album_topics">
+		<p>
+			Read more in
+			<koken:loop separator=", ">
+				<koken:link title="Read {{ essay.title }}">
+					{{ essay.title }}
+				</koken:link>
+			</koken:loop>
+		</p>
+	</div>
+
+</koken:topics>
+
+<koken:if true="settings.social_bttns_show_one">
+
+	<koken:if true="album.public">
+
+		<ul class="social-links">
+			<li><koken:if empty="profile.twitter"><a href="https://twitter.com/intent/tweet?text={{ album.title url_encode="true" }}&url={{ album.url url_encode="true" }}" class="share-twitter" title="Share {{ album.title url_encode="true" }} on Twitter"><koken:else><a href="https://twitter.com/intent/tweet?text={{ album.title url_encode="true" }}&url={{ album.url url_encode="true" }}&via={{ profile.twitter }}" class="share-twitter" title="Share {{ album.title url_encode="true" }} on Twitter"></koken:if><i class="kicon-twitter"></i></a></li><li><a href="https://www.facebook.com/sharer.php?u={{ album.url url_encode="true" }}" class="share-facebook" title="Share {{ album.title url_encode="true" }} on Facebook"><i class="kicon-facebook"></i></a></li><li><a href="http://pinterest.com/pin/create/button/?url={{ album.url url_encode="true" }}&media={{ album.covers.first.presets.large.url url_encode="true" }}&description={{ album.title url_encode="true" }}" class="share-pinterest" title="Share {{ album.title url_encode="true" }} on Pinterest"><i class="kicon-pinterest"></i></a></li><li><a href="http://www.tumblr.com/share/photo?source={{ album.covers.first.presets.large.url url_encode="true" }}&caption=%3Cp%3E%3Cstrong%3E%3Ca href=&quot;{{ album.url url_encode="true" }}&quot; title=&quot;{{ album.title }}&quot;%3E{{ album.title }}%3C/a%3E%3C/strong%3E%3C/p%3E%3Cp%3E{{ album.description url_encode="true" }}%3C/p%3E&click_thru={{ album.url url_encode="true" }}" class="share-tumblr" title="Share {{ album.title url_encode="true" }} on Tumblr"><i class="kicon-tumblr"></i></a></li><li><a href="https://plus.google.com/share?url={{ album.url url_encode="true" }}" class="share-google" title="Share {{ album.title url_encode="true" }} on Google+"><i class="kicon-gplus"></i></a></li>
+		</ul>
+
+		<koken:asset file="sharelite.js" common="true" />
+
+	</koken:if>
+
+</koken:if>
+
+<koken:include file="layouts/like-tweet.html" />
+
+<koken:if data="settings.album_layout" equals="grid">
+
+	<koken:include file="layouts/pagination.html" />
+
+</koken:if>
+
+<koken:else>
+
+	<koken:note>
+
+		This album is empty. Add content to it in the Library.
+
+	</koken:note>
+
+</koken:load>
+
+<koken:include file="layouts/footer.html" />

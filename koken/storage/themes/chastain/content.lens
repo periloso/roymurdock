@@ -1,0 +1,123 @@
+<koken:include file="inc/header.html" />
+
+<koken:load>
+
+	<koken:head>
+		<meta property="og:site_name" content="{{ site.title }}" />
+		<meta property="og:title" content="{{ content.title|content.filename strip_html="true" }}" />
+		<meta property="og:description" content="{{ content.caption strip_html="true" }}" />
+		<meta property="og:type" content="website" />
+		<meta property="og:image" content="{{ content.presets.medium_large.url }}" />
+		<meta property="og:image:width" content="{{ content.presets.medium_large.width }}" />
+		<meta property="og:image:height" content="{{ content.presets.medium_large.height }}" />
+		<meta property="og:url" content="{{ content.url }}" />
+		<koken:content_image>
+			<koken:not empty="profile.twitter">
+				<meta name="twitter:card" content="photo" />
+				<meta name="twitter:site" content="@{{ profile.twitter }}" />
+				<meta name="twitter:creator" content="@{{ profile.twitter }}" />
+			</koken:not>
+		</koken:content_image>
+	</koken:head>
+
+	<div class="img">
+
+		<span class="img-wrap">
+
+			<span class="img-pag left"><span>
+				<koken:previous>
+					<koken:link title="{{ content.title | content.filename }}" bind_to_key="left">
+						<i class="icon-left-open-big"></i>
+					</koken:link>
+				</koken:previous>
+			</span></span>
+
+			<span class="img-pag right"><span>
+				<koken:next>
+					<koken:link title="{{ content.title | content.filename }}" bind_to_key="right">
+						<i class="icon-right-open-big"></i>
+					</koken:link>
+				</koken:next>
+			</span></span>
+
+			<koken:content_image>
+
+				<koken:img class="content" lazy="true" />
+
+			</koken:content_image>
+
+			<koken:content_video>
+
+				<koken:video controls="true" />
+
+			</koken:content_video>
+		</span>
+
+		<span class="img-data">
+
+			<span class="img-caption">
+				<h4>{{ content.title | content.filename }}</h4>
+				{{ content.caption paragraphs="true" }}
+			</span>
+
+			<koken:if true="settings.social_bttns_show_one">
+
+				<koken:if true="content.public">
+
+					<ul class="social-links">
+						<li><koken:if empty="profile.twitter"><a href="https://twitter.com/intent/tweet?text={{ content.title|content.filename url_encode="true" }}&url={{ content.url url_encode="true" }}" class="share-twitter"><koken:else><a href="https://twitter.com/intent/tweet?text={{ content.title|content.filename url_encode="true" }}&url={{ content.url url_encode="true" }}&via={{ profile.twitter }}" class="share-twitter"></koken:if><i class="kicon-twitter"></i></a></li><li><a href="https://www.facebook.com/sharer.php?u={{ content.url url_encode="true" }}" class="share-facebook" title="Share {{ content.title|content.filename url_encode="true" }} on Facebook"><i class="kicon-facebook"></i></a></li><li><a href="http://pinterest.com/pin/create/button/?url={{ content.url url_encode="true" }}&media={{ content.presets.large.url url_encode="true" }}&description={{ content.title|content.filename url_encode="true" }}" class="share-pinterest" title="Share {{ content.title|content.filename url_encode="true" }} on Pinterest"><i class="kicon-pinterest"></i></a></li><li><a href="http://www.tumblr.com/share/photo?source={{ content.presets.large.url url_encode="true"  }}&caption=%3Cp%3E%3Cstrong%3E%3Ca href=&quot;{{ content.url url_encode="true" }}&quot; title=&quot;{{ content.title|content.filename url_encode="true" }}&quot;%3E{{ content.title|content.filename url_encode="true" }}%3C/a%3E%3C/strong%3E%3C/p%3E%3Cp%3E{{ content.caption url_encode="true" }}%3C/p%3E&click_thru={{ content.url url_encode="true" }}" class="share-tumblr" title="Share {{ content.title|content.filename }} on Tumblr"><i class="kicon-tumblr"></i></a></li><li><a href="https://plus.google.com/share?url={{ content.url url_encode="true" }}" class="share-google" title="Share {{ content.url url_encode="true" }} on Google+"><i class="kicon-gplus"></i></a></li>
+					</ul>
+
+					<koken:asset file="sharelite.js" common="true" />
+
+				</koken:if>
+
+			</koken:if>
+
+			<koken:include file="inc/social-bttns.html" />
+
+			<koken:if true="settings.show_disc_content">
+
+				<div id="kdiscuss">
+
+					<koken:discussion>
+
+						{{ discussion }}
+
+					</koken:discussion>
+
+				</div>
+
+			</koken:if>
+
+		</span>
+
+	</div>
+
+	<koken:parent>
+
+		<div class="bot">
+
+			<ul>
+
+				<li>
+
+					<span class="cell single">
+
+						<span class="nav">
+							<koken:link title="View {{ album.title }}"><i class="icon-left-open-mini"></i>{{ album.title }}</koken:link>
+						</span>
+
+					</span>
+
+				</li>
+
+			</ul>
+
+		</div>
+
+	</koken:parent>
+
+</koken:load>
+
+<koken:include file="inc/footer.html" />
