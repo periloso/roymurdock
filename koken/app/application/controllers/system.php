@@ -172,7 +172,9 @@ class System extends Koken_Controller {
 		$t = new Text();
 		$t->select_max('modified_on')->get();
 
-		$webhost = new WebhostWhois(array('useDns' => false));
+		$webhost = new WebhostWhois(array(
+			'useDns' => !in_array($_SERVER['SERVER_ADDR'], array('127.0.0.1', '::1'))
+		));
 
 		if (!defined('MAX_PARALLEL_REQUESTS'))
 		{

@@ -1,0 +1,155 @@
+<koken:event_content>
+
+<div class="item">
+
+	<div class="media">
+
+		<koken:content_image>
+
+			<span class="wrap" data-koken-ignore-responsive="true">
+
+				<koken:if true="settings.show_share">
+
+					<koken:if true="content.public">
+
+						<div class="share_content">
+
+							<span class="content-share share_button"><i></i></span>
+
+							<div class="kshare">
+								<input type="text" class="kshare-input" value="{{ content.url }}" />
+								<ul class="kshare-items">
+									<li>
+										<koken:if empty="profile.twitter"><a target="_blank" href="https://twitter.com/intent/tweet?text={{ content.title|content.filename url_encode="true" }}&url={{ content.url url_encode="true" }}" class="share-twitter"><koken:else><a target="_blank" href="https://twitter.com/intent/tweet?text={{ content.title|content.filename url_encode="true" }}&url={{ content.url url_encode="true" }}&via={{ profile.twitter }}" class="share-twitter"></koken:if><i class="kicon-twitter"></i></a>
+							    	</li>
+							    	<li>
+							   			 <a target="_blank" href="https://www.facebook.com/sharer.php?u={{ content.url url_encode="true" }}" class="share-facebook"><i class="kicon-facebook"></i></a>
+							   		</li>
+							   		<li>
+							    		<a href="http://pinterest.com/pin/create/button/?url={{ content.url url_encode="true" }}&media={{ content.presets.large.url url_encode="true" }}&description={{ content.title|content.filename url_encode="true" }}" class="share-pinterest" title="Share {{ content.title|content.filename url_encode="true" }} on Pinterest"><i class="kicon-pinterest"></i></a>
+							    	</li>
+							    	<li>
+							    		<a href="http://www.tumblr.com/share/photo?source={{ content.presets.large.url url_encode="true"  }}&caption=%3Cp%3E%3Cstrong%3E%3Ca href=&quot;{{ content.url url_encode="true" }}&quot; title=&quot;{{ content.title|content.filename }}&quot;%3E{{ content.title|content.filename }}%3C/a%3E%3C/strong%3E%3C/p%3E%3Cp%3E{{ content.caption }}%3C/p%3E&click_thru={{ content.url url_encode="true" }}" class="share-tumblr" title="Share {{ content.title|content.filename url_encode="true" }} on Tumblr"><i class="kicon-tumblr"></i></a>
+							    	</li>
+							    	<li>
+							    		<a target="_blank" href="https://plus.google.com/share?url={{ content.url url_encode="true" }}" class="share-google" title="Share {{ content.title|content.filename url_encode="true" }} on Google+"><i class="kicon-gplus"></i></a>
+							    	</li>
+							    	<koken:max_download>
+							    	<li>
+							    		<koken:link class="share-dl no-share" title="Download {{ max_download.width }} x {{ max_download.height }}"><i class="kicon-dl"></i></koken:link>
+							    	</li>
+								    </koken:max_download>
+							    </ul>
+					    	</div>
+
+					    </div>
+
+					 </koken:if>
+
+					</koken:if>
+
+					<koken:if true="settings.show_img_spinner">
+
+						<koken:if true="settings.link_to_lightbox">
+
+							<koken:link lightbox="true" title="View in lightbox"><koken:img lazy="true" /></koken:link>
+
+						<koken:else>
+
+							<koken:img lazy="true" />
+
+						</koken:if>
+
+					<koken:else>
+
+						<koken:if true="settings.link_to_lightbox">
+
+							<koken:link lightbox="true" title="View in lightbox"><koken:img lazy="true" class="nospin" /></koken:link>
+
+						<koken:else>
+
+							<koken:img lazy="true" class="nospin" />
+
+						</koken:if>
+
+					</koken:if>
+
+			</span>
+
+			<div class="media-meta">
+
+				<koken:if true="settings.show_exif">
+					<koken:exif>
+						<ol class="exif">
+							<koken:not empty="exif.aperture">
+								<li>
+									{{ exif.aperture }}
+								</li>
+							</koken:not>
+							<koken:not empty="exif.exposure">
+								<li>
+									{{ exif.exposure }}
+								</li>
+							</koken:not>
+							<koken:not empty="exif.focal_length">
+								<li>
+									{{ exif.focal_length }}
+								</li>
+							</koken:not>
+							<koken:not empty="exif.iso_speed_ratings">
+								<li>
+									{{ exif.iso_speed_ratings }}
+								</li>
+			    		 </koken:not>
+			    		</ol>
+					</koken:exif>
+				</koken:if>
+
+			</div>
+
+		</koken:content_image>
+
+		<koken:content_video>
+			<koken:video />
+		</koken:content_video>
+
+	</div>
+
+	<span class="text">
+
+		<h2>
+			<koken:link title="View {{ content.title | content.filename }}">
+				{{ content.title | content.filename }}
+			</koken:link>
+		</h2>
+
+		<p class="caption">
+			{{ content.caption }}
+		</p>
+
+		<koken:categories>
+			<p class="tagscats">
+				View more in:
+				<koken:loop separator=", ">
+					<koken:link to="category" title="View everything in {{ category.title }}">
+						{{ category.title }}
+					</koken:link>
+				</koken:loop>
+			</p>
+		</koken:categories>
+
+		<koken:tags>
+			<p class="tagscats tags">
+				<koken:loop separator="&nbsp;">
+					<koken:link to="tag" title="View everything in #{{ tag.title }}">
+						#{{ tag.title }}
+					</koken:link>
+				</koken:loop>
+			</p>
+		</koken:tags>
+
+	</span>
+
+</div>
+
+</koken:event_content>

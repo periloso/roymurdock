@@ -1390,10 +1390,13 @@
 				</div>
 
 				<div class="mid-wrap">
-					<!-- ko if: system.memory_limit.replace(/(M|G)$/, '') < 64 -->
+					<!-- ko ifnot: system.memory_limit -->
+					Not set
+					<!-- /ko -->
+					<!-- ko if: system.memory_limit && system.memory_limit.replace(/(M|G)$/, '') < 64 -->
 					<span class="icon16 label-warn" data-bind="text: system.memory_limit + 'B (low)'"></span>
 					<!-- /ko -->
-					<!-- ko if: system.memory_limit.replace(/(M|G)$/, '') >= 64 -->
+					<!-- ko if: system.memory_limit && system.memory_limit.replace(/(M|G)$/, '') >= 64 -->
 					<span data-bind="text: system.memory_limit + 'B'"></span>
 					<!-- /ko -->
 				</div>

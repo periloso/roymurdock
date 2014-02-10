@@ -17,6 +17,12 @@ class BD_Shortcodes extends KokenPlugin {
 		if (!isset($attr['url']) || !isset($attr['endpoint'])) { return ''; }
 
 		$endpoint = $attr['endpoint'];
+
+		if (strpos($endpoint, 'maxwidth=') === false)
+		{
+			$endpoint .= '&maxwidth=1920&maxheight=1080';
+		}
+
 		if (strpos($endpoint, '?') !== false)
 		{
 			$endpoint .= '&';

@@ -1,0 +1,402 @@
+	<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="description" content="" />
+	<meta name="author" content="Roy Murdock" />
+	<meta name="keywords" content="photography, Roy Murdock" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+	<title>
+	
+	
+	Roy Murdock</title>
+
+	<link rel="stylesheet" type="text/css" href="/koken/app/site/themes/common/css/reset.css?0.11.3" />
+	<link rel="stylesheet" type="text/css" href="/koken/app/site/themes/common/css/animate.css?0.11.3" />
+	<link rel="stylesheet" type="text/css" href="/koken/storage/themes/roystheme/css/screen.css?1.4.2" />
+	<link rel="stylesheet" type="text/css" href="/koken/storage/themes/roystheme/css/kicons.css?1.4.2" />
+	<link rel="stylesheet" type="text/css" href="/koken/storage/themes/roystheme/css/kshare.css?1.4.2" />
+	<link id="koken_settings_css_link" rel="stylesheet" type="text/css" href="/settings.css.lens" />
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+	
+	<meta property="og:site_name" content="Roy Murdock" />
+	<meta property="og:description" content="" />
+	<meta property="og:title" content="Timeline" />
+	<meta property="og:type" content="blog" />
+	<meta property="og:url" content="http://roymurdock.com/" />
+	
+
+	<!--[if IE]>
+	<script src="/koken/app/site/themes/common/js/html5shiv.js"></script>
+	<![endif]-->
+
+	<meta name="generator" content="Koken 0.11.3" />
+	<meta name="theme" content="Roy's Theme 1.4.2" />
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="/koken/app/site/themes/common/js/jquery.min.js"><\/script>')</script>
+	<script src="/koken.js?0.11.3"></script>
+	<script>$K.location = $.extend($K.location, {"here":"\/","parameters":{"page":1,"url":"\/","base_folder":"\/"},"page_class":"k-source-timeline k-lens-timeline"});</script>
+
+	<link rel="alternate" type="application/atom+xml" title="Roy Murdock: All uploads" href="/feed/content/recent.rss" />
+	<link rel="alternate" type="application/atom+xml" title="Roy Murdock: Essays" href="/feed/essays/recent.rss" />
+	<link rel="alternate" type="application/atom+xml" title="Roy Murdock: Timeline" href="/feed/timeline/recent.rss" />
+<script src="/koken/storage/themes/roystheme/js/jquery.smooth-scroll.min.js?1.4.2"></script>
+<script src="/koken/storage/themes/roystheme/js/jquery.sidr.min.js?1.4.2"></script>
+<script src="/koken/app/site/themes/common/js/jquery.pjax.js?0.11.3"></script>
+<script>
+	$(function() {
+
+	var navClassSets = function() {
+	$('.k-nav-current').parentsUntil('nav').each(function(i,element) {
+	if ($(element).get(0).tagName === 'UL') {
+	$(element).prev().addClass('k-nav-open');
+	}
+	});
+	}
+	navClassSets();
+
+	$(window).bind('resize', function() {
+	$('#strip').css({
+	left: $('#main').offset().left + $('#main').width() + 40 + 'px'
+	});
+	})
+	.trigger('resize');
+
+	$(document).pjax('nav a:not(.k-nav-set), header h1 a', '#target', {
+	timeout: 2000
+	});
+
+	$(document)
+	.on('pjax:start', function(e) {
+	$('#target').empty();
+	$K.navigation.setCurrent($(e.relatedTarget).attr('href'));
+	window.scrollTo(0,0);
+	})
+	.on('pjax:click', function() {
+	navClassSets();
+	$('.k-nav-current').parentsUntil('nav').each(function(i,element) {
+	if ($(element).hasClass('k-nav-root')) {
+	if ($('.k-nav-current').closest('ul').prev().hasClass('k-nav-open')) {
+	$(element).addClass('paused');
+	} else {
+	$(element).removeClass('paused');
+	}
+	}
+	});
+	})
+	.on('scroll', function() {
+	$('.item').each(function() {
+	if ( ($(this).offset().top+$('body').offset().top) > $(window).scrollTop() ) {
+	$('#strip .current').removeClass('current');
+	$('#strip a[href="#' + $(this).attr('id') + '"]').addClass('current');
+	return false;
+	}
+	});
+	})
+	.trigger('scroll');
+
+	function createStrip() {
+	$('#strip a').smoothScroll({
+	offset: -40,
+	afterScroll: function() {
+	$('#strip .current').removeClass('current');
+	$(this).addClass('current');
+	}
+	});
+	}
+
+	window.pjaxReload = function() {
+	createStrip();
+	$K.responsiveImages();
+	$K.loadImages();
+	$(window).trigger('resize');
+	$(document).trigger('scroll');
+	}
+
+	createStrip();
+
+	});
+	</script>
+<script>
+	$(function() {
+	$('time').timeago();
+	});
+</script>
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-44114303-1']);
+ 	_gaq.push(['_trackPageview']);
+ 	_gaq.push(['_anonymizeIP', false]);
+
+ 	(function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ 	})();
+
+</script>
+</head>
+
+<body class="k-source-timeline k-lens-timeline">
+	
+	<div id="sidr-left" class="mob">
+ 	<ul class="k-nav-list k-nav-root "><li><a class="k-nav-current" data-koken-internal title="Home" href="/">Home</a></li><li><a data-koken-internal title="About" href="/pages/about/">About</a></li></ul><ul class="k-nav-list k-nav-root "><li><a target="_blank" title="+ EMAIL" href="mailto:murdock.roy@gmail.com">+ EMAIL</a></li><li><a target="_blank" title="+ TWITTER" href="https://twitter.com/RoyMurdock">+ TWITTER</a></li></ul><ul class="k-nav-list k-nav-root "><li><a target="_blank" title="Subscribe" href="http://eepurl.com/MFi0L">Subscribe</a></li><li><a data-koken-internal title="RSS" href="/feed/essays/recent.rss">RSS</a></li></ul>	</div>
+
+	<div id="mob-bttn-row"><a id="mob-menu" href="#mob-menu" title="Open mobile menu"><i class="kicon-mob-menu"></i></a></div>
+
+	<div id="page">
+
+	<div id="col">
+
+	<div class="in">
+
+	<header class="top">
+	<a href="/" title="Home" class="k-nav-current" data-koken-internal><img src="http://roymurdock.com/koken/RMLogo.png" alt="Roy Murdock" class="custom_logo"></a>	</header>
+
+	<nav>
+	<ul class="k-nav-list k-nav-root "><li><a class="k-nav-current" data-koken-internal title="Home" href="/">Home</a></li><li><a data-koken-internal title="About" href="/pages/about/">About</a></li></ul><ul class="k-nav-list k-nav-root "><li><a target="_blank" title="+ EMAIL" href="mailto:murdock.roy@gmail.com">+ EMAIL</a></li><li><a target="_blank" title="+ TWITTER" href="https://twitter.com/RoyMurdock">+ TWITTER</a></li></ul><ul class="k-nav-list k-nav-root "><li><a target="_blank" title="Subscribe" href="http://eepurl.com/MFi0L">Subscribe</a></li><li><a data-koken-internal title="RSS" href="/feed/essays/recent.rss">RSS</a></li></ul>	</nav>
+
+	<div id="col-xtra">
+
+	<div id="col-xtra-content">
+
+	
+	
+	</div>
+
+	</div>
+
+	</div>
+
+	</div> <!-- close col -->
+
+	<div id="target">
+
+<div id="main" class="timeline">
+
+	
+	
+
+	
+	<h1 class="top">
+	<a href="/timeline/2014/01/18/" title="View everything published this day" data-koken-internal>
+	</a>
+	</h1>
+
+	<div class="event">
+
+	</div>
+	<hr>
+	<h1 class="top">
+	<a href="/timeline/2013/11/04/" title="View everything published this day" data-koken-internal>
+	</a>
+	</h1>
+
+	<div class="event">
+
+	<time datetime="2013-11-04T20:43:06+00:00" >
+	November 4, 2013
+</time>	
+<span class="text">
+
+	<h1>
+	<a href="/essays/2013/11/snapchat-is-intrinsically-worthless/" class="essay_title" title="View Am I Going Insane? Snapchat is Intrinsically Worthless" data-koken-internal>Am I Going Insane? Snapchat is Intrinsically Worthless</a>&nbsp;&nbsp;<span class="item_meta">(<a href="http://roymurdock.com/essays/2013/11/snapchat-is-intrinsically-worthless/#disqus_thread" data-disqus-identifier="koken_disqus_essay_3"></a>)</span>	</h1>
+
+	<div class="item">
+
+	<a href="/essays/2013/11/snapchat-is-intrinsically-worthless/" title="View Am I Going Insane? Snapchat is Intrinsically Worthless" class=".top" data-koken-internal>
+	<div class="media">
+
+	
+	<noscript>
+	<img width="100%" alt="Snapchat Header" src="http://roymurdock.com/koken/storage/cache/images/000/022/snapchatbanner,large.png?1383598234" />
+</noscript>
+<img data-alt="Snapchat Header" data-respond-to="width" data-presets="tiny,60,29 small,100,49 medium,480,234 medium_large,705,344 large,705,344 xlarge,705,344 huge,705,344" data-base="http://roymurdock.com/koken/storage/cache/images/000/022/snapchatbanner," data-extension="png?1383598234"/>
+
+	
+	
+	</div>
+
+	</a>
+
+	<p class="caption">
+	While Snapchat's valuation is nowhere close to that of Apple and Facebook, it is surprisingly close to stable, established companies with actual revenue streams. Why have investors put such a high price tag on what seems to be a silly messaging app?	<a href="/essays/2013/11/snapchat-is-intrinsically-worthless/" class="read_more" title="View Am I Going Insane? Snapchat is Intrinsically Worthless" data-koken-internal>more</a>
+	</p>
+
+	
+	
+	</span>
+
+	</div>
+
+	</div>
+	<hr>
+	<h1 class="top">
+	<a href="/timeline/2013/10/05/" title="View everything published this day" data-koken-internal>
+	</a>
+	</h1>
+
+	<div class="event">
+
+	<time datetime="2013-10-05T18:22:36+00:00" >
+	October 5, 2013
+</time>	
+<span class="text">
+
+	<h1>
+	<a href="/essays/2013/10/google-is-taking-apples-niche/" class="essay_title" title="View The Death of the iPhone" data-koken-internal>The Death of the iPhone</a>&nbsp;&nbsp;<span class="item_meta">(<a href="http://roymurdock.com/essays/2013/10/google-is-taking-apples-niche/#disqus_thread" data-disqus-identifier="koken_disqus_essay_1"></a>)</span>	</h1>
+
+	<div class="item">
+
+	<a href="/essays/2013/10/google-is-taking-apples-niche/" title="View The Death of the iPhone" class=".top" data-koken-internal>
+	<div class="media">
+
+	
+	<noscript>
+	<img width="100%" alt="custom_oembed_1.jpg" src="http://roymurdock.com/koken/storage/cache/images/custom/custom_oembed_1-jpg/large.jpg?1380997692" />
+</noscript>
+<img data-alt="custom_oembed_1.jpg" data-respond-to="width" data-presets="tiny,60,45 small,100,75 medium,480,360 medium_large,480,360 large,480,360 xlarge,480,360 huge,480,360" data-base="http://roymurdock.com/koken/storage/cache/images/custom/custom_oembed_1-jpg/" data-extension="jpg?1380997692"/>
+
+	
+	
+	</div>
+
+	</a>
+
+	<p class="caption">
+	Apple has long been the champion of meeting (and exceeding) customer expectations. What happens when big data and responsive technology enter the equation?	<a href="/essays/2013/10/google-is-taking-apples-niche/" class="read_more" title="View The Death of the iPhone" data-koken-internal>more</a>
+	</p>
+
+	
+	
+	</span>
+
+	</div>
+
+	</div>
+	<hr>
+	<h1 class="top">
+	<a href="/timeline/2013/09/21/" title="View everything published this day" data-koken-internal>
+	</a>
+	</h1>
+
+	<div class="event">
+
+	<time datetime="2013-09-21T22:12:20+00:00" >
+	September 21, 2013
+</time>	
+<span class="text">
+
+	<h1>
+	<a href="/essays/2013/09/how-useful-is-the-new-iphone/" class="essay_title" title="View How Useful Is the New iPhone 5s?" data-koken-internal>How Useful Is the New iPhone 5s?</a>&nbsp;&nbsp;<span class="item_meta">(<a href="http://roymurdock.com/essays/2013/09/how-useful-is-the-new-iphone/#disqus_thread" data-disqus-identifier="koken_disqus_essay_2"></a>)</span>	</h1>
+
+	<div class="item">
+
+	<a href="/essays/2013/09/how-useful-is-the-new-iphone/" title="View How Useful Is the New iPhone 5s?" class=".top" data-koken-internal>
+	<div class="media">
+
+	
+	<noscript>
+	<img width="100%" alt="iphone5s.jpeg" src="http://roymurdock.com/koken/storage/cache/images/000/006/iphone5s,large.jpeg?1379898585" />
+</noscript>
+<img data-alt="iphone5s.jpeg" data-respond-to="width" data-presets="tiny,60,36 small,100,60 medium,480,288 medium_large,640,384 large,640,384 xlarge,640,384 huge,640,384" data-base="http://roymurdock.com/koken/storage/cache/images/000/006/iphone5s," data-extension="jpeg?1379898585"/>
+
+	
+	
+	</div>
+
+	</a>
+
+	<p class="caption">
+	While the new 5s and 5c may keep customers coming back to Apple, they will not bring about any serious change in the smartphone world, and stagnation leads to decay and eventual death. Let's go through the list of 5s and iOS7 upgrades and ask ourselves…	<a href="/essays/2013/09/how-useful-is-the-new-iphone/" class="read_more" title="View How Useful Is the New iPhone 5s?" data-koken-internal>more</a>
+	</p>
+
+	
+	
+	</span>
+
+	</div>
+
+	</div>
+	<hr>	
+	
+	<script>$K.keyboardScroll('.item', 0);</script>
+
+	
+</div>
+
+	
+	</div>
+
+	</div>	<!-- close container -->
+
+	<script src="/koken/app/site/themes/common/js/share.js?0.11.3"></script>
+	<footer class="main"></footer>
+
+	<script src="/koken/storage/themes/roystheme/js/madison.js?1.4.2"></script>
+
+	<script>
+	$(document).ready(function() {
+	$('#mob-menu').sidr({
+	name: 'sidr-left'
+	});
+	});
+	</script>
+
+<script type="text/javascript">
+	var disqus_shortname = 'roymurdock';
+	(function() {
+	var disqus = function() {
+	if ($('#disqus_thread').length) {
+	(function() {
+	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+	} else if ($('[data-disqus-identifier]').length) {
+	(function() {
+	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+	}
+	}
+
+	$(function() {
+	if ($.pjax) {
+	$(document).on('pjax.success', function() {
+	window.setTimeout(function() {
+	if (window.DISQUS && $('#disqus_thread').length) {
+	window.DISQUS.reset({
+	reload: true,
+	config: function() {
+	this.page.url = window.location.href;
+	this.page.identifier = disqus_identifier;
+	}
+	});
+	} else {
+	disqus();
+	}
+	}, 250)
+	});
+	}
+	disqus();
+	});
+	}());
+</script></body>
+
+</html>
+

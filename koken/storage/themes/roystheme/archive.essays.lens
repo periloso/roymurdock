@@ -1,0 +1,53 @@
+<koken:if true="pjax">
+	<koken:title />
+<koken:else>
+	<koken:include file="layouts/header.html" />
+</koken:if>
+
+<div id="main">
+
+<koken:load limit="{{ settings.essays_index_limit }}">
+
+	<koken:head>
+		<meta property="og:site_name" content="{{ site.title }}" />
+		<meta property="og:description" content="{{ site.description strip_html='true' }}" />
+		<meta property="og:title" content="{{ labels.essay.plural }}" />
+		<meta property="og:type" content="blog" />
+		<meta property="og:url" content="{{ location.site_url }}{{ location.here }}" />
+	</koken:head>
+
+	<koken:variable name="list" value="true" />
+
+	<h1 class="top">
+		<koken:breadcrumbs separator="/" />
+	</h1>
+
+	<koken:loop>
+
+		<article>
+
+			<koken:include file="layouts/essay.html" />
+
+		</article>
+
+	</koken:loop>
+
+	<koken:keyboard_scroll element="article" />
+
+	<koken:include file="layouts/pagination.html" />
+
+	<koken:else>
+
+		<koken:note>
+			No essays found.
+		</koken:note>
+
+</koken:load>
+
+</div>
+
+<koken:if true="pjax">
+	<script>$K.ready();</script>
+<koken:else>
+	<koken:include file="layouts/footer.html" />
+</koken:not>

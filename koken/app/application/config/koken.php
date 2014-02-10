@@ -42,7 +42,7 @@ if (!defined('ALLOW_BETA_BUILDS')) {
 }
 
 // Director constants
-define('KOKEN_VERSION', '0.11.2');
+define('KOKEN_VERSION', '0.11.3');
 
 /* End of file koken.php */
 /* Location: ./system/application/config/koken.php */

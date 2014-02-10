@@ -573,7 +573,7 @@ class Text extends DataMapper {
 		}
 
 		$data['topics'] = array();
-		foreach($this->albums as $a)
+		foreach($this->albums->where('deleted', 0)->get_iterated() as $a)
 		{
 			$data['topics'][] = $a->to_array(array('with_topics' => false));
 		}
