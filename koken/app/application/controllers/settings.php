@@ -36,8 +36,6 @@ class Settings extends Koken_Controller {
 			$data[ $setting->name ] = $value;
 		}
 
-		unset($data['uuid']);
-
 		$disable_cache_file = FCPATH . 'storage' . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'no-site-cache';
 		$data[ 'enable_site_cache' ] = !file_exists( $disable_cache_file );
 

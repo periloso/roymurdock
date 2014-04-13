@@ -270,24 +270,44 @@ class Install extends CI_Controller {
 		}
 
 		$host = new WebhostWhois;
+		$data = array(
+			'domain' => $_SERVER['HTTP_HOST'],
+			'path' => '/' . $base_folder,
+			'uuid' => $settings['uuid'],
+			'php' => PHP_VERSION,
+			'version' => KOKEN_VERSION,
+			'ip' => $_SERVER['SERVER_ADDR'],
+			'image_processing' => urlencode($processing_string),
+			'subscribe' => (isset($_POST['subscribe']) ? $_POST['subscribe'] : ''),
+			'first' => $_POST['first_name'],
+			'last' => $_POST['last_name'],
+			'host' => $host->key,
+			'plugins' => array(),
+		);
+
+		$t = new Theme;
+		$themes = $t->read();
+
+		foreach($themes as $theme)
+		{
+			if (isset($theme['koken_store_guid']))
+			{
+				$data['plugins'][] = array(
+					'guid' => $theme['koken_store_guid'],
+					'version' => $theme['version'],
+				);
+			}
+		}
 
 		$curl = curl_init();
-		curl_setopt($curl, CURLOPT_URL, KOKEN_STORE_URL . '/register?domain=' . $_SERVER['HTTP_HOST'] .
-			'&path=/' . $base_folder .
-			'&uuid=' . $settings['uuid'] .
-			'&php=' . PHP_VERSION .
-			'&version=' . KOKEN_VERSION .
-			'&ip=' . $_SERVER['SERVER_ADDR'] .
-			'&subscribe=' . (isset($_POST['subscribe']) ? $_POST['subscribe'] : '') .
-			'&first=' . $_POST['first_name'] .
-			'&last=' . $_POST['last_name'] .
-			'&image_processing=' . urlencode($processing_string) .
-			'&host=' . $host->key);
-		curl_setopt($curl, CURLOPT_HEADER, 0);
+		curl_setopt($curl, CURLOPT_URL, KOKEN_STORE_URL . '/register');
+		curl_setopt($curl, CURLOPT_POST, 1);
+	    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
 		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+		curl_setopt($curl, CURLOPT_HEADER, 0);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
 		$r = curl_exec($curl);
 		curl_close($curl);
 

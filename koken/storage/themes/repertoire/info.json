@@ -1,14 +1,14 @@
 {
 	"name": "Repertoire",
-	"version": "1.4.2",
-	"description": "Theme intended for graphic designers and creative directors to showcase their portfolio of work.",
+	"version": "1.4.5",
+	"description": "Repertoire is an understated yet polished theme tailored for photographers and designers who want both a blog and portfolio site showcasing their work.",
 	"demo": "http://demo.koken.me/#repertoire",
-	"documentation": "http://help.koken.me/customer/portal/articles/1227392-repertoire-documentation",
+	"documentation": "https://store.koken.me/themes/repertoire",
 	"author": {
-		"name": "Sebastian Pinehurst",
-		"link": "http://koken.me"
+		"name": "Koken",
+		"link": "https://store.koken.me/authors/koken"
 	},
-	"koken_version_required": "0.10.0-beta.1",
+	"koken_version_required": "0.12.0-beta.1",
 
 	"navigation_groups": {
 	     "secondary": {

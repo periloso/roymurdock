@@ -25,7 +25,8 @@ class Users extends Koken_Controller {
 				$this->email->subject('Koken: Password reset requested');
 				$this->email->message("Hi there -\n\nSomeone (hopefully you!) just requested that the password to your Koken installation at {$koken_url_info->base} be reset. If you did not request a password reset, ignore this email and your password will stay the same. If you do need your password reset, click the link below.\n\n{unwrap}{$koken_url_info->base}api.php?/users/reset_password/{$u->internal_id}{/unwrap}\n\n- Koken");
 				$this->email->send();
-				exit;
+
+				$this->set_response_data(array('success' => true));
 			}
 			else
 			{
@@ -39,7 +40,6 @@ class Users extends Koken_Controller {
 				$u->password = $new;
 				$u->save();
 
-				// TODO: add user email here
 				$this->email->from($u->email, 'Koken');
 				$this->email->to($u->email);
 				$this->email->subject('Koken: Your password has been reset');

@@ -3,14 +3,18 @@
 @import url(css/body/[$font_body].css);
 
 header.top h1 {
-	font-size: [$site_title_size]px;
+	font-size: $site_title_size;
 	text-transform: $site_title_case;
 }
 
 body {
-	font-size: 1em;
+	font-size: 1.1em;
 	color: #2E2E2E;
 	background: $background_color;
+}
+
+h1 {
+	font-size: 1.4em;
 }
 
 a {
@@ -91,6 +95,18 @@ nav a.k-nav-current {
 	color:#1975FF;
 	font-weight:bold;
 }
+
+#main p.caption {
+	color: $hot;
+}
+
+#main p.caption a, #main p.caption a:visited {
+	color: $cool;
+}
+
+#main p.caption a:hover {
+	color: $hot;
+}
 /* End Roy's Edits */
 
 #main ol.exif li {
@@ -98,15 +114,11 @@ nav a.k-nav-current {
 }
 
 #main p.tagscats.tags {
-
+	color: $hot;
 }
 
 #main p.tagscats.tags a, #main p.tagscats.tags a:visited {
-	color: $cool;
-}
-
-#main p.tagscats.tags a:hover {
-	color: $hot_nav;
+	color: $hot;
 }
 
 #strip a {

@@ -5,6 +5,8 @@
 
 	<div id="lay-three-col">
 
+		<div class="ui-sheet-bg"></div>
+
 		<!-- ko with: sheets.insert_link -->
 			<!-- ko template: 'sheets_mu' --><!-- /ko -->
 		<!-- /ko -->
@@ -335,8 +337,10 @@
 				</ol>
 			</div>
 			<div id="left-menu-bot" class="col-bot" style="z-index:15">
-				<div class="w">
-					<a href="#" data-event="toggle_sheet" data-sheet="create_text" title="Create new essay or page" class="button-ui emb" style="margin-top:-1px;"><span class="icon-solo bi-new"></span></a>
+				<div class="ui-row">
+					<div class="l push">
+						<a href="#" data-event="toggle_sheet" data-sheet="create_text" title="Create new essay or page" class="button-ui emb" data-bind="css: { disabled: loading }"><span class="icon-solo bi-new"></span></a>
+					</div>
 				</div>
 			</div>
 		</div> <!-- close #three-col-left -->
@@ -1090,12 +1094,12 @@
 		<div class="sheet-wrap">
 			<label>Show:</label>
 			<select id="view_select" class="tiny" data-bind="value: selected.view()">
-				<option class="all_content" value="content">All content</option>
-				<option class="last_upload" value="last_upload">Last upload</option>
-				<option class="quick_collection" value="quick_collection">Quick collection</option>
-				<option class="favorites" value="content/favorites:1">Favorites</option>
-				<option class="featured" value="content/featured:1">Featured content</option>
-				<option class="albums" value="public_albums">Public album</option>
+				<option class="all_content default_opt" value="content">All content</option>
+				<option class="last_upload default_opt" value="last_upload">Last upload</option>
+				<option class="quick_collection default_opt" value="quick_collection">Quick collection</option>
+				<option class="favorites default_opt" value="content/favorites:1">Favorites</option>
+				<option class="featured default_opt" value="content/featured:1">Featured content</option>
+				<option class="albums default_opt" value="public_albums">Public album</option>
 			</select>
 			<select id="album_select" class="tiny" data-bind="visible: selected.view() === 'public_albums' || $parent.sheet_media_chosen.secondary() !== 'none'">
 				<option class="none">Select a public album</option>
@@ -1199,7 +1203,7 @@
 							</span>
 							<span class="info">
 								<span class="titie"><h3 data-bind="text: title"></h3></span>
-								<span class="desc" data-bind="text: $root.truncate(description, 74)"></span>
+								<span class="desc" data-bind="text: $root.truncate(description, 70)"></span>
 							</span>
 						</li>
 					</ul>
@@ -1255,8 +1259,8 @@
 								<span class="icon48 icon-page-last-upload"></span>
 							</span>
 							<span class="info">
-								<span class="title"><h3 data-bind="">Last upload</h3></span>
-								<span class="desc">Use photos from your most recent upload.</span>
+								<span class="title"><h3 data-bind="">Last import</h3></span>
+								<span class="desc">Use photos from your most recent import.</span>
 							</span>
 						</li>
 					</ul>
@@ -1465,7 +1469,7 @@
 	<span class="info">
 		<h3 data-bind="text: title"></h3>
 		<!-- ko if: description -->
-		<span class="desc" data-bind="text: $root.truncate(description, 74 - (level*5))"></span>
+		<span class="desc" data-bind="text: $root.truncate(description, 70 - (level*5))"></span>
 		<!-- /ko -->
 		<!-- ko ifnot: description -->
 		<span class="desc">No description available</span>
@@ -1488,7 +1492,7 @@
 	<span class="info">
 		<h3 data-bind="text: title"></h3>
 		<!-- ko if: description -->
-		<span class="desc" data-bind="text: $root.truncate(description, 74 - (level*5))"></span>
+		<span class="desc" data-bind="text: $root.truncate(description, 70 - (level*5))"></span>
 		<!-- /ko -->
 		<!-- ko ifnot: description -->
 		<span class="desc">No description available</span>
@@ -1511,7 +1515,7 @@
 	<span class="info">
 		<h3 data-bind="text: title"></h3>
 		<!-- ko if: description -->
-		<span class="desc" data-bind="text: $root.truncate(description, 74 - (level*5))"></span>
+		<span class="desc" data-bind="text: $root.truncate(description, 70 - (level*5))"></span>
 		<!-- /ko -->
 		<!-- ko ifnot: description -->
 		<span class="desc">No description available</span>

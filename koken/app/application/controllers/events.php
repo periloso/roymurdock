@@ -42,18 +42,28 @@ class Events extends Koken_Controller {
     		$order .= ',event_day DESC';
     	}
 
+    	$a = new Album;
     	$c = new Content;
-    	$c->select($select)
+    	$t = new Text;
+
+    	$c->select(str_replace($content_col, $c->table . '.' . $content_col, $select))
+    		->include_related('album', 'id')
     		->where('visibility', 0)
     		->where('deleted', 0);
 
-    	$a = new Album;
-    	$a->select( str_replace($content_col, 'created_on', $select) )
+    	if (!$params['limit_to'])
+    	{
+    		$c->group_start()
+    			->where('album_id', null)
+    			->or_where($c->table . '.published_on > `' . $a->table . '`.`published_on`')
+    		->group_end();
+    	}
+
+    	$a->select( str_replace($content_col, 'published_on', $select) )
     				->where('listed', 1)
     				->where('deleted', 0)
     				->where('total_count >', 0);
 
-    	$t = new Text;
     	$t->select( str_replace($content_col, 'published_on', $select) )
     				->where('page_type', 0)
     				->where('published', 1);

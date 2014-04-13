@@ -176,7 +176,10 @@ div#container {
 body.k-source-index div#container {
 	width:[$page_width_index]px;
 }
-body.k-source-albums div#container, body.k-source-sets div#container, body.k-source-set div#container {
+body.k-source-albums div#container,
+body.k-source-sets div#container,
+body.k-source-set div#container
+{
 	width:[$page_width_albums]px;
 }
 body.k-source-album div#container {
@@ -185,10 +188,16 @@ body.k-source-album div#container {
 body.k-source-content div#container {
 	width:[$page_width_content]px;
 }
-body.k-source-contents div#container {
+body.k-source-contents div#container,
+body.k-source-favorites div#container
+{
 	width:[$page_width_contents]px;
 }
-body.k-source-essays div#container, body.k-source-essay div#container, body.k-source-archive-essays div#container, body.k-source-page div#container {
+body.k-source-essays div#container,
+body.k-source-essay div#container,
+body.k-source-archive-essays div#container,
+body.k-source-page div#container
+{
 	width:[$page_width_essays]px;
 }
 
@@ -243,10 +252,11 @@ ul#nav-content li {
 	text-transform:uppercase;
 	letter-spacing:1px;
 	font-size:11px;
+	padding:0 8px;
 }
 
 ul#nav-content li:nth-child(2) {
-	padding:0 16px;
+	display:$show_lightbox_link;
 }
 
 div#caption-content {
@@ -320,7 +330,7 @@ ul#img-grid {
 
 ul#img-grid li {
 	width:[$grid_img_w]px;
-	display:none;
+	display:block;
 	-moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -605,12 +615,11 @@ div#kdiscuss {
 	body.k-source-contents div#container,
 	body.k-source-essays div#container,
 	body.k-source-essay div#container,
+	body.k-source-favorites div#container,
 	body.k-source-archive-essays div#container,
 	body.k-source-page div#container {
 		width:960px;
 	}
-
-	/*body::before{content: "TABLET LANDSCAPE";font-weight: bold;display: block;text-align: center;background: rgba(255,255,0, 0.9);position: absolute;top: 0;left: 0;right: 0;z-index: 99;}*/
 }
 
 /* Tablet Portrait size to standard 960 (devices and browsers) */
@@ -625,12 +634,11 @@ div#kdiscuss {
 	body.k-source-contents div#container,
 	body.k-source-essays div#container,
 	body.k-source-essay div#container,
+	body.k-source-favorites div#container,
 	body.k-source-archive-essays div#container,
 	body.k-source-page div#container {
 		width:728px;
 	}
-
-	/*body::before{content: "TABLET PORTRAIT";font-weight: bold;display: block;text-align: center;background: rgba(255,255,0, 0.9);position: absolute;top: 0;left: 0;right: 0;z-index: 99;}*/
 }
 
 /* All Mobile Sizes (devices and browser) */
@@ -681,12 +689,11 @@ div#kdiscuss {
 	body.k-source-contents div#container,
 	body.k-source-essays div#container,
 	body.k-source-essay div#container,
+	body.k-source-favorites div#container,
 	body.k-source-archive-essays div#container,
 	body.k-source-page div#container {
 		width:440px;
 	}
-
-	/*body::before{content: "MOBILE LANDSCAPE";font-weight: bold;display: block;text-align: center;background: rgba(255,255,0, 0.9);position: absolute;top: 0;left: 0;right: 0;z-index: 99;}*/
 }
 
 /* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
@@ -701,10 +708,9 @@ div#kdiscuss {
 	body.k-source-contents div#container,
 	body.k-source-essays div#container,
 	body.k-source-essay div#container,
+	body.k-source-favorites div#container,
 	body.k-source-archive-essays div#container,
 	body.k-source-page div#container {
 		width:300px;
 	}
-
-	/*body::before{content: "MOBILE PORTRAIT";font-weight: bold;display: block;text-align: center;background: rgba(255,255,0, 0.9);position: absolute;top: 0;left: 0;right: 0;z-index: 99;}*/
 }

@@ -1,14 +1,14 @@
 {
-	"name": "Observatory",
-	"version": "1.4.2",
-	"description": "Tri-column collection browsing perfect for graphic design portfolios.",
-	"demo": "http://demo.koken.me/#observatory",
-	"documentation": "http://help.koken.me/customer/portal/articles/1227390-observatory-documentation",
+	"name": "Ensemble",
+	"version": "1.4.5",
+	"description": "Fashionable theme that's light on customization but packs plenty of style. Tri-column mosaic layout for albums, large album detail pages, plus blogging make Ensemble a good fit for small to medium sized designer and photographer portfolio sites.",
+	"demo": "http://demo.koken.me/#ensemble",
+	"documentation": "https://store.koken.me/themes/ensemble",
 	"author": {
-		"name": "Sebastian Pinehurst",
-		"link": "http://koken.me"
+		"name": "Koken",
+		"link": "https://store.koken.me/authors/koken"
 	},
-	"koken_version_required": "0.10.0-beta.1",
+	"koken_version_required": "0.12.0-beta.1",
 
 	"default_front_page": "albums",
 
@@ -226,6 +226,13 @@
 				},
 				"show_content_catstags": {
 					"label": "Show categories and tags",
+					"type": "boolean",
+					"value": true,
+					"control_first": true,
+					"scope": [ "content" ]
+				},
+				"show_content_source": {
+					"label": "Show imported items source link",
 					"type": "boolean",
 					"value": true,
 					"control_first": true,

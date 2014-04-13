@@ -84,7 +84,7 @@
 					<span id="album_topics" class="meta">
 						<strong>Read more:</strong>
 						<koken:loop separator=", ">
-							<koken:link title="View {{ essay.title }}">{{ essay.title }}</koken:link>
+							<koken:link title="View {{ title }}">{{ title }}</koken:link>
 						</koken:loop>
 					</span>
 				</koken:topics>

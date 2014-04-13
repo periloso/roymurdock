@@ -2,6 +2,19 @@
 
 class Plugin extends DataMapper {
 
+	function init($plugins)
+	{
+		$plugin = $this->_get_plugin($plugins);
+		if ($plugin && isset($plugin['php_class']))
+		{
+			return new $plugin['php_class'];
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	function _get_plugin($plugins)
 	{
 		foreach ($plugins as $plugin) {
@@ -13,15 +26,15 @@ class Plugin extends DataMapper {
 		}
 		return false;
 	}
+
 	function run_plugin_method($method, $plugins, $arg = false)
 	{
 		$plugin = $this->_get_plugin($plugins);
 		if ($plugin && isset($plugin['php_class']))
 		{
-			$plug = new $plugin['php_class'];
-			if (method_exists($plug, $method))
+			if (method_exists($plugin['php_class'], $method))
 			{
-				return $plug->$method($arg);
+				return $plugin['php_class']->$method($arg);
 			}
 		}
 		return false;
@@ -44,7 +57,8 @@ class Plugin extends DataMapper {
 				}
 			}
 
-			$this->data = serialize($save_data);
+			$plugin['php_class']->set_data((object) $save_data);
+			$this->data = serialize( (array) $plugin['php_class']->get_data() );
 		}
 	}
 }

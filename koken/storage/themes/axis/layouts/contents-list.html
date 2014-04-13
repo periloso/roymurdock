@@ -7,7 +7,7 @@
 		<koken:if true="settings.contents_show_date"><koken:time /></koken:if>
 
 		<div class="main-content">
-			<koken:if true="settings.contents_link_lbox">
+			<koken:if true="settings.link_lbox">
 				<koken:link lightbox="true" title="View {{ content.title | content.filename }}"><koken:img lazy="true" fade="true" /></koken:link>
 			<koken:else>
 				<koken:link title="View {{ content.title | content.filename }}"><koken:img lazy="true" fade="true" /></koken:link>

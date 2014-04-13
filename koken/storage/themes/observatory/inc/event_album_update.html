@@ -1,7 +1,7 @@
 <koken:event_album_update>
 
 	<koken:if data="settings.album_update_time_type" equals="mosaic" live="false">
-		<koken:link filter:order_by="uploaded_on" filter:year="{{ date date_format='Y' }}" filter:month="{{ date date_format='m' }}" filter:day="{{ date date_format='d' }}" title="View {{ album.title }}">
+		<koken:link filter:order_by="published_on" filter:year="{{ date date_format='Y' }}" filter:month="{{ date date_format='m' }}" filter:day="{{ date date_format='d' }}" title="View {{ album.title }}">
 			<koken:if condition="{{ content.length }} === 1">
 				<koken:img lazy="true" />
 			<koken:else>

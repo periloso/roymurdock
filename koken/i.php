@@ -25,7 +25,8 @@
 	$ds = DIRECTORY_SEPARATOR;
 	$root = dirname(__FILE__);
 	$content = $root . $ds . 'storage';
-	$file = $content . $ds . 'cache' . $ds . 'images' . str_replace('/', $ds, $path);
+	$base = $content . $ds . 'cache' . $ds . 'images';
+	$file = $base . str_replace('/', $ds, $path);
 	$strip = true;
 
 	$dl = $base64 = false;
@@ -42,10 +43,24 @@
 
 	$new = false;
 
+	$exists = file_exists($file);
+
 	$info = pathinfo($file);
 	$ext = $info['extension'];
 
-	if (!file_exists($file))
+	if ($exists)
+	{
+		$realpath = realpath($base);
+		$realpathfile = realpath($file);
+
+		if ($exists && (!$realpathfile || strpos($realpathfile, $realpath) !== 0))
+		{
+			// Bad request
+			header('HTTP/1.1 403 Forbidden');
+			exit;
+		}
+	}
+	else
 	{
 		$new = $preset = true;
 
@@ -78,11 +93,12 @@
 		if ($custom)
 		{
 			$query = false;
+			$row = array();
 		}
 		else
 		{
 			$id = (int) str_replace('/', '', $matches[1]);
-			$query = "SELECT filename, file_type, lg_preview, internal_id, focal_point, width, height FROM {$KOKEN_DATABASE['prefix']}content WHERE id = $id";
+			$query = "SELECT filename, file_type, visibility, lg_preview, internal_id, focal_point, width, height FROM {$KOKEN_DATABASE['prefix']}content WHERE id = $id";
 		}
 
 		$settings_query = "SELECT id FROM {$KOKEN_DATABASE['prefix']}settings WHERE name = 'retain_image_metadata' AND value = 'true'";
@@ -198,11 +214,13 @@
 		else
 		{
 			$internal_path = substr($row['internal_id'], 0, 2) . $ds . substr($row['internal_id'], 2, 2);
-			$original = $content . $ds . 'originals' . $ds . $internal_path . $ds . $row['filename'];
+			$original = $content . $ds . 'originals' . $ds . $internal_path . $ds . basename($row['filename']);
 			if ($row['file_type'] != 0)
 			{
 				$preview_file = array_shift(explode(':', $row['lg_preview']));
 				$original .= '_previews' . $ds . $preview_file;
+
+				list($source_width, $source_height) = getimagesize($original);
 			}
 		}
 
@@ -281,6 +299,12 @@
 					$sh /= 100;
 				}
 
+				if (!isset($source_width))
+				{
+					$source_width = $row['width'];
+					$source_height = $row['height'];
+				}
+
 				Darkroom::develop( array(
 						'source' => $original,
 						'destination' => $file,
@@ -292,10 +316,11 @@
 						'focal_x' => $x,
 						'focal_y' => $y,
 						'hires' => $hires,
-						'source_width' => $row['width'],
-						'source_height' => $row['height'],
+						'source_width' => $source_width,
+						'source_height' => $source_height,
 						'strip' => $strip
-					)
+					),
+					$row
 				);
 			}
 		}

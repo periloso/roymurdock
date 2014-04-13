@@ -1585,7 +1585,7 @@ class DataMapper implements IteratorAggregate {
 					(
 						( isset($this->published) && $this->published ) ||
 						( in_array('left_id', $this->fields) && (!isset($this->listed) || $this->listed) ) ||
-						( in_array('file_type', $this->fields) && (!isset($this->visibility) || (int) $this->visibility === 0) )
+						( in_array('file_type', $this->fields) && (!isset($this->visibility) || (int) $this->visibility !== 2) )
 					)
 				)
 			{

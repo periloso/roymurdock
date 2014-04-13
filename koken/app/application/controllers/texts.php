@@ -107,11 +107,15 @@ class Texts extends Koken_Controller {
 							$id = explode(',', $id);
 						}
 
+						$tags = array();
+
 						foreach($id as $text_id)
 						{
 							$text = $t->get_by_id($text_id);
 							if ($text->exists())
 							{
+								$tags = array_merge($tags, $text->tags);
+
 								$s = new Slug;
 								$prefix = $text->page_type == 0 ? 'essay' : 'page';
 								$this->db->query("DELETE FROM {$s->table} WHERE id = '$prefix.{$text->slug}'");
@@ -124,6 +128,12 @@ class Texts extends Koken_Controller {
 									$this->error('500', 'Delete failed.');
 								}
 							}
+						}
+
+						if (!empty($tags))
+						{
+							$t = new Tag;
+							$t->manage(false, $tags, 'text');
 						}
 					}
 					exit;

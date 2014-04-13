@@ -1,7 +1,7 @@
 <?php
 
 	error_reporting(0);
-	define('KOKEN_VERSION', '0.11.3');
+	define('KOKEN_VERSION', '0.13.0');
 
 	ini_set('default_charset', 'UTF-8');
 
@@ -221,7 +221,7 @@
 
 		$css = $js = false;
 
-		if ($cache_url === '/settings.css.lens')
+		if (preg_match('/\.css\.lens$/', $cache_url))
 		{
 			$css = true;
 			$cache_url = $base_path . $cache_url;
@@ -327,6 +327,7 @@
 		'hostname' => $_SERVER['HTTP_HOST'],
 		'site_url' => $protocol . '://' . $_SERVER['HTTP_HOST'] . $base_folder,
 		'preview' => $preview,
+		'draft' => $draft
 	);
 
 	Koken::$rss_feeds = array(
@@ -572,16 +573,17 @@
 
 	$stylesheet = $source = false;
 
-	if ($url === '/settings.css.lens')
+	if (preg_match('/\.css\.lens$/', $url))
 	{
-		$final_path = 'css/settings.css';
+		$final_path = 'css' . preg_replace('/\.lens$/', '', $url);
 		$stylesheet = true;
 		$variables_to_pass[] = array();
 		$variables_to_pass[] = array();
 	}
 	else if ($url === '/koken.js')
 	{
-		$contents = file_get_contents(Koken::get_path('common/js/koken.js'));
+		$contents = file_get_contents(Koken::get_path('common/js/koken-dependencies.js'));
+		$contents .= file_get_contents(Koken::get_path('common/js/koken.js'));
 
 		$tmp = Koken::$location;
 		foreach(Koken::$dynamic_location_parts as $key)
@@ -632,6 +634,8 @@
 				$contents .= file_get_contents($root_path . $src);
 			}
 		}
+
+		$contents .= join("\n", Shutter::get_site_scripts());
 
 		Koken::cache($contents);
 		header('Content-type: text/javascript');
@@ -902,8 +906,8 @@
 					Koken::$page_class = 'k-source-archive-timeline';
 				}
 
-				Koken::$page_class = trim(Koken::$page_class . ' k-lens-' . str_replace('.', '-', $page['template']));
-
+				Koken::$location['template'] = str_replace('.', '-', $page['template']);
+				Koken::$page_class = trim(Koken::$page_class . ' k-lens-' . Koken::$location['template']);
 				break;
 			}
 		}
@@ -1032,8 +1036,9 @@
 					return 'url(' . $wrap . $path . $wrap . ')';
 				}
 
-				$raw = preg_replace('/\[?\$([a-z_0-9]+)\]?/', '<?php echo Koken::$settings[\'${1}\']; ?>', $tmpl);
+				$raw = preg_replace('/\[?\$([a-z\-_0-9\.]+)\]?/', '<?php echo Koken::get_setting(\'${1}\'); ?>', $tmpl);
 
+				// die($raw);
 				$contents = Koken::render($raw);
 				$contents = preg_replace_callback('/url\((\'|")?([^\'")]+)(\'|")?\)/', 'url', $contents);
 
@@ -1055,20 +1060,24 @@
 					return "$r, $g, $b";
 				}
 
-				$koken_css = file_get_contents(Koken::get_path('common/css/koken.css'));
 				$contents = preg_replace_callback('/to_rgb\(#([0-9a-zA-Z]{3,6})\)/', 'to_rgb', $contents);
 
-				$contents = $contents . "\n\n" . $koken_css;
+				global $final_path;
 
-				if (!empty(Koken::$site['custom_css']) && !Koken::$draft)
+				if (strpos($final_path, 'lightbox-settings.css.lens') === false)
 				{
-					$contents .= "\n\n" . Koken::$site['custom_css'];
+					$koken_css = file_get_contents(Koken::get_path('common/css/koken.css'));
+					$contents = $contents . "\n\n" . $koken_css;
+					if (!empty(Koken::$site['custom_css']) && !Koken::$draft)
+					{
+						$contents .= "\n\n" . Koken::$site['custom_css'];
+					}
 				}
 
 				Koken::cache($contents);
 
 				header('Content-type: text/css');
-				echo $contents;
+				die($contents);
 			}
 		}
 		else
@@ -1081,7 +1090,14 @@
 
 			function parse_replacements($matches)
 			{
-				return Koken::$settings[$matches[2]];
+				if (isset(Koken::$settings[$matches[2]]))
+				{
+					return Koken::$settings[$matches[2]];
+				}
+				else
+				{
+					return Koken::$settings['__scoped_' . str_replace('.', '-', Koken::$location['template']) . '_' . $matches[2]];
+				}
 			}
 
 			function parse_include($matches)
@@ -1099,10 +1115,22 @@
 			{
 				$id = '';
 				$passthrough = array();
+				$if = false;
 
 				if ($matches[1] === 'settings')
 				{
-					$path = Koken::$location['root_folder'] . '/' . (Koken::$draft ? 'preview.php?/' : (Koken::$rewrite ? '' : 'index.php?/')) . 'settings.css.lens' . (Koken::$preview ? '&preview=' . Koken::$preview : '');
+					global $final_path;
+					$file = 'settings.css.lens';
+					if ($final_path === 'lightbox.lens')
+					{
+						if (!file_exists(Koken::$template_path . '/css/lightbox-settings.css.lens'))
+						{
+							return '';
+						}
+
+						$file = 'lightbox-' . $file;
+					}
+					$path = Koken::$location['root_folder'] . '/' . (Koken::$draft ? 'preview.php?/' : (Koken::$rewrite ? '' : 'index.php?/')) . $file . (Koken::$preview ? '&preview=' . Koken::$preview : '');
 					$info = array( 'extension' => 'css' );
 					$id = ' id="koken_settings_css_link"';
 				}
@@ -1122,6 +1150,10 @@
 						{
 							$common = $value;
 						}
+						else if ($name === 'if')
+						{
+							$if = str_replace('settings.', '', $value);
+						}
 						else
 						{
 							$passthrough[] = "$name=\"$value\"";
@@ -1136,16 +1168,23 @@
 					}
 					else
 					{
-						$path = Koken::$location['real_root_folder'];
-
 						if (isset($common) && $common)
 						{
-							$path .= '/app/site/themes/common/' . $info['extension'] . '/' . $file . '?' . KOKEN_VERSION;
+							$path = '/app/site/themes/common/' . $info['extension'] . '/' . $file;
+							$buster = KOKEN_VERSION;
 						}
 						else
 						{
-							$path .= '/storage/themes/' . Koken::$site['theme']['path'] . '/' . $file . '?' . Koken::$site['theme']['version'];
+							$path = '/storage/themes/' . Koken::$site['theme']['path'] . '/' . $file;
+							$buster = Koken::$site['theme']['version'];
 						}
+
+						if (!file_exists(Koken::$root_path . $path))
+						{
+							return '';
+						}
+
+						$path = Koken::$location['real_root_folder'] . $path . '?' . $buster;
 					}
 				}
 
@@ -1156,6 +1195,16 @@
 				else
 				{
 					$parameters = '';
+				}
+
+				if ($if && !Koken::$settings[$if])
+				{
+					return '';
+				}
+
+				if (!isset($info['extension']))
+				{
+					$info['extension'] = strpos($path, 'css') === false ? 'js' : 'css';
 				}
 
 				if ($info['extension'] == 'css' || $info['extension'] == 'less')
@@ -1232,7 +1281,7 @@
 						$koken_js = Koken::$location['root_folder'] . '/' . (Koken::$draft ? 'preview.php?/' : (Koken::$rewrite ? '' : 'index.php?/')) . 'koken.js' . (Koken::$preview ? '&preview=' . Koken::$preview : '');
 						if (strpos($koken_js, '.php?') === false)
 						{
-							$koken_js .= $stamp;
+							$koken_js .= '?' . Shutter::get_site_scripts_timestamp();
 						}
 
 						if (Koken::$has_video)
@@ -1429,6 +1478,22 @@ JS;
 							$new_body = str_replace('>', ' class="' . Koken::$page_class . '">', $body);
 						}
 						$contents = str_replace($body, $new_body, $contents);
+					}
+				}
+
+				if (preg_match_all('/<html(?:[^>]+)?>/', $contents, $match) && Koken::$page_class)
+				{
+					foreach($match[0] as $html)
+					{
+						if (strpos($html, 'class="') !== false)
+						{
+							$new_html = preg_replace('/class="([^"]+)"/', "class=\"$1 " . Koken::$page_class . "\"", $html);
+						}
+						else
+						{
+							$new_html = str_replace('>', ' class="' . Koken::$page_class . '">', $html);
+						}
+						$contents = str_replace($html, $new_html, $contents);
 					}
 				}
 

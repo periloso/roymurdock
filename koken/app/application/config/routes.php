@@ -90,6 +90,7 @@ $route['update/(:any)?'] = "update/index/$1";
 $route['events/(\d{4}\-\d{1,2}\-\d{1,2})/?(:any)?'] = "events/show/$1/$2";
 $route['events/(:any)?'] = "events/index/$1";
 $route['plugins/call/(:any)'] = "plugins/call/$1";
+$route['plugins/(js|css)(:any)?/?'] = "plugins/$1/$2";
 $route['plugins/(:any)?'] = "plugins/index/$1";
 
 /* End of file routes.php */

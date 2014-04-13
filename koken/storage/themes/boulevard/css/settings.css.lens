@@ -193,6 +193,7 @@ ol#lane-nav a:hover {
 body.k-source-album header, body.k-source-index header, body.k-source-favorites header {
 	position:fixed;
 	z-index:999;
+	top:0;
 }
 
 #lane {
@@ -217,7 +218,9 @@ body.k-source-album header, body.k-source-index header, body.k-source-favorites 
 	margin:4px 0 0 0;
 }
 
-#lane img, #album-intro {
+#lane img,
+#lane .content,
+#album-intro {
 	height:600px;
 }
 
@@ -443,7 +446,7 @@ div#kdiscuss {
 	position:absolute;
 	top:10px;
 	left:10px;
-	z-index:1;
+	z-index:999;
 }
 
 #lane .cell:hover .content-share {
@@ -493,18 +496,23 @@ div#kdiscuss {
 /* #Tablet
 ================================================== */
 
-@media only screen and (min-width: 768px) {
-
-	#lane img, #album-intro {
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px)
+and (orientation : landscape) {
+	#lane .content,
+	#lane img,
+	#album-intro {
 		height:520px;
 	}
 
-	/*body::before{content: "TABLET LANDSCAPE";font-weight: bold;display: block;text-align: center;background: rgba(255,255,0, 0.9);position: fixed;top: 0;left: 0;right: 0;z-index: 9999;}*/
 }
 
 @media only screen and (min-width: 768px) and (max-width: 959px) {
 
-	#lane img, #album-intro {
+	#lane .content,
+	#lane img,
+	#album-intro {
 		height:400px;
 	}
 
@@ -578,7 +586,9 @@ div#kdiscuss {
 	}
 
 	/* fit to viewport */
-	#lane img, #album-intro {
+	#lane .content,
+	#lane img,
+	#album-intro {
 		max-height:208px;
 	}
 
@@ -608,7 +618,9 @@ div#kdiscuss {
 	}
 
 	/* fit to viewport */
-	#lane img, #album-intro {
+	#lane .content,
+	#lane img,
+	#album-intro {
 		max-height:165px;
 	}
 
@@ -622,7 +634,9 @@ div#kdiscuss {
 
 @media only screen and (min-height: 1000px) {
 
-	#lane img, #album-intro {
+	#lane .content,
+	#lane img,
+	#album-intro {
 		height:800px;
 	}
 

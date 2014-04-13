@@ -2,7 +2,7 @@
 
 include(dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR. 'configuration' . DIRECTORY_SEPARATOR . 'database.php');
 
-class Content extends DataMapper {
+class Content extends Koken {
 
 	var $table = 'content';
 	var $created_field = 'uploaded_on';
@@ -13,7 +13,13 @@ class Content extends DataMapper {
 			'rules' => array('required')
 		),
 		'uploaded_on' => array(
-			'rules' => array('validate_uploaded_on')
+			'rules' => array('validate_time')
+		),
+		'published_on' => array(
+			'rules' => array('validate_time')
+		),
+		'captured_on' => array(
+			'rules' => array('validate_time')
 		),
 		'filename' => array(
 			'rules' => array('before'),
@@ -45,7 +51,7 @@ class Content extends DataMapper {
 	function _validate_focal_point()
 	{
 		$this->clear_cache(true);
-		$this->file_modified_on = time();
+		$data['file_modified_on']['timestamp'] = time();
 	}
 
 	function clean_filename($file)
@@ -174,16 +180,6 @@ class Content extends DataMapper {
 		{
 			return array();
 		}
-	}
-
-	function _validate_uploaded_on()
-	{
-		$val = $this->uploaded_on;
-		if (is_numeric($val))
-		{
-			return strlen($val) <= 10;
-		}
-		return false;
 	}
 
 	function _validate_max_download()
@@ -318,159 +314,173 @@ class Content extends DataMapper {
 		return array($internal_id, $path . DIRECTORY_SEPARATOR);
 	}
 
+	function _force_utf($string)
+	{
+		if (!function_exists('mb_detect_encoding')) return $string;
+
+		if (mb_detect_encoding($string) !== 'UTF-8')
+		{
+			return utf8_encode($string);
+		}
+
+		return $string;
+	}
+
 	function _before()
 	{
-		$this->file_type = (int) $this->set_type();
-		$path = $this->path_to_original();
-		if ($this->file_type > 0)
+		if (!preg_match('~^https?://~', $this->filename))
 		{
-			include_once(FCPATH . 'app' . DIRECTORY_SEPARATOR . 'koken' . DIRECTORY_SEPARATOR . 'ffmpeg.php');
-			$ffmpeg = new FFmpeg($path);
-			if ($ffmpeg->version())
+			$this->file_type = (int) $this->set_type();
+			$path = $this->path_to_original();
+			if ($this->file_type > 0)
 			{
-				$this->duration = $ffmpeg->duration();
-				list($this->width, $this->height) = $ffmpeg->dimensions();
-				$this->lg_preview = $ffmpeg->create_thumbs();
-			}
-		}
-		else
-		{
-			list($this->width, $this->height) = getimagesize($path);
-			// Have to do this twice for some reason, as some metadata errors cause getimagesize
-			// to return false, even if it could tell us the dimensions
-			getimagesize($path, $info);
-			if (!empty($info['APP13']))
-			{
-				$iptc = iptcparse($info['APP13']);
-				if (!empty($iptc))
+				include_once(FCPATH . 'app' . DIRECTORY_SEPARATOR . 'koken' . DIRECTORY_SEPARATOR . 'ffmpeg.php');
+				$ffmpeg = new FFmpeg($path);
+				if ($ffmpeg->version())
 				{
-					$this->iptc = utf8_encode(serialize($iptc));
-				}
-			} else {
-				$iptc = array();
-			}
-
-			$pathinfo = pathinfo($path);
-			if (in_array(strtolower($pathinfo['extension']), array('jpg', 'jpeg')) && is_callable('exif_read_data'))
-			{
-				@$exif = exif_read_data($path, 0, true);
-				// Maker notes are evil and eat up space
-				unset($exif['EXIF']['MakerNote']);
-				if (!empty($exif))
-				{
-					$this->exif = utf8_encode(serialize($exif));
+					$this->duration = $ffmpeg->duration();
+					list($this->width, $this->height) = $ffmpeg->dimensions();
+					$this->lg_preview = $ffmpeg->create_thumbs();
 				}
 			}
 			else
 			{
-				$exif = array();
-			}
-
-			if (isset($iptc['2#005']))
-			{
-				if (is_array($iptc['2#005']))
+				list($this->width, $this->height) = getimagesize($path);
+				// Have to do this twice for some reason, as some metadata errors cause getimagesize
+				// to return false, even if it could tell us the dimensions
+				getimagesize($path, $info);
+				if (!empty($info['APP13']))
 				{
-					$iptc['2#005'] = $iptc['2#005'][0];
+					$iptc = iptcparse($info['APP13']);
+					if (!empty($iptc))
+					{
+						$this->iptc = utf8_encode(serialize($iptc));
+					}
+				} else {
+					$iptc = array();
 				}
-				$this->title = utf8_encode($iptc['2#005']);
-			}
 
-			if (isset($iptc['2#120']))
-			{
-				if (is_array($iptc['2#120']))
+				$pathinfo = pathinfo($path);
+				if (in_array(strtolower($pathinfo['extension']), array('jpg', 'jpeg')) && is_callable('exif_read_data'))
 				{
-					$iptc['2#120'] = $iptc['2#120'][0];
-				}
-				$this->caption = utf8_encode($iptc['2#120']);
-			}
-
-			if (isset($iptc['2#025']) && is_array($iptc['2#025']) && !isset($this->tags))
-			{
-				$words = array();
-
-				if (count($iptc['2#025']) == 1)
-				{
-					$words = array($iptc['2#025'][0]);
+					@$exif = exif_read_data($path, 0, true);
+					// Maker notes are evil and eat up space
+					unset($exif['EXIF']['MakerNote']);
+					if (!empty($exif))
+					{
+						$this->exif = utf8_encode(serialize($exif));
+					}
 				}
 				else
 				{
-					$words = $iptc['2#025'];
+					$exif = array();
 				}
-
-				$this->tags = utf8_encode(rtrim($this->tags, ',') . ',' . join(',', $words));
-			}
-
-			$captured_on = $this->parse_captured($iptc, $exif);
-
-			if (!is_null($captured_on) && $captured_on > 0)
-			{
-				$this->captured_on = $captured_on;
-			}
-
-			// TODO: EXIF (F, shutter speed, subject distance?)
-			if (isset($exif['IFD0']['Make']))
-			{
-				$this->exif_make = trim($exif['IFD0']['Make']);
-			}
-			if (isset($exif['IFD0']['Model']))
-			{
-				$this->exif_model = trim($exif['IFD0']['Model']);
-			}
-			if (isset($exif['EXIF']['ISOSpeedRatings']))
-			{
-				$this->exif_iso = trim($exif['EXIF']['ISOSpeedRatings']);
-			}
-			// Best Lens info is in this tag
-			if (isset($exif['EXIF']['UndefinedTag:0xA434']))
-			{
-			 	$this->exif_camera_lens = trim($exif['EXIF']['UndefinedTag:0xA434']);
-			}
-			// If the above doesn't work, this is a fallback
-			else if (isset($exif['EXIF']['UndefinedTag:0xA432']))
-			{
-				$val = $exif['EXIF']['UndefinedTag:0xA432'];
-				$short = array_shift(explode('/', $val[0]));
-				$long = array_shift(explode('/', $val[1]));
-				$lens = $short;
-				if ($short != $long)
+				if (isset($iptc['2#005']))
 				{
-					$lens .= '-' . $long;
+					if (is_array($iptc['2#005']))
+					{
+						$iptc['2#005'] = $iptc['2#005'][0];
+					}
+					$this->title = $this->_force_utf($iptc['2#005']);
 				}
-				$lens .= ' mm';
-				$this->exif_camera_lens = $lens;
+
+				if (isset($iptc['2#120']))
+				{
+					if (is_array($iptc['2#120']))
+					{
+						$iptc['2#120'] = $iptc['2#120'][0];
+					}
+					$this->caption = $this->_force_utf($iptc['2#120']);
+				}
+
+				if (isset($iptc['2#025']) && is_array($iptc['2#025']) && !isset($this->tags))
+				{
+					$words = array();
+
+					if (count($iptc['2#025']) == 1)
+					{
+						$words = array($iptc['2#025'][0]);
+					}
+					else
+					{
+						$words = $iptc['2#025'];
+					}
+
+					$this->tags = $this->_force_utf(rtrim($this->tags, ',') . ',' . join(',', $words));
+				}
+
+				$captured_on = $this->parse_captured($iptc, $exif);
+
+				if (!is_null($captured_on) && $captured_on > 0)
+				{
+					$this->captured_on = $captured_on;
+				}
+
+				// TODO: EXIF (F, shutter speed, subject distance?)
+				if (isset($exif['IFD0']['Make']))
+				{
+					$this->exif_make = trim($exif['IFD0']['Make']);
+				}
+				if (isset($exif['IFD0']['Model']))
+				{
+					$this->exif_model = trim($exif['IFD0']['Model']);
+				}
+				if (isset($exif['EXIF']['ISOSpeedRatings']))
+				{
+					$this->exif_iso = trim($exif['EXIF']['ISOSpeedRatings']);
+				}
+				// Best Lens info is in this tag
+				if (isset($exif['EXIF']['UndefinedTag:0xA434']))
+				{
+				 	$this->exif_camera_lens = trim($exif['EXIF']['UndefinedTag:0xA434']);
+				}
+				// If the above doesn't work, this is a fallback
+				else if (isset($exif['EXIF']['UndefinedTag:0xA432']))
+				{
+					$val = $exif['EXIF']['UndefinedTag:0xA432'];
+					$short = array_shift(explode('/', $val[0]));
+					$long = array_shift(explode('/', $val[1]));
+					$lens = $short;
+					if ($short != $long)
+					{
+						$lens .= '-' . $long;
+					}
+					$lens .= ' mm';
+					$this->exif_camera_lens = $lens;
+				}
+
+				$longest = max($this->width, $this->height);
+				$midsize = preg_replace('/\.' . $pathinfo['extension'] . '$/', '.1600.' . $pathinfo['extension'], $path);
+
+				if (file_exists($midsize))
+				{
+					unlink($midsize);
+				}
+
+				if ($longest > 1600 && ENVIRONMENT === 'production')
+				{
+					include_once(FCPATH . 'app' . DIRECTORY_SEPARATOR . 'koken' . DIRECTORY_SEPARATOR . 'darkroom.php');
+
+					Darkroom::develop( array(
+							'source' => $path,
+							'destination' => preg_replace('/\.' . $pathinfo['extension'] . '$/', '.1600.' . $pathinfo['extension'], $path),
+							'width' => 1600,
+							'height' => 1600,
+							'quality' => 99,
+							'square' => false,
+							'sharpening' => 0,
+							'focal_x' => 50,
+							'focal_y' => 50,
+							'hires' => false,
+							'source_width' => $this->width,
+							'source_height' => $this->height,
+							'strip' => false
+						)
+					);
+				}
 			}
-
-			$longest = max($this->width, $this->height);
-			$midsize = preg_replace('/\.' . $pathinfo['extension'] . '$/', '.1600.' . $pathinfo['extension'], $path);
-
-			if (file_exists($midsize))
-			{
-				unlink($midsize);
-			}
-
-			if ($longest > 1600 && ENVIRONMENT === 'production')
-			{
-				include_once(FCPATH . 'app' . DIRECTORY_SEPARATOR . 'koken' . DIRECTORY_SEPARATOR . 'darkroom.php');
-
-				Darkroom::develop( array(
-						'source' => $path,
-						'destination' => preg_replace('/\.' . $pathinfo['extension'] . '$/', '.1600.' . $pathinfo['extension'], $path),
-						'width' => 1600,
-						'height' => 1600,
-						'quality' => 99,
-						'square' => false,
-						'sharpening' => 0,
-						'focal_x' => 50,
-						'focal_y' => 50,
-						'hires' => false,
-						'source_width' => $this->width,
-						'source_height' => $this->height,
-						'strip' => false
-					)
-				);
-			}
+			$this->filesize = filesize($path);
 		}
-		$this->filesize = filesize($path);
 
 		if (is_numeric($this->width))
 		{
@@ -629,7 +639,7 @@ class Content extends DataMapper {
 		return FCPATH . 'storage' .
 				DIRECTORY_SEPARATOR . 'originals' .
 				DIRECTORY_SEPARATOR . $this->path .
-				DIRECTORY_SEPARATOR . $this->filename;
+				DIRECTORY_SEPARATOR . basename($this->filename);
 	}
 
 	function parse_captured($iptc, $exif) {
@@ -667,10 +677,6 @@ class Content extends DataMapper {
 			else
 			{
 				$preview_file = array_shift(explode(':', $this->lg_preview));
-				if ($preview_file == 'waveform.svg')
-				{
-					return array($w, $h);
-				}
 				$preview_path = $this->path_to_original() . '_previews' . DIRECTORY_SEPARATOR . $preview_file;
 				list($original_width, $original_height) = getimagesize($preview_path);
 				$original_aspect = $original_width/$original_height;
@@ -783,6 +789,8 @@ class Content extends DataMapper {
 		$strings = array('title', 'caption');
 		list($data, $fields) = $this->prepare_for_output($options, $exclude, $bools, $dates, $strings);
 
+		$data = Shutter::filter('api.content.before', array( $data, $this, $options ));
+
 		if (!$data['featured'])
 		{
 			unset($data['featured_on']);
@@ -812,33 +820,40 @@ class Content extends DataMapper {
 			unset($data['internal_id']);
 		}
 
-		$info = pathinfo($this->filename);
+		if (!preg_match('~https?://~', $this->filename))
+		{
+			$info = pathinfo($this->filename);
 
-		$mimes = array(
-			'jpg' => 'image/jpeg',
-			'jpeg' => 'image/jpeg',
-			'gif' => 'image/gif',
-			'png' => 'image/png',
-			'flv' => 'video/x-flv',
-			'f4v' => 'video/f4v',
-			'swf' => 'application/x-shockwave-flash',
-			'mov' => 'video/mp4',
-			'mp4' => 'video/mp4',
-			'm4v' => 'video/x-m4v',
-			'3gp' => 'video/3gpp',
-			'3g2' => 'video/3gpp2',
-			'mp3' => 'audio/mpeg'
-		);
+			$mimes = array(
+				'jpg' => 'image/jpeg',
+				'jpeg' => 'image/jpeg',
+				'gif' => 'image/gif',
+				'png' => 'image/png',
+				'flv' => 'video/x-flv',
+				'f4v' => 'video/f4v',
+				'swf' => 'application/x-shockwave-flash',
+				'mov' => 'video/mp4',
+				'mp4' => 'video/mp4',
+				'm4v' => 'video/x-m4v',
+				'3gp' => 'video/3gpp',
+				'3g2' => 'video/3gpp2',
+				'mp3' => 'audio/mpeg'
+			);
 
-		$data['__koken__'] = 'content';
-
-		if (array_key_exists(strtolower($info['extension']), $mimes)) {
-			$data['mime_type'] = $mimes[strtolower($info['extension'])];
-		} else if (function_exists('mime_content_type')) {
-			$data['mime_type'] = mime_content_type($this->path_to_original());
-		} else {
+			if (array_key_exists(strtolower($info['extension']), $mimes)) {
+				$data['mime_type'] = $mimes[strtolower($info['extension'])];
+			} else if (function_exists('mime_content_type')) {
+				$data['mime_type'] = mime_content_type($this->path_to_original());
+			} else {
+				$data['mime_type'] = '';
+			}
+		}
+		else
+		{
 			$data['mime_type'] = '';
 		}
+
+		$data['__koken__'] = 'content';
 
 		if (!isset($options['include_presets']) || $options['include_presets'])
 		{
@@ -869,14 +884,16 @@ class Content extends DataMapper {
 					);
 				}
 			}
-			else
+			else if ($this->file_type > 0 || !preg_match('~^https?://~', $this->filename))
 			{
-				$prefix = preg_replace("/\.{$info['extension']}$/", '', $this->filename);
-				$cache_base = $koken_url_info->base . (KOKEN_REWRITE ? 'storage/cache/images' : 'i.php?') . '/' . str_replace('\\', '/', $this->cache_path) . '/' . $prefix . ',';
-
-				$data['cache_path'] = array(
-					'prefix' => $cache_base
-				);
+				if (isset($info['extension']))
+				{
+					$prefix = preg_replace("/\.{$info['extension']}$/", '', basename($this->filename));
+				}
+				else
+				{
+					$prefix = basename($this->filename);
+				}
 
 				if ($this->file_type != 0)
 				{
@@ -884,7 +901,13 @@ class Content extends DataMapper {
 					$info = pathinfo($preview_file);
 				}
 
-				$data['cache_path']['extension'] = $info['extension'] . '?' . $this->file_modified_on;
+				$cache_base = $koken_url_info->base . (KOKEN_REWRITE ? 'storage/cache/images' : 'i.php?') . '/' . str_replace('\\', '/', $this->cache_path) . '/' . $prefix . ',';
+
+				$data['cache_path'] = array(
+					'prefix' => $cache_base
+				);
+
+				$data['cache_path']['extension'] = $info['extension'] . '?' . $data['file_modified_on']['timestamp'];
 				$data['presets'] = array();
 				foreach(Darkroom::$presets as $name => $opts)
 				{
@@ -893,15 +916,15 @@ class Content extends DataMapper {
 					{
 						list($w, $h) = $dims;
 						$data['presets'][$name] = array(
-							'url' => $cache_base . "$name.{$info['extension']}?{$this->file_modified_on}",
-							'hidpi_url' => $cache_base . "$name.2x.{$info['extension']}?{$this->file_modified_on}",
+							'url' => $cache_base . "$name.{$info['extension']}?{$data['file_modified_on']['timestamp']}",
+							'hidpi_url' => $cache_base . "$name.2x.{$info['extension']}?{$data['file_modified_on']['timestamp']}",
 							'width' => (int) $w,
 							'height' => (int) $h
 						);
 
 						$data['presets'][$name]['cropped'] = array(
-							'url' => $cache_base . "$name.crop.{$info['extension']}?{$this->file_modified_on}",
-							'hidpi_url' => $cache_base . "$name.crop.2x.{$info['extension']}?{$this->file_modified_on}",
+							'url' => $cache_base . "$name.crop.{$info['extension']}?{$data['file_modified_on']['timestamp']}",
+							'hidpi_url' => $cache_base . "$name.crop.2x.{$info['extension']}?{$data['file_modified_on']['timestamp']}",
 							'width' => (int) $opts['width'],
 							'height' => (int) $opts['height']
 						);
@@ -1162,7 +1185,28 @@ class Content extends DataMapper {
 			unset($data['url']);
 		}
 
-		return Shutter::filter('api.content', array( $data, $this, $options ));
+		if (empty($data['source']))
+		{
+			$data['source'] = false;
+		}
+		else
+		{
+			$data['source'] = array(
+				'title' => $data['source'],
+				'url' => $data['source_url'],
+			);
+		}
+
+		unset($data['source_url']);
+
+		$final = Shutter::filter('api.content', array( $data, $this, $options ));
+
+		if (!isset($final['html']) || empty($final['html']))
+		{
+			$final['html'] = false;
+		}
+
+		return $final;
 	}
 
 	function greatest_common_denominator($a, $b)
@@ -1534,6 +1578,8 @@ class Content extends DataMapper {
 			'favorites' => null,
 			'before' => false,
 			'after' => false,
+			'after_column' => 'uploaded_on',
+			'before_column' => 'uploaded_on',
 			'category' => false,
 			'category_not' => false,
 			'year' => false,
@@ -1548,6 +1594,8 @@ class Content extends DataMapper {
 			'independent' => false
 		);
 		$options = array_merge($options, $params);
+
+		Shutter::hook('content.listing', array($this, $options));
 
 		if ($options['featured'] == 1 && !isset($params['order_by']))
 		{
@@ -1717,11 +1765,11 @@ class Content extends DataMapper {
 		}
 		if ($options['after'])
 		{
-			$this->where($options['order_by'] . ' >=', $options['after']);
+			$this->where($options['after_column'] . ' >=', $options['after']);
 		}
 		if ($options['before'])
 		{
-			$this->where($options['order_by'] . ' <=', $options['before']);
+			$this->where($options['before_column'] . ' <=', $options['before']);
 		}
 		if ($options['visibility'] === 'album')
 		{
@@ -1784,7 +1832,7 @@ class Content extends DataMapper {
 		}
 		else
 		{
-			$date_col = 'captured_on';
+			$date_col = 'published_on';
 		}
 
 		if ($options['year'] || $options['year_not'])
@@ -1832,9 +1880,9 @@ class Content extends DataMapper {
 				$a->select('id')
 					->where('deleted', 0)
 					->where('listed', 1)
-					->where('YEAR(FROM_UNIXTIME(created_on' . $shift . '))', $options['year'])
-					->where('MONTH(FROM_UNIXTIME(created_on' . $shift . '))', $options['month'])
-					->where('DAY(FROM_UNIXTIME(created_on' . $shift . '))', $options['day'])
+					->where('YEAR(FROM_UNIXTIME(' . $a->table . '.published_on' . $shift . '))', $options['year'])
+					->where('MONTH(FROM_UNIXTIME(' . $a->table . '.published_on' . $shift . '))', $options['month'])
+					->where('DAY(FROM_UNIXTIME(' . $a->table . '.published_on' . $shift . '))', $options['day'])
 					->include_related('content', 'id')
 					->get_iterated();
 
@@ -1852,9 +1900,9 @@ class Content extends DataMapper {
 					->where('page_type', 0)
 					->where('published', 1)
 					->where('featured_image_id >', 0)
-					->where('YEAR(FROM_UNIXTIME(published_on' . $shift . '))', $options['year'])
-					->where('MONTH(FROM_UNIXTIME(published_on' . $shift . '))', $options['month'])
-					->where('DAY(FROM_UNIXTIME(published_on' . $shift . '))', $options['day'])
+					->where('YEAR(FROM_UNIXTIME(' . $e->table . '.published_on' . $shift . '))', $options['year'])
+					->where('MONTH(FROM_UNIXTIME(' . $e->table . '.published_on' . $shift . '))', $options['month'])
+					->where('DAY(FROM_UNIXTIME(' . $e->table . '.published_on' . $shift . '))', $options['day'])
 					->get_iterated();
 
 				foreach($e as $essay)

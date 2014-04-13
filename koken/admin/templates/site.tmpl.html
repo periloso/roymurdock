@@ -23,6 +23,8 @@
 
 	<div id="siteui-wrap" data-bind="visible: !error()">
 
+		<div class="ui-sheet-bg"></div>
+
 		<!-- ko with: sheets.draft_history -->
 			<!-- ko template: 'sheets_mu' --><!-- /ko -->
 		<!-- /ko -->
@@ -374,20 +376,15 @@
 
 			<div id="theme-selection" class="top-off" style="position:relative" data-bind="scrollbar: true">
 
-				<div data-bind="visible: updateable_themes().length" class="row-mid-filter" id="theme-updates-banner">
-					Updates available for <span data-bind="text: updateable_themes().length"></span> theme<span data-bind="visible: updateable_themes().length > 1">s</span>&nbsp;&nbsp;&nbsp;<a href="#" class="button tiny c0" title="" data-event="update_all_themes">Update all themes</a>
-				</div>
-
-				<ol class="theme-scroll">
+				<ol class="theme-scroll" data-bind="visible: $parent.themes().length">
 
 					<!-- ko foreach: $parent.themes -->
 
 					<li class="loading" data-bind="css: { current: path === $parent.drafts.current.theme.path() }">
-						<a class="theme-img" data-bind="attr: { href: '#/site/themes/preview:' + path }" title="Preview theme with your content"><img width="260" height="195" data-bind="attr: { id: 'preview-thumb-' + path, 'data-src': preview + '?' + version }" class="preview" /></a>
+						<a class="theme-img" data-bind="attr: { href: '#/site/themes/preview:' + path }" title="Preview theme with your content"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="260" data-bind="attr: { id: 'preview-thumb-' + path, 'data-src': preview + '?' + version, style: 'height:' + Math.round(260 / preview_aspect) + 'px' }" class="preview" /></a>
 						<span class="theme-info">
 							<span class="theme-title">
 								<h2 data-bind="text: name"></h2>
-								<a class="button c0 tiny" href="#" data-event="update_theme" data-bind="visible: $data.koken_store_guid && $.inArray(koken_store_guid, $parent.updateable_themes()) !== -1">Update theme</a>
 							</span>
 							<span data-bind="text: $parent.truncate(description,140)"></span>
 						</span>
@@ -395,9 +392,20 @@
 
 					<!-- /ko -->
 
+					<li>
+						<a href="#/store/themes" class="theme-store-link" title="Download more themes from the Koken Store" class="">
+							<span>
+								<h3>More themes</h3>
+								<p>Click here to browse the Koken Store</p>
+							</span>
+						</a>
+					</li>
+
 				</ol>
 
 			</div>
+
+			<div id="theme-preview-wrap">
 
 			<div id="theme-preview-info" class="l-col">
 
@@ -419,7 +427,7 @@
 							<span class="theme-title">
 								<h2 data-bind="text: name"></h2>
 							</span>
-							<p>by <a data-bind="attr: { href: author.link }, text: author.name" target="_blank"></a>
+							<p>by <a data-bind="attr: { href: author.link.indexOf('https://store.koken.me') === 0 ? '#/store' + author.link.replace('https://store.koken.me', '') : author.link }, text: author.name" target="_blank"></a>
 							</p>
 							<p data-bind="text: description" style="margin:13px 0;"></p>
 							<p>
@@ -436,7 +444,7 @@
 							<li><a class="button sm" data-bind="attr: { href: demo }, text: 'Live demonstration'" title="View demo" onclick="return !window.open(this.href);" ></a></li>
 							<!-- /ko -->
 							<!-- ko if: $data.documentation -->
-							<li><a class="button sm" data-bind="attr: { href: documentation }, text: 'Help documentation'" title="View demo" onclick="return !window.open(this.href);" ></a></li>
+							<li><a class="button sm" data-bind="attr: { href: documentation.indexOf('https://store.koken.me') === 0 ? '#/store' + documentation.replace('https://store.koken.me', '') : documentation, onclick: documentation.indexOf('https://store.koken.me') === 0 ? '' : 'return !window.open(this.href)' }, text: 'Help documentation'" title="View demo"></a></li>
 							<!-- /ko -->
 						</ul>
 					</div>
@@ -461,6 +469,8 @@
 				</div>
 				<!-- /ko -->
 				<!-- /ko -->
+			</div>
+
 			</div>
 
 		</div> <!-- close themes-browse -->
@@ -490,7 +500,7 @@
 
 			<ul id="siteui-view-toggle" class="button-row-joined" data-bind="visible: !error()">
 				<li>
-					<a class="button-ui emb" href="#/site/themes" data-bind="css: { selected: state.type() == 'themes' }" title="Browse themes">Themes<span data-bind="visible: updateable_themes().length" class="theme-update-badge"></span></a>
+					<a class="button-ui emb" href="#/site/themes" data-bind="css: { selected: state.type() == 'themes' }" title="Browse themes">Themes</a>
 				</li>
 				<li>
 					<a class="button-ui emb" data-bind="attr: { href: '#/site/draft/' + state.sidebar() + '/url:' + state.iframe.rel_path() }, css: { selected: state.type() == 'draft' }" title="Edit current draft" id="edit_current_draft">Draft</a>
@@ -571,12 +581,12 @@
 
 	<div class="col-head" data-event="toggle_visibility">
 		<span class="in">
-			<a href="#" class="arrow-toggle open fold"></a>
+			<a href="#" class="arrow-toggle fold" data-bind="css: { open: !$data.collapse }"></a>
 			<h6><a href="#" class="fold" data-bind="text: group"></a></h6>
 		</span>
 	</div>
 
-	<div class="col-group">
+	<div class="col-group" data-bind="visible: !$data.collapse">
 		<!-- ko if: settings.length -->
 		<!-- ko foreach: settings -->
 			<!-- ko template: { name: 'render_option', data: { prefix: $parents[2].prefix, setting: $data } } --><!-- /ko -->
@@ -761,7 +771,7 @@
 		<section>
 
 			<div class="sheet-wrap">
-				<!-- ko if: $parents.length && $parents[1].url_data.album -->
+				<!-- ko if: $parents.length && $parents[1].site.url_data.home() -->
 				<div class="section-header" data-event="toggle_visibility">
 					<a href="#" class="arrow-toggle sheet open"></a>
 					<h6>Templates</h6>
@@ -774,7 +784,7 @@
 								<span class="icon48 icon-page-albums"></span>
 							</span>
 							<span class="info">
-								<h3>Albums <span data-bind="visible: $parents[1].url_data['album'].plural() !== 'Albums', text: '(' + $parents[1].url_data['album'].plural() + ')'"></span></h3>
+								<h3>Albums <span data-bind="visible: $parents[1].site.url_data['album'].plural() !== 'Albums', text: '(' + $parents[1].site.url_data['album'].plural() + ')'"></span></h3>
 								<span class="desc">Displays all top public albums and sets</span>
 							</span>
 							<span class="toggle">
@@ -794,7 +804,7 @@
 								<span class="icon48 icon-page-set"></span>
 							</span>
 							<span class="info">
-								<h3>Sets <span data-bind="visible: $parents[1].url_data['set'].plural() !== 'Sets', text: '(' + $parents[1].url_data['set'].plural() + ')'"></span></h3>
+								<h3>Sets <span data-bind="visible: $parents[1].site.url_data['set'].plural() !== 'Sets', text: '(' + $parents[1].site.url_data['set'].plural() + ')'"></span></h3>
 								<span class="desc">Displays all top public sets</span>
 							</span>
 							<span class="toggle">
@@ -814,7 +824,7 @@
 								<span class="icon48 icon-page-contents"></span>
 							</span>
 							<span class="info">
-								<h3>Content <span data-bind="visible: $parents[1].url_data['content'].plural() !== 'Content', text: '(' + $parents[1].url_data['content'].plural() + ')'"></span></h3>
+								<h3>Content <span data-bind="visible: $parents[1].site.url_data['content'].plural() !== 'Content', text: '(' + $parents[1].site.url_data['content'].plural() + ')'"></span></h3>
 								<span class="desc">Displays all public images and videos</span>
 							</span>
 							<span class="toggle">
@@ -834,7 +844,7 @@
 								<span class="icon48 icon-page-essays"></span>
 							</span>
 							<span class="info">
-								<h3>Essays <span data-bind="visible: $parents[1].url_data['essay'].plural() !== 'Essays', text: '(' + $parents[1].url_data['essay'].plural() + ')'"></span></h3>
+								<h3>Essays <span data-bind="visible: $parents[1].site.url_data['essay'].plural() !== 'Essays', text: '(' + $parents[1].site.url_data['essay'].plural() + ')'"></span></h3>
 								<span class="desc">Displays all published essays</span>
 							</span>
 							<span class="toggle">
@@ -854,7 +864,7 @@
 								<span class="icon48 icon-page-favorites"></span>
 							</span>
 							<span class="info">
-								<h3>Favorites <span data-bind="visible: $parents[1].url_data['favorite'].plural() !== 'Favorites', text: '(' + $parents[1].url_data['favorite'].plural() + ')'"></span></h3>
+								<h3>Favorites <span data-bind="visible: $parents[1].site.url_data['favorite'].plural() !== 'Favorites', text: '(' + $parents[1].site.url_data['favorite'].plural() + ')'"></span></h3>
 								<span class="desc">Displays all favorite images and videos</span>
 							</span>
 							<span class="toggle">
@@ -874,7 +884,7 @@
 								<span class="icon48 icon-page-archives"></span>
 							</span>
 							<span class="info">
-								<h3>Timeline <span data-bind="visible: $parents[1].url_data['timeline'].plural() !== 'Timeline', text: '(' + $parents[1].url_data['timeline'].plural() + ')'"></span></h3>
+								<h3>Timeline <span data-bind="visible: $parents[1].site.url_data['timeline'].plural() !== 'Timeline', text: '(' + $parents[1].site.url_data['timeline'].plural() + ')'"></span></h3>
 								<span class="desc">Displays an unified stream of your latest essays, albums and content</span>
 							</span>
 							<span class="toggle">
@@ -894,7 +904,7 @@
 								<span class="icon48 icon-page-tags"></span>
 							</span>
 							<span class="info">
-								<h3>Tags <span data-bind="visible: $parents[1].url_data['tag'].plural() !== 'Tags', text: '(' + $parents[1].url_data['tag'].plural() + ')'"></span></h3>
+								<h3>Tags <span data-bind="visible: $parents[1].site.url_data['tag'].plural() !== 'Tags', text: '(' + $parents[1].site.url_data['tag'].plural() + ')'"></span></h3>
 								<span class="desc">Displays all tags</span>
 							</span>
 							<span class="toggle">
@@ -907,7 +917,7 @@
 								<span class="icon48 icon-page-categories"></span>
 							</span>
 							<span class="info">
-								<h3>Categories <span data-bind="visible: $parents[1].url_data['category'].plural() !== 'Categories', text: '(' + $parents[1].url_data['category'].plural() + ')'"></span></h3>
+								<h3>Categories <span data-bind="visible: $parents[1].site.url_data['category'].plural() !== 'Categories', text: '(' + $parents[1].site.url_data['category'].plural() + ')'"></span></h3>
 								<span class="desc">Displays all categories</span>
 							</span>
 							<span class="toggle">
@@ -970,7 +980,7 @@
 								<span class="icon48 icon-page-custom"></span>
 							</span>
 							<span class="info">
-								<h3 data-bind="text: title"></h3>
+								<h3 data-bind="text: $root.truncate(title, 70)"></h3>
 								<span class="desc">Last modified <span data-bind="text: $root.format_date(modified_on.timestamp, 'MMMM D YYYY')"></span></span>
 							</span>
 							<span class="toggle">
@@ -1050,7 +1060,7 @@
 		</section>
 		<!-- /ko -->
 
-		<!-- ko if: $parents.length && $parents[1].url_data.album -->
+		<!-- ko if: $parents.length && $parents[1].site.url_data.home() -->
 		<section>
 
 			<div class="sheet-wrap">
@@ -1070,8 +1080,8 @@
 								<span class="icon48 icon-page-rss"></span>
 							</span>
 							<span class="info">
-								<h3 data-bind="text: $parents[1].url_data['essay'].plural()"></h3>
-								<span class="desc" data-bind="text: 'RSS feed for published ' + $parents[1].url_data['essay'].plural().toLowerCase()"></span>
+								<h3 data-bind="text: $parents[1].site.url_data['essay'].plural()"></h3>
+								<span class="desc" data-bind="text: 'RSS feed for published ' + $parents[1].site.url_data['essay'].plural().toLowerCase()"></span>
 							</span>
 						</li>
 
@@ -1083,8 +1093,8 @@
 								<span class="icon48 icon-page-rss"></span>
 							</span>
 							<span class="info">
-								<h3 data-bind="text: $parents[1].url_data['content'].plural()"></h3>
-								<span class="desc" data-bind="text: 'RSS feed for published ' + $parents[1].url_data['content'].plural().toLowerCase()"></span>
+								<h3 data-bind="text: $parents[1].site.url_data['content'].plural()"></h3>
+								<span class="desc" data-bind="text: 'RSS feed for published ' + $parents[1].site.url_data['content'].plural().toLowerCase()"></span>
 							</span>
 						</li>
 
@@ -1096,8 +1106,8 @@
 								<span class="icon48 icon-page-rss"></span>
 							</span>
 							<span class="info">
-								<h3 data-bind="text: $parents[1].url_data['timeline'].plural()"></h3>
-								<span class="desc" data-bind="text: 'RSS feed for published ' + $parents[1].url_data['timeline'].plural().toLowerCase()"></span>
+								<h3 data-bind="text: $parents[1].site.url_data['timeline'].plural()"></h3>
+								<span class="desc" data-bind="text: 'RSS feed for published ' + $parents[1].site.url_data['timeline'].plural().toLowerCase()"></span>
 							</span>
 						</li>
 					</ul>
@@ -1225,7 +1235,7 @@
 				<ul class="table">
 
 					<li>
-						<span class="cell label top">
+						<span class="cell label">
 							<label>Link label</label>
 						</span>
 
@@ -1523,9 +1533,9 @@
 		<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-bind="attr: { 'data-src': covers.length ? covers[0].presets.tiny.cropped.url : 'images/no-cover-48.png' }" width="48" height="48" class="thumb loading" />
 	</span>
 	<span class="info">
-		<h3 data-bind="text: title"></h3>
+		<h3 data-bind="text: $root.truncate(title, 50 - (level*5))"></h3>
 		<!-- ko if: description -->
-		<span class="desc" data-bind="text: $root.truncate(description, 75 - (level*5))"></span>
+		<span class="desc" data-bind="text: $root.truncate(description, 70 - (level*5))"></span>
 		<!-- /ko -->
 		<!-- ko ifnot: description -->
 		<span class="desc">No description available</span>

@@ -17,7 +17,13 @@
 
 	<div id="lay-three-col">
 
+		<div class="ui-sheet-bg"></div>
+
 		<!-- ko with: sheets.create_collection -->
+			<!-- ko template: 'sheets_mu' --><!-- /ko -->
+		<!-- /ko -->
+
+		<!-- ko with: sheets.import_content -->
 			<!-- ko template: 'sheets_mu' --><!-- /ko -->
 		<!-- /ko -->
 
@@ -58,22 +64,22 @@
 						<div class="l">
 							<ul class="button-row-joined">
 								<li>
-									<a href="#" title="Edit selection" data-dropdown="edit" data-event="toggle_dropdown" class="button-ui emb thin disabled" data-bind="css: { disabled: view() == 'empty' || loading() || view() == 'upload' || selection().length <= 0 || sidebar.id() === 'trash', selected: dropdowns.edit.active() == true }">
+									<a href="#" title="Edit selection" data-dropdown="edit" data-event="toggle_dropdown" class="button-ui emb thin disabled" data-bind="css: { disabled: view() == 'empty' || loading() || selection().length <= 0 || sidebar.id() === 'trash', selected: dropdowns.edit.active() == true }">
 										<span>Edit</span>
 									</a>
 								</li>
 								<li>
-									<a href="#" title="Sort view" data-dropdown="sort" data-event="toggle_dropdown" class="button-ui emb thin" data-bind="css: { disabled: loading() || view() == 'empty' || view() == 'upload' || view() == 'single', selected: dropdowns.sort.active() == true }">
+									<a href="#" title="Sort view" data-dropdown="sort" data-event="toggle_dropdown" class="button-ui emb thin" data-bind="css: { disabled: loading() || view() == 'empty' || view() == 'single', selected: dropdowns.sort.active() == true }">
 										<span>Sort</span>
 									</a>
 								</li>
 								<li>
-									<a href="#" title="Filter view" data-dropdown="filter" data-event="toggle_dropdown" class="button-ui emb thin" data-bind="css: { disabled: loading() || view() == 'upload' || selected_type() == 'set' || view() == 'single' || view() == 'empty' && dropdowns.filter.selected() == 'none', selected: dropdowns.filter.active() == true }">
+									<a href="#" title="Filter view" data-dropdown="filter" data-event="toggle_dropdown" class="button-ui emb thin" data-bind="css: { disabled: loading() || selected_type() == 'set' || view() == 'single' || view() == 'empty' && dropdowns.filter.selected() == 'none', selected: dropdowns.filter.active() == true }">
 										<span>Filter</span>
 									</a>
 								</li>
 								<li>
-									<a href="#" title="Share selection" data-dropdown="share" data-event="toggle_dropdown" class="button-ui emb thin" data-bind="css: { disabled: view() == 'upload' || sidebar.id() === 'trash' || selected_type() == 'set' || view() == 'empty' || view() == 'loading' || selection().length !== 1 || ( sidebar.asset.visibility && sidebar.asset.visibility.raw() == 'private' ), selected: dropdowns.share.active() == true }">
+									<a href="#" title="Share selection" data-dropdown="share" data-event="toggle_dropdown" class="button-ui emb thin" data-bind="css: { disabled: sidebar.id() === 'trash' || selected_type() == 'set' || view() == 'empty' || view() == 'loading' || selection().length !== 1 || ( sidebar.asset.visibility && sidebar.asset.visibility.raw() == 'private' ), selected: dropdowns.share.active() == true }">
 										<span>Share</span>
 									</a>
 								</li>
@@ -115,7 +121,7 @@
 					<div id="mid-content" data-bind="css: { grid: view() === 'grid', list: view() === 'list', single: view() === 'single', filtered: year() > 0 || month() > 0 || dropdowns.filter.selected() != 'none' || ( search() && search().length ) }">
 						<div id="lib-overlay-content"></div>
 
-						<div data-bind="visible: view() !== 'single' && view() !== 'empty' && view() !== 'upload' && !loading(), scrollbar: true" id="mid_multi" class="lazy">
+						<div data-bind="visible: view() !== 'single' && view() !== 'empty' && !loading(), scrollbar: true" id="mid_multi" class="lazy">
 					    	<div class="content">
 					    		<ul data-bind="attr: { class: 'lib-content ' + order_by() + ' ' + view() }" id="content_list"></ul>
 							</div>
@@ -126,6 +132,9 @@
 								<div class="w">
 									<div id="mid-single-wrap">
 										<!-- ko if: selection().length -->
+										<!-- ko if: sidebar.asset.html() -->
+										<div id="custom_single_html" data-bind="html: sidebar.asset.console_html ? sidebar.asset.console_html() : sidebar.asset.html()"></div>
+										<!-- /ko -->
 										<div id="focal_point" data-bind="css: { selected: focal_point() }"></div>
 										<!-- /ko -->
 									</div>
@@ -160,32 +169,26 @@
 									<span class="spinner-main"></span>
 									<!-- /ko -->
 									<!-- ko ifnot: loading() -->
-									<h1>No content in selection</h1>
+										<!-- ko if: $data.observers.properties.album.selected().album -->
+											<h1>Album is empty</h1>
+										<!-- /ko -->
+										<!-- ko ifnot: $data.observers.properties.album.selected().album -->
+											<h1>Selection is empty</h1>
+										<!-- /ko -->
+										<!-- ko if: $data.observers.observers.is_uploadable() -->
+											<h2>Drop images here for instant upload</h2>
+										<!-- /ko -->
 									<!-- /ko -->
 								</div>
 							</div>
 						</div>
 
-						<div data-bind="visible: view() === 'upload' && !loading()" id="lib-add-content" class="cmsg upload" style="opacity: 0;">
-							<div class="cmsg-wrap">
-								<div class="cmsg-msg">
-									<div id="drop-zone">
-										<img src="images/drop-files-here.png" />
-										<h1>Drag and drop photos and videos here</h1>
-										<p>JPG, PNG, GIF, MP4</p>
-									</div>
-									<h2 style="font-size:16px;"><span>&mdash;</span> or <span>&mdash;</span></h2>
-									<p><a class="button lg c0" href="#" id="upload-bttn">Choose photos and videos</a></p>
-								</div>
-							</div>
-						</div>
-
-						<div id="mid-menu-bot" class="col-bot">
-							<div data-bind="visible: view() !== 'upload', template: { name: view() === 'single' ? 'single_bottom' : 'multi_bottom' }"></div>
-						</div>
 
 					</div><!-- #mid-content -->
 
+					<div id="mid-menu-bot" class="col-bot">
+						<div data-bind="template: { name: view() === 'single' ? 'single_bottom' : 'multi_bottom' }"></div>
+					</div>
 				</div>
 
 			</div><!-- #three-col-mid -->
@@ -203,7 +206,7 @@
 					</li>
 					<li data-bind="visible: settings.last_upload()">
 						<a data-bind="attr: { href: '#/library/content/after:' + settings.last_upload() + '/order_by:uploaded_on' + ( view() !== 'grid' && view() !== 'empty' ? '/view:' + view() : '') }" class="item" title="View most recent uploads">
-							<span class="in"><span class="icon16 label-recent">Last upload</span></span>
+							<span class="in"><span class="icon16 label-recent">Last import</span></span>
 						</a>
 					</li>
 					<li>
@@ -314,9 +317,12 @@
 				</ol>
 			</div>
 			<div id="left-menu-bot" class="col-bot">
-	        	<div class="w" data-bind="visible: view() !== 'upload'">
-	        		<div class="fleft first">
-						<a href="#" data-event="toggle_sheet" data-sheet="create_collection" title="Create new collection" class="button-ui emb" style="margin-top:-1px"><span class="icon-solo bi-new"></span></a>
+	        	<div class="ui-row">
+	        		<div class="l push">
+						<a href="#" data-event="toggle_sheet" data-sheet="create_collection" title="Create new collection" class="button-ui emb"><span class="icon-solo bi-new"></span></a>
+					</div>
+					<div class="r">
+
 					</div>
 	          	</div>
 	        </div>
@@ -348,7 +354,13 @@
 			</div>
 			<!-- #content_sidebar_template -->
 			<div class="top-off" style="position: relative;" id="content_sidebar_template" data-bind="template: { name: sidebar.id() + '_sidebar_info', data: observers, afterRender: function() { $data.events.sidebar_callback[sidebar.id()] && $data.events.sidebar_callback[sidebar.id()].call($data) }}"></div>
-			<div id="right-menu-bot" class="col-bot"></div>
+			<div id="right-menu-bot" class="col-bot">
+				<div class="ui-row">
+					<div class="w">
+						<a href="#" title="Import images and videos" data-event="toggle_sheet" data-sheet="import_content" class="button-ui emb" style="width:201px">Import content</a>
+					</div>
+				</div>
+			</div>
 		</div><!-- #three-col-right -->
 	</div>
 </div>
@@ -510,7 +522,7 @@
 <script id="captured_uploaded_edit" type="text/html">
 <div data-submit="captured_on">
 	<div class="col-row field-row">
-		<input type="text" class="field side-col datepicker" data-no-tz-shift="true" data-bind="value: sidebar.asset.captured_on.timestamp" />
+		<input type="text" class="field side-col datepicker" data-no-tz-shift="true" data-bind="value: sidebar.asset.captured_on.timestamp, attr: { 'data-no-tz-shift': sidebar.asset.captured_on.utc ? 'false' : 'true' }" />
 	</div>
 	<div class="col-row button-row" data-event="save_changes">
 		<button class="button c0 sm data-submit" title="Save changes and close">Done</button>
@@ -548,7 +560,13 @@
 <!-- @BEGIN History Uploaded Edit Drawer Template -->
 <script id="history_published_edit" type="text/html">
 <div data-bind="attr: { 'data-submit': 'published_on' }">
-	<div class="col-row field-row">
+	<div class="col-row">
+		<input id="date_pub_single" type="radio" name="pub_on" value="captured" data-bind="attr: {checked: singleHistory.type() === 'captured'}" /> <label for="date_pub_single">Assign date captured</label>
+	</div>
+	<div class="col-row">
+		<input id="date_new_single" type="radio" name="pub_on" value="assign" data-bind="attr: {checked: singleHistory.type() === 'assign'}" /> <label for="date_new_single">Assign new date and time</label>
+	</div>
+	<div class="col-row field-row" data-bind="visible: singleHistory.type() === 'assign'">
 		<input type="text" class="field side-col datepicker" data-bind="value: sidebar.asset.published_on.timestamp" />
 	</div>
 	<div class="col-row button-row" data-event="save_changes">
@@ -567,10 +585,85 @@
 </script>
 <!-- @END History Edit Drawer Template -->
 
+<!-- @BEGIN Multi History Uploaded Edit Drawer Template -->
+<script id="multi_history" type="text/html">
+<div data-submit="multi_history">
+	<div class="col-row">
+		You have multiple items selected. How do you want to assign a new date and time?
+	</div>
+	<!-- ko if: multiHistory.drawer() === 'published_on' -->
+	<div class="col-row">
+		<input id="date_pub" type="radio" name="multi_history" data-bind="attr: {checked: multiHistory.type() === 'captured'}" value="captured" /> <label for="date_pub">Assign date captured</label>
+	</div>
+	<!-- /ko -->
+	<div class="col-row">
+		<input id="date_new" type="radio" name="multi_history" data-bind="attr: {checked: multiHistory.type() === 'assign'}" value="assign" /> <label for="date_new">Assign new date and time</label>
+	</div>
+	<div class="col-row">
+		<input id="date_shift" type="radio" name="multi_history" data-bind="attr: {checked: multiHistory.type() === 'shift'}" value="shift" /> <label for="date_shift">Shift each date and time</label>
+	</div>
+	<div data-bind="visible: multiHistory.type() === 'assign'">
+		<div class="col-row field-row">
+			<input type="text" class="field side-col datepicker" data-bind="value: multiHistory.getNow()" />
+		</div>
+	</div>
+	<div data-bind="visible: multiHistory.type() === 'shift'">
+		<div class="col-row field-row">
+			<div class="label">Years</div>
+			<div class="value">
+				<input data-type="years" class="field small" type="number" min="-50" max="50" step="1" data-bind="value: multiHistory.date.years()" />
+			</div>
+		</div>
+		<div class="col-row">
+			<div class="label">Months</div>
+			<div class="value">
+				<input data-type="months" class="field small" type="number" min="-12" max="12" step="1" data-bind="value: multiHistory.date.months()" />
+			</div>
+		</div>
+		<div class="col-row">
+			<div class="label">Days</div>
+			<div class="value">
+				<input data-type="days" class="field small" type="number" min="-31" max="31" step="1" data-bind="value: multiHistory.date.days()" />
+			</div>
+		</div>
+		<div class="col-row">
+			<div class="label">Hours</div>
+			<div class="value">
+				<input data-type="hours" class="field small" type="number" min="-24" max="24" step="1" data-bind="value: multiHistory.date.hours()" />
+			</div>
+		</div>
+		<div class="col-row">
+			<div class="label">Minutes</div>
+			<div class="value">
+				<input data-type="minutes" class="field small" type="number" min="-60" max="60" step="1" data-bind="value: multiHistory.date.minutes()" />
+			</div>
+		</div>
+	</div>
+	<div class="col-row" data-bind="visible: multiHistory.type() === 'shift'">
+		<!-- ko if: multiHistory.date.years() != 0 || multiHistory.date.months() != 0 || multiHistory.date.days() != 0 || multiHistory.date.hours() != 0 || multiHistory.date.minutes() != 0 -->
+		Each selected date will be shifted by:<br>
+		<!-- /ko -->
+			<!-- ko if: multiHistory.date.years() != 0 --><strong><span data-bind="text: multiHistory.date.years()"></span> year<!-- ko if: multiHistory.date.years() != 1 && multiHistory.date.years() != -1 -->s<!-- /ko --></strong><br><!-- /ko -->
+			<!-- ko if: multiHistory.date.months() != 0 || multiHistory.date.days() != 0 || multiHistory.date.hours() != 0 || multiHistory.date.minutes() != 0 --><!-- /ko -->
+			<!-- ko if: multiHistory.date.months() != 0 --><strong><span data-bind="text: multiHistory.date.months()"></span> month<!-- ko if: multiHistory.date.months() != 1 && multiHistory.date.months() != -1 -->s<!-- /ko --></strong><br><!-- /ko -->
+			<!-- ko if:  multiHistory.date.days() != 0 || multiHistory.date.hours() != 0 || multiHistory.date.minutes() != 0 --><!-- /ko -->
+			<!-- ko if: multiHistory.date.days() != 0 --><strong><span data-bind="text: multiHistory.date.days()"></span> day<!-- ko if: multiHistory.date.days() != 1 && multiHistory.date.days() != -1 -->s<!-- /ko --></strong><br><!-- /ko -->
+			<!-- ko if: multiHistory.date.hours() != 0 || multiHistory.date.minutes() != 0 --><!-- /ko -->
+			<!-- ko if: multiHistory.date.hours() != 0 --><strong><span data-bind="text: multiHistory.date.hours()"></span> hour<!-- ko if: multiHistory.date.hours() != 1 && multiHistory.date.hours() != -1 -->s<!-- /ko --></strong><br><!-- /ko -->
+			<!-- ko if: multiHistory.date.minutes() != 0 --><!-- /ko -->
+			<!-- ko if: multiHistory.date.minutes() != 0 --><strong><span data-bind="text: multiHistory.date.minutes()"></span> minute<!-- ko if: multiHistory.date.minutes() != 1 && multiHistory.date.minutes() != -1 -->s<!-- /ko --></strong><!-- /ko -->
+	</div>
+	<div class="col-row button-row" data-event="save_changes">
+		<button class="button c0 sm data-submit" title="Save changes and close">Done</button>
+	</div>
+</div>
+</script>
+<!-- @END Multi History Uploaded Edit Drawer Template -->
+
 <!-- @BEGIN Visibility Edit Drawer Template -->
 <script id="visibility_edit" type="text/html">
 <div data-submit="visibility">
-	<div class="col-row"><input id="i-public" value="public" type="radio" name="visibility" data-bind="attr: { checked: sidebar.asset.visibility.raw() == 'public' }" /> <label for="i-public">Public</label></div>
+	<div class="col-row"><input id="i-public" value="public" type="radio" name="visibility" data-bind="checked: sidebar.asset.visibility.raw()" /> <label for="i-public">Public</label></div>
 	<div class="col-row"><input id="i-unlisted" value="unlisted" type="radio" name="visibility" data-bind="checked: sidebar.asset.visibility.raw()" /> <label for="i-unlisted">Unlisted</label></div>
 	<div class="col-row"><input id="i-private" value="private" type="radio" name="visibility" data-bind="checked: sidebar.asset.visibility.raw()" /> <label for="i-private">Private</label></div>
 	<div class="col-row button-row" data-event="save_changes"><button class="button c0 sm data-submit" title="Save changes and close">Done</button></div>
@@ -757,7 +850,7 @@
 			</div>
 			<div class="col-group">
 				<div class="col-row">
-					<div class="label"><label>Last upload</label></div>
+					<div class="label"><label>Last import</label></div>
 					<div class="value" data-bind="text: format_date( settings.last_upload(),'M/D/YYYY h:mm a' )"></div>
 				</div>
 			</div>
@@ -943,6 +1036,9 @@
 				<img class="inspect mag" data-bind="attr: { src: sidebar.asset.presets.medium.url(), width: sidebar.last.width, height: sidebar.last.height }" />
 			</a>
 			<!-- /ko -->
+			<!-- ko if: sidebar.asset.html() -->
+			<div data-bind="html: sidebar.asset.console_html ? sidebar.asset.console_html() : sidebar.asset.html()"></div>
+			<!-- /ko -->
 			</div>
 		</div>
 	</div>
@@ -962,7 +1058,12 @@
 						<div class="label">
 							<label>File</label>
 						</div>
-						<div class="value" data-bind="text: sidebar.asset.filename"></div>
+						<div class="value">
+							<span data-bind="text: sidebar.asset.filename"></span>
+							<!-- ko if: sidebar.asset.source.url -->
+							<a data-bind="attr: { href: sidebar.asset.source.url }" class="edit-link" title="View source page" onclick="return !window.open(this.href);">source</a>
+							<!-- /ko -->
+						</div>
 					</div>
 					<div class="col-row" data-bind="visible: sidebar.asset.width() !== null">
 						<div class="label"><label>Dimensions</label></div>
@@ -1031,6 +1132,20 @@
 								<!-- /ko -->
 							</span>
 							<a href="#" title="Edit tags" class="edit-link" style="display:inline-block">edit</a>
+						</div>
+					</div>
+					<div class="col-row">
+						<div class="label"><label>Albums</label></div>
+						<div class="value">
+							<!-- ko if: get_albums() --><!-- /ko -->
+							<!-- ko if: typeof selection_albums() !== 'string' -->
+								<!-- ko foreach: selection_albums() -->
+								<a href="#" class="data-link" data-bind="text: $data.title, attr: {href: $root.paths.admin + '/#/library/albums/' + $data.id + '/content' }"></a>
+								<!-- /ko -->
+							<!-- /ko -->
+							<!-- ko if: typeof selection_albums() === 'string' -->
+							<span data-bind="text: selection_albums()"></span>
+							<!-- /ko -->
 						</div>
 					</div>
 				</div><!-- .col-group -->
@@ -1126,7 +1241,7 @@
 							<label for="" class="captured_uploaded_edit">Captured</label>
 						</div>
 						<div class="value">
-							<span data-bind="text: format_date(sidebar.asset.captured_on.timestamp(), 'M/D/YYYY h:mm a', false)"></span>
+							<span data-bind="text: format_date(sidebar.asset.captured_on.timestamp(), 'M/D/YYYY h:mm a', sidebar.asset.captured_on.utc())"></span>
 							<a href="#" class="edit-link" title="Edit date captured">edit</a>
 						</div>
 					</div>
@@ -1151,7 +1266,7 @@
 	<div id="multi_side" data-bind="scrollbar: true">
 		<div data-event="sidebar">
 
-			<div class="col-row tall">
+			<div class="col-row">
 				You have multiple items selected. Edits made below will apply to all.
 			</div>
 
@@ -1262,6 +1377,33 @@
 					</div>
 				</div>
 			</div>
+
+			<div data-event="toggle_visibility" class="col-head">
+				<span class="in">
+					<a href="#" class="arrow-toggle open fold"></a>
+					<h6><a href="#" class="fold">History</a></h6>
+				</span>
+			</div>
+			<div class="col-group">
+				<div class="col-row" data-type="published_on">
+					<div class="label"><label class="multi_history">Published</label></div>
+					<div class="value">
+						<span>- Mixed -</span> <a href="#" class="edit-link" title="Edit published date">edit</a>
+					</div>
+				</div>
+				<div class="col-row" data-type="uploaded_on">
+					<div class="label"><label class="multi_history">Uploaded</label></div>
+					<div class="value">
+						<span>- Mixed -</span> <a href="#" class="edit-link" title="Edit uploaded date">edit</a>
+					</div>
+				</div>
+				<div class="col-row" data-type="captured_on">
+					<div class="label"><label class="multi_history">Captured</label></div>
+					<div class="value">
+						<span>- Mixed -</span> <a href="#" class="edit-link" title="Edit captured date">edit</a>
+					</div>
+				</div>
+			</div>
 			<!-- /ko -->
 
 		</div>
@@ -1307,19 +1449,6 @@
 <!-- /ko -->
 </script>
 <!-- @END Trash Sidebar Info -->
-
-<!-- @BEGIN Mid Single -->
-<script id="single" type="text/html">
-<div id="mid-single">
-    <div id="mid-single-img">
-		<div class="w"></div>
-		<p>
-			<span class="cell" data-bind="text: sidebar.asset.filename()"></span><span class="cell" data-bind="visible: sidebar.asset.width() > 0, text: sidebar.asset.width() + ' x ' + sidebar.asset.height()"></span><span data-bind="visible: sidebar.asset.file_type() === 'image' && sidebar.asset.exif_fields().length > 0"><span class="cell" data-bind="html: $data.exif_label()"></span></span>
-		</p>
-	</div>
-</div>
-</script>
-<!-- @END Mid Single -->
 
 <!-- @BEGIN Mid Menu Bottom Single -->
 <script id="single_bottom" type="text/html">
@@ -1375,7 +1504,7 @@
 
 				<div class="section-header" data-event="toggle_visibility">
 					<a href="#" class="arrow-toggle sheet open"></a>
-					<h6>Select a collection type</h6>
+					<h6>Collection type</h6>
 				</div>
 
 				<div class="section-content always-show">
@@ -1399,7 +1528,7 @@
 
 				<div class="section-header" data-event="toggle_visibility">
 					<a href="#" class="arrow-toggle sheet" data-bind="css: { open: type() === 0 || type() === 2 }"></a>
-					<h6>Enter a title and description</h6>
+					<h6>Title and description</h6>
 				</div>
 
 				<div class="section-content no-bot" data-bind="style: { display: type() === 0 || type() === 2 ? 'block' : 'none' }">
@@ -1495,7 +1624,7 @@
 								<!-- /ko -->
 								<span class="cell-row">
 									<h6>Assign new category</h6>
-									<input class="field sheet small col-wide" data-bind="value: category" placeholder="Category name" />&nbsp;&nbsp;<button class="button c1 sheet sm sib" data-bind="click: $parent.models.categories.set.bind($root,category())">Create</button>
+									<input class="field sheet small col-wide" data-bind="value: category" placeholder="Category name" />&nbsp;&nbsp;<button class="button c1 sheet sm sib" data-bind="click: $parent.models.categories.set.bind($root,category(), null)" id="create_cat_create_collection_sheet">Create</button>
 								</span>
 							</span>
 						</li>
@@ -1527,27 +1656,146 @@
 </script>
 <!-- @END Create Collection Sheet -->
 
-<!-- @BEGIN Upload Ready -->
-<script id="upload_ready" type="text/html">
-<div class="msg-ready">
-	<span class="ready">
-		<span class="total"></span> items are ready for upload.
-	</span>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	When complete set their visibility to
-	<select id="upload_preset">
-		<option value="public">Public</option>
-		<option value="unlisted">Unlisted</option>
-		<option value="private">Private</option>
-	</select>
-	<span class="andaddto" style="display: none;"> and add to "<span class="addto"></span>". <a href="#" title="Do not add to this collection" class="removefrom">(remove)</a></span>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<div class="upload-bttns">
-		<a id="upload-cancel-bttn" class="button sm" href="#" title="Clear queue and cancel upload">Cancel</a>&nbsp;&nbsp;<a class="button sm c0" id="upload-start-bttn" href="#" title="Start upload">Start upload</a>
+<!-- @BEGIN Import Content Sheet -->
+<script id="import_content_sheet" type="text/html">
+<div class="sheet-head">
+	<div class="sheet-wrap">
+		<h1>Import content</h1>
+		<p>Add images and videos to the Library</p>
+	</div>
+</div>
+<hr>
+<div class="sheet-middle-no-pad clearfix">
+<section style="margin-bottom:0;">
+	<div class="sheet-wrap">
+		<ul class="option_square_grid">
+			<li class="selected">
+				<a href="#" class="import_upload" data-title="Upload" title="Upload images or videos" data-bind=""><span></span></a>
+			</li>
+			<li>
+				<a href="#" class="import_link" data-title="URL" title="Import photo from a url"><span></span></a>
+			</li>
+			<li>
+				<a href="#" class="import_vimeo" data-title="Vimeo" data-plugin-php="KokenVimeo" data-plugin="#/store/plugins/vimeo-import" title="Import video from Vimeo"><span></span></a>
+			</li>
+			<li>
+				<a href="#" class="import_inst" data-plugin-php="KokenInstagram" data-plugin="#/store/plugins/instagram-import" data-title="Instagram" title="Import photo from Instagram"><span></span></a>
+			</li>
+		</ul>
+	</div>
+</section>
+</div>
+<div id="" class="sheet-middle-no-pad clearfix">
+	<div class="import_sheet_sections">
+
+		<section id="import_upload_content" style="margin-bottom:0">
+			<div id="upload-drop-area" class="media-browse-middle center">
+				<section id="upload-drop-start">
+					<h3>Drop files here or click to browse</h3>
+					<p>JPG, PNG, GIF, MP4</p>
+				</section>
+				<section id="upload-drop-queued" style="display:none">
+					<h2><span class="label-success-select"><span id="upload_queued_num">0</span> items queued</span></h2>
+					<p>Add more or click Import to begin upload</p>
+				</section>
+			</div>
+		</section>
+
+		<section id="import_content_plugin_disabled" style="display:none;">
+			<hr>
+			<div class="sheet-wrap" style="margin-top:10px;">
+				<div class="section-content">
+					<ul class="table">
+						<li>
+							<span class="cell">
+								<p class="no-bot"><span class="title"></span> import plugin required
+								&nbsp;&nbsp;
+								<a href="#" class="button sm c0" title="Download plugin">Download plugin</a>
+								</p>
+							</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<section id="import_content_plugin_activate" style="display:none;">
+			<hr>
+			<div class="sheet-wrap" style="margin-top:10px;">
+				<div class="section-content">
+					<ul class="table">
+						<li>
+							<span class="cell">
+								<p class="no-bot"><span class="title"></span> Import plugin is installed but not enabled.
+								&nbsp;&nbsp;
+								<a href="#" class="button sm c0" data-event="enable_plugin_import" title="Enable plugin">Enable plugin</a>
+								</p>
+							</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<section id="import_content_url" style="display:none;">
+			<hr>
+			<div class="sheet-wrap" style="margin-top:10px;">
+				<div class="section-content">
+					<ul class="table">
+						<li>
+							<span class="cell label">
+								<label for="">Image or video URL</label>
+							</span>
+							<span class="cell">
+								<input class="field sheet wide" placeholder="http://path/to/image.jpg" data-validate="content_url" />
+							</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+
+
+	</div>
+
+</div>
+<div class="sheet-middle fixed clearfix">
+<hr>
+<section class="sub">
+	<div class="sheet-wrap">
+		<div data-event="toggle_visibility" class="section-header">
+			<a href="#" class="arrow-toggle sheet"></a>
+			<h6>Options</h6>
+		</div>
+		<div class="section-content" style="display:none;">
+			<label>Set content visibility to:</label>
+			<select id="upload_visibility" class="tiny" data-bind="">
+				<option value="public">Public</option>
+				<option value="unlisted">Unlisted</option>
+				<option value="private">Private</option>
+			</select>
+		</div>
+	</div>
+</section>
+</div>
+<div class="sheet-actions">
+	<hr>
+	<div class="sheet-wrap">
+		<div class="sheet-action-l al-display" style="display: none;">
+			<input id="import_tar_coll" type="checkbox" checked="checked" />
+			<label for="import_tar_coll" class="al-title"></label>
+		</div>
+		<div class="sheet-action">
+			<ul class="button-row">
+				<li><button class="button sheet lg c1" data-event="toggle_sheet" data-sheet="import_content">Cancel</button></li>
+				<li><button class="button sheet lg c0 import" data-bind="css: { disabled: $root.valid() === false }">Import</button></li>
+			</ul>
+		</div>
 	</div>
 </div>
 </script>
-<!-- @END Upload Ready -->
+<!-- @END Import Content Sheet -->
 
 <!-- @BEGIN Upload FileCon -->
 <script id="upload_filecon" type="text/html">

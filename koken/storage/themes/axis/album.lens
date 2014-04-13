@@ -61,8 +61,8 @@
 		<p>
 			Read more in
 			<koken:loop separator=", ">
-				<koken:link title="Read {{ essay.title }}">
-					{{ essay.title }}
+				<koken:link title="Read {{ title }}">
+					{{ title }}
 				</koken:link>
 			</koken:loop>
 		</p>

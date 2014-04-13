@@ -118,7 +118,7 @@ class Mcurl {
 		}
 
 		curl_setopt($this->calls[$key]["curl"], CURLOPT_RETURNTRANSFER, TRUE);
-		curl_setopt($this->calls[$key]["curl"], CURLOPT_FOLLOWLOCATION, TRUE);
+		// curl_setopt($this->calls[$key]["curl"], CURLOPT_FOLLOWLOCATION, TRUE);
 
 		curl_setopt_array($this->calls[$key]["curl"], $options);
 

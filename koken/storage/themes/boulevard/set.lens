@@ -85,6 +85,12 @@
 
 	</koken:load>
 
-<koken:asset file="js/thumbs.js" />
+<koken:asset file="js/jquery.eqheight.js" />
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#albums").eqHeight(".item");
+});
+</script>
 
 <koken:include file="inc/footer.html" />

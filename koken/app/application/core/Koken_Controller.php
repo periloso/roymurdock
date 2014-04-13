@@ -15,13 +15,13 @@ class Koken_Controller extends CI_Controller {
 	var $cache_path;
 	var $cache_path_to_file;
 
-	// If not format is specified, JSON it is
+	// If no format is specified, JSON it is
 	var $format = 'json';
 
 	// We can't use CI's set_output, as it causes type coersion, so we'll use our own var for that
 	var $response_data = array();
 
-	function _download($f, $to)
+	function _download($f, $to, $force_content_mimes = false)
 	{
 		if (extension_loaded('curl')) {
 			$cp = curl_init($f);
@@ -30,8 +30,31 @@ class Koken_Controller extends CI_Controller {
 				curl_close($cp);
 				return false;
 			} else {
+				if (strpos($f, 'https://') === 0)
+				{
+					curl_setopt($cp, CURLOPT_SSL_VERIFYHOST, 2);
+					curl_setopt($cp, CURLOPT_SSL_VERIFYPEER, false);
+				}
+				else if (!$force_content_mimes)
+				{
+					curl_setopt($cp, CURLOPT_HTTPHEADER, array(
+						'Accept: application/octet-stream'
+					));
+				}
 				curl_setopt($cp, CURLOPT_FILE, $fp);
+				curl_setopt($cp, CURLOPT_CONNECTTIMEOUT, 10);
 				curl_exec($cp);
+				if ($force_content_mimes)
+				{
+					$mime = curl_getinfo($cp, CURLINFO_CONTENT_TYPE);
+					if (!preg_match('/^(image|video|application)\/.*/', $mime))
+					{
+						curl_close($cp);
+						fclose($fp);
+						unlink($to);
+						return false;
+					}
+				}
 				curl_close($cp);
 				fclose($fp);
 			}
@@ -40,6 +63,12 @@ class Koken_Controller extends CI_Controller {
 				return false;
 			}
 		}
+
+		if ((!file_exists($to) || filesize($to) === 0) && preg_match('/^https:/', $f))
+		{
+			return $this->_download(str_replace('https://', 'http://', $f), $to, $force_content_mimes);
+		}
+
 		return true;
 	}
 
@@ -57,6 +86,8 @@ class Koken_Controller extends CI_Controller {
     	$stamp = $this->cache_path . DIRECTORY_SEPARATOR . 'stamp';
     	make_child_dir($this->cache_path);
     	$this->check_for_rewrite();
+    	$uri_parts = $this->uri->ruri_to_assoc(1);
+    	$action = array_shift($uri_parts);
 
     	if (!file_exists($stamp))
     	{
@@ -80,7 +111,6 @@ class Koken_Controller extends CI_Controller {
 		{
 			if (array_key_exists('exclude', $this->auto_authenticate))
 			{
-				$action = array_shift($this->uri->ruri_to_assoc(1));
 				if (in_array($action, $this->auto_authenticate['exclude']))
 				{
 					$this->auto_authenticate = false;
@@ -99,11 +129,27 @@ class Koken_Controller extends CI_Controller {
 			}
 		}
 
+		$this->caching = !array_key_exists('cache:false', $uri_parts) && ($this->caching === true || (is_array($this->caching) && in_array($action, $this->caching)));
+
 		if ($this->method === 'get')
 		{
-			if ($this->caching && file_exists($this->cache_path_to_file) && ENVIRONMENT === 'production')
+			$final_cache_path = false;
+			$content_type = 'application/json';
+			$content_types = array('application/json', 'text/javascript', 'text/css');
+			foreach(array('.cache', '.javascript.cache', '.css.cache') as $index => $file_ext)
 			{
-				$mtime = filemtime($this->cache_path_to_file);
+				$path = str_replace('.cache', $file_ext, $this->cache_path_to_file);
+				if (file_exists($path))
+				{
+					$content_type = $content_types[$index];
+					$final_cache_path = $path;
+					break;
+				}
+			}
+
+			if ($this->caching && $final_cache_path && ENVIRONMENT === 'production')
+			{
+				$mtime = filemtime($final_cache_path);
 
 				if ($mtime > $cache_stamp)
 				{
@@ -111,14 +157,15 @@ class Koken_Controller extends CI_Controller {
 						set_status_header('304');
 				    	exit;
 					}
-					$contents = file_get_contents($this->cache_path_to_file);
-					if (!empty($contents) && json_decode($contents))
+
+					$contents = file_get_contents($final_cache_path);
+					if ($content_type !== 'application/json' || (!empty($contents) && json_decode($contents)))
 					{
 						if ($this->uri->uri_string() !== '/system' || filemtime(FCPATH . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'configuration' . DIRECTORY_SEPARATOR . 'user_setup.php') <= $mtime)
 						{
 							header('Content-type: application/json');
 							header('Cache-control: must-revalidate');
-							header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($this->cache_path_to_file)) . ' GMT');
+							header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $mtime) . ' GMT');
 							die($contents);
 						}
 					}
@@ -159,6 +206,9 @@ class Koken_Controller extends CI_Controller {
 
 			Shutter::finalize_plugins($plugins);
 		}
+
+		// Force MySQL to UTC
+		$this->db->simple_query("SET time_zone = '+00:00'");
     }
 
 	function redirect($url)
@@ -239,6 +289,16 @@ class Koken_Controller extends CI_Controller {
 				$content_type = 'text/plain';
 				$data = serialize($this->response_data);
 				break;
+			case 'javascript':
+			case 'css':
+				$content_type = 'text/' . $this->format;
+				$data = $this->response_data;
+
+				if (isset($this->cache_path_to_file))
+				{
+					$this->cache_path_to_file = preg_replace('/.cache$/', ".{$this->format}.cache", $this->cache_path_to_file);
+				}
+				break;
 			default:
 				$data = json_encode($this->response_data);
 				$content_type = 'json';
@@ -316,8 +376,7 @@ class Koken_Controller extends CI_Controller {
 
 			if (isset($plugin['php_class']))
 			{
-				$plug = new $plugin['php_class'];
-				$plugin['compatible'] = $plug->is_compatible();
+				$plugin['compatible'] = $plugin['php_class']->is_compatible();
 				if ($plugin['compatible'] !== true)
 				{
 					$plugin['compatible_error'] = $plugin['compatible'];
@@ -630,7 +689,11 @@ class Koken_Controller extends CI_Controller {
 		{
 			$c->include_related('album')->where("YEAR(FROM_UNIXTIME({$c->table}.published_on{$shift}))", $options['year'])
 				->where("MONTH(FROM_UNIXTIME({$c->table}.published_on{$shift}))", $options['month'])
-				->where("DAY(FROM_UNIXTIME({$c->table}.published_on{$shift}))", $options['day']);
+				->where("DAY(FROM_UNIXTIME({$c->table}.published_on{$shift}))", $options['day'])
+				->group_start()
+					->where($a->table. '.id', null)
+					->or_where($a->table . '.deleted', 0)
+				->group_end();
 		}
 		else if ($type === 'tag')
 		{

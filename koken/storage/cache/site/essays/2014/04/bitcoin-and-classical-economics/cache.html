@@ -1,0 +1,346 @@
+	<!DOCTYPE html>
+<html class="k-source-essay k-lens-essay">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="description" content="" />
+	<meta name="author" content="Roy Murdock" />
+	<meta name="keywords" content="Roy Murdock, portfolio, essays, technology" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui">
+
+	
+
+	<link rel="stylesheet" type="text/css" href="/koken/app/site/themes/common/css/reset.css?0.13.0" />
+	<link rel="stylesheet" type="text/css" href="/koken/app/site/themes/common/css/animate.css?0.13.0" />
+	<link rel="stylesheet" type="text/css" href="/koken/storage/themes/madison/css/screen.css?1.4.7" />
+	<link rel="stylesheet" type="text/css" href="/koken/storage/themes/madison/css/kicons.css?1.4.7" />
+	<link rel="stylesheet" type="text/css" href="/koken/storage/themes/madison/css/kshare.css?1.4.7" />
+	<link id="koken_settings_css_link" rel="stylesheet" type="text/css" href="/settings.css.lens" />
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+	<link rel="canonical" href="http://roymurdock.com/essays/2014/04/bitcoin-and-classical-economics/">
+	<title>Bitcoin and the Classical Theory of Money - Roy Murdock</title>
+	
+	<meta property="og:site_name" content="Roy Murdock" />
+	<meta property="og:title" content="Bitcoin and the Classical Theory of Money" />
+	<meta property="og:description" content="This comparative analysis led me to discover three things above all. One concerns efficiency, and the other concerns our concept of &quot;money&quot; as a function of time." />
+	<meta property="og:url" content="http://roymurdock.com/essays/2014/04/bitcoin-and-classical-economics/" />
+	<meta property="og:type" content="website" />
+	<meta property="og:image" content="http://roymurdock.com/koken/storage/cache/images/custom/bitcoin-money-jpg/medium_large.jpg?1397172289" />
+	<meta property="og:image:width" content="800" />
+	<meta property="og:image:height" content="450" />
+	<meta name="medium" content="article" />
+	
+
+	<!--[if IE]>
+	<script src="/koken/app/site/themes/common/js/html5shiv.js"></script>
+	<![endif]-->
+
+	<meta name="generator" content="Koken 0.13.0" />
+	<meta name="theme" content="Madison 1.4.7" />
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="/koken/app/site/themes/common/js/jquery.min.js"><\/script>')</script>
+	<script src="/koken.js?0.13.0"></script>
+	<script>$K.location = $.extend($K.location, {"here":"\/essays\/2014\/04\/bitcoin-and-classical-economics\/","parameters":{"page":1,"url":"\/essays\/2014\/04\/bitcoin-and-classical-economics\/","base_folder":"\/"},"page_class":"k-source-essay k-lens-essay"});</script>
+
+	<link rel="alternate" type="application/atom+xml" title="Roy Murdock: All uploads" href="/feed/content/recent.rss" />
+	<link rel="alternate" type="application/atom+xml" title="Roy Murdock: Essays" href="/feed/essays/recent.rss" />
+	<link rel="alternate" type="application/atom+xml" title="Roy Murdock: Timeline" href="/feed/timeline/recent.rss" />
+<script src="/koken/storage/themes/madison/js/jquery.smooth-scroll.min.js?1.4.7"></script>
+<script src="/koken/storage/themes/madison/js/jquery.sidr.min.js?1.4.7"></script>
+<script src="/koken/app/site/themes/common/js/jquery.pjax.js?0.13.0"></script>
+<script>
+	$(function() {
+
+	var navClassSets = function() {
+	$('.k-nav-current').parentsUntil('nav').each(function(i,element) {
+	if ($(element).get(0).tagName === 'UL') {
+	$(element).prev().addClass('k-nav-open');
+	}
+	});
+	}
+	navClassSets();
+
+	$(window).bind('resize', function() {
+	$('#strip').css({
+	left: $('#main').offset().left + $('#main').width() + 40 + 'px'
+	});
+	})
+	.trigger('resize');
+
+	$(document).pjax('nav a:not(.k-nav-set), header h1 a', '#target', {
+	timeout: 2000
+	});
+
+	$(document)
+	.on('pjax:start', function(e) {
+	$('#target').empty();
+	$K.navigation.setCurrent($(e.relatedTarget).attr('href'));
+	window.scrollTo(0,0);
+	})
+	.on('pjax:click', function() {
+	navClassSets();
+	$('.k-nav-current').parentsUntil('nav').each(function(i,element) {
+	if ($(element).hasClass('k-nav-root')) {
+	if ($('.k-nav-current').closest('ul').prev().hasClass('k-nav-open')) {
+	$(element).addClass('paused');
+	} else {
+	$(element).removeClass('paused');
+	}
+	}
+	});
+	})
+	.on('scroll', function() {
+	$('.item').each(function() {
+	if ( ($(this).offset().top+$('body').offset().top) > $(window).scrollTop() ) {
+	$('#strip .current').removeClass('current');
+	$('#strip a[href="#' + $(this).attr('id') + '"]').addClass('current');
+	return false;
+	}
+	});
+	})
+	.trigger('scroll');
+
+	function createStrip() {
+	$('#strip a').smoothScroll({
+	offset: -50,
+	afterScroll: function() {
+	$('#strip .current').removeClass('current');
+	$(this).addClass('current');
+	}
+	});
+	}
+
+	window.pjaxReload = function() {
+	createStrip();
+	$K.responsiveImages();
+	$K.loadImages();
+	$(window).trigger('resize');
+	$(document).trigger('scroll');
+	$('body').fitVids();
+	}
+
+	createStrip();
+
+	});
+	</script>
+<script>
+	$(function() {
+	$('time').timeago();
+	});
+</script>
+<script type="text/javascript">
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-44114303-1']);
+ 	_gaq.push(['_trackPageview']);
+ 	_gaq.push(['_anonymizeIP', false]);
+
+ 	(function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ 	})();
+
+</script>
+</head>
+
+<body class="k-source-essay k-lens-essay">
+	
+	<div id="sidr-left" class="mob">
+ 	<ul class="k-nav-list k-nav-root "><li><a data-koken-internal title="Home" href="/">Home</a></li><li><a data-koken-internal title="About" href="/pages/about/">About</a></li></ul><ul class="k-nav-list k-nav-root "><li><a title="+TWITTER" href="https://twitter.com/RoyMurdock">+TWITTER</a></li><li><a target="_blank" title="+LINKEDIN" href="http://www.linkedin.com/pub/roy-murdock/40/8ab/7b3">+LINKEDIN</a></li></ul><ul class="k-nav-list k-nav-root "><li><a target="_blank" title="SUBSCRIBE" href="http://eepurl.com/MFi0L">SUBSCRIBE</a></li><li><a target="_blank" title="RSS" href="/feed/essays/recent.rss">RSS</a></li></ul>	</div>
+
+	<div id="mob-bttn-row"><a id="mob-menu" href="#mob-menu" title="Open mobile menu"><i class="kicon-mob-menu"></i></a></div>
+
+	<div id="page">
+
+	<div id="col">
+
+	<div class="in">
+
+	<header class="top">
+	<a href="/" title="Home" data-koken-internal><img src="http://roymurdock.com/koken/RMLogo.png" alt="Roy Murdock" class="custom_logo"></a>
+	</header>
+
+	<nav>
+	<ul class="k-nav-list k-nav-root "><li><a data-koken-internal title="Home" href="/">Home</a></li><li><a data-koken-internal title="About" href="/pages/about/">About</a></li></ul><ul class="k-nav-list k-nav-root "><li><a title="+TWITTER" href="https://twitter.com/RoyMurdock">+TWITTER</a></li><li><a target="_blank" title="+LINKEDIN" href="http://www.linkedin.com/pub/roy-murdock/40/8ab/7b3">+LINKEDIN</a></li></ul><ul class="k-nav-list k-nav-root "><li><a target="_blank" title="SUBSCRIBE" href="http://eepurl.com/MFi0L">SUBSCRIBE</a></li><li><a target="_blank" title="RSS" href="/feed/essays/recent.rss">RSS</a></li></ul>	</nav>
+
+	<div id="col-xtra">
+
+	<div id="col-xtra-content">
+
+	
+	<p>
+	© Roy Murdock 2014	</p>
+
+	</div>
+
+	</div>
+
+	</div>
+
+	</div> <!-- close col -->
+
+	<div id="target">
+
+	
+	
+
+	<div id="main">
+
+	<article>
+
+	<header>
+	<h1>
+	<a href="/essays/2014/04/bitcoin-and-classical-economics/" class="k-nav-current" title="Bitcoin and the Classical Theory of Money" data-koken-internal>	Bitcoin and the Classical Theory of Money</a>
+	</h1>
+</header>
+
+<figure class="k-content-embed">
+	<div class="k-content">
+	
+	<noscript>
+	<img width="100%" alt="bitcoin-money.jpg" src="http://roymurdock.com/koken/storage/cache/images/custom/bitcoin-money-jpg/large.jpg?1397172289" />
+</noscript>
+<img data-alt="bitcoin-money.jpg" data-respond-to="width" data-presets="tiny,60,34 small,100,56 medium,480,270 medium_large,800,450 large,1024,576 xlarge,1600,900 huge,1920,1080" data-base="http://roymurdock.com/koken/storage/cache/images/custom/bitcoin-money-jpg/" data-extension="jpg?1397172289"/>
+
+	
+	</div>
+	
+	</figure><p class="">The idea behind this post is to use comparisons between old currency (USD) and new currency (BTC) to figure out just how our financial system can be improved through the switch from physical to digital money.</p><p class="">Some of the properties of physical money that were once considered important, namely portability and durability, are irrelevant in the world of digital currency.</p><p class="">Bitcoin dominates the USD on endogenous properties, such as divisibility and scarcity. </p><p class="">Bitcoin struggles with the exogenously determined variable of acceptability.</p><p class=""><span style="font-size: 1em;">The comparative analysis led me to discover three things above all:</span></p><p class="">1) <b>Virtual currency is much more efficient than physical currency <i>by design</i>.</b> If/When it is implemented and controlled by correctly, it has the potential to cut costs and achieve economic goals in a faster and more accurate manner than our current scheme: Central Banks conducting open market operations and setting reserve requirements and interest rates.&nbsp;Society permitting, it will take a prominent position alongside cash and credit in the future.<br></p><p class=""><span style="font-size: 1em;">2) <b>Our concept of "money" and its characteristics is a function of time.</b> Our society has evolved quite rapidly in the past couple of decades alongside technology and globalization. A reevaluation of our definition of "money" is inevitable, given the passage of time.</span></p><p class="">If you are interested in following the analysis that led me to these conclusions, please read on. I will examine our current political and societal state in regards to virtual currency in my next post.</p><h2>CLASSICAL ECONOMICS</h2><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><p class=""><i style="font-size: 1em;">“A traditional view of money is that it has three important functions. Namely, money is a medium of exchange, it is a store of value, and it is a unit of account.” - Macroeconomics, Stephen D. Williamson (457)</i></p></blockquote><p class=""><span style="font-size: 1em;">This definition of money will serve as a framework for our analysis. If the substance we are considering, be it cash or bitcoin, fulfills these three functions, then we can be certain that we are looking at money. 
+</span></p><p class=""><span style="font-size: 1em;">Now we need a way to differentiate between the different forms of money. What separates “good” money from “bad” money? </span></p><p class=""><span style="font-size: 1em;">There is no singular, authoritative list of the necessary properties of money, but there are some generally accepted “ideal” properties that determine how well different substances can perform the functions of money.
+
+I started with the six </span><a href="http://www.stlouisfed.org/education_resources/economic-lowdown-podcast-series/functions-of-money/" target="_blank">outlined by the Federal Reserve Bank of St. Louis</a><span style="font-size: 1em;">. After a bit of research, I decided to add security to the list. </span></p><p class=""><span style="font-size: 1em;">These are the properties I examined: <br></span>1. Portability <br>2. Durability <br>3. Divisibility <br>4. Fungibility (Uniformity) <br>5. Scarcity (Limited Supply) <br>6. Acceptability <br>7. Security (No counterfeits/theft) </p><p class="">So far so good. We’ve identified the major functions of money and the properties that allow a substance to fulfill those functions. </p><p class="">The next task is to group the properties by the functions they fulfill.
+
+If we see that a form of money does not score high in one property, we can draw conclusions about which function of money is violated. For example, a barrel of oil scores low on the portability scale, so we can conclude that it will not function well as a medium of exchange. Portability has no bearing on the store of value or unit of account functions of money. </p><p class="">Some properties facilitate multiple functions of money. For example: Acceptability is important when considering money’s function as a medium of exchange, a store of value, and a unit of account. Here is the matrix I ended up with:&nbsp;</p>
+
+<figure class="k-content-embed">
+	<div class="k-content">
+	
+	<noscript>
+	<img width="100%" alt="matrix.png" src="http://roymurdock.com/koken/storage/cache/images/custom/matrix-png/large.png?1397172509" />
+</noscript>
+<img data-alt="matrix.png" data-respond-to="width" data-presets="tiny,60,24 small,100,40 medium,480,194 medium_large,505,204 large,505,204 xlarge,505,204 huge,505,204" data-base="http://roymurdock.com/koken/storage/cache/images/custom/matrix-png/" data-extension="png?1397172509"/>
+
+	
+	</div>
+	
+	</figure>
+
+<p class="">Now that we have a matrix in place, let's begin our analysis in earnest by comparing the properties of the American Dollar and the bitcoin.&nbsp;</p><h2>ANALYSIS</h2><p class=""><span style="font-size: 1em;"><b>1. Portablility (ME)
+Money must be easy to transport.&nbsp;</b></span></p><p class=""><a href="http://en.wikipedia.org/wiki/Rai_stones" target="_blank" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 2;">Rai Stones</a>&nbsp;<span style="font-size: 1em;">exhibit low portability.&nbsp;</span></p><p class=""><span style="font-size: 1em;">USD: Paper money is extremely portable. The small size and weight of a dollar bill makes it a convenient means of transaction.&nbsp;</span></p><p class=""><span style="font-size: 1em;">bitcoin: A bitcoin exists as data on server, 0’s and 1’s expressed by thousands of tiny transistors - it is as portable as a flash drive or a slip of paper. Millions can be "stored" and transported on a scrap of paper. Any medium that can record 52 digits can be used to transport Bitcoin. Moreover, there is no point in porting a bitcoin from one place to another. It exists on a server, and you mine it, access it, and spend it remotely.&nbsp;</span></p><p class=""><span style="font-size: 1em;"><i>Portability is not a relevant property when we consider Bitcoin.</i></span></p><p class=""><span style="font-size: 1em;"><b>2. Fungibility (ME)
+The property of mutual substitution.&nbsp;</b></span></p><p class=""><span style="font-size: 1em;">Artwork and houses exhibit low fungibility.&nbsp;</span></p><p class=""><span style="font-size: 1em;">USD: The USD is pretty good when it comes to fungibility, as all denominations are worth exactly the same amount. There are minor cosmetic differences and systems in place for identification, but these would rarely stop us from swapping $20 bills. As the bills begin to deteriorate, their fungibility is called into questions.</span></p><p class=""><span style="font-size: 1em;">bitcoin: bitcoins and satoshis are almost perfect fungibility wise. They don’t have a serial number, and the&nbsp;</span><a href="http://bitcoin.stackexchange.com/questions/2496/are-bitcoins-inherently-fungible" target="_blank">only difference between my 1BTC and your 1BTC</a><span style="font-size: 1em;">&nbsp;is when it was mined, and whose virtual hands it passed through to end up in our respective wallets.&nbsp;</span></p><p class=""><span style="font-size: 1em;">Some bitcoins do hold more sentimental value to some than others, such as the Bitcoin that were part of the first pizza purchase using Bitcoin, just as a dollar bill might have more value depending on who gave it to you, who signed it, etc. This extra sentimental value is negligible in both cases.&nbsp;</span></p><p class=""><span style="font-size: 1em;"><i>bitcoins are slightly more fungible than USD.&nbsp;</i></span></p><p class=""><span style="font-size: 1em;"><b>3. Divisibility (ME)
+It must be easily divisible into different denominations.&nbsp;</b></span></p><p class=""><span style="font-size: 1em;">Artwork, cars, and machinery exhibit low divisibility.&nbsp;</span></p><p class=""><span style="font-size: 1em;">USD: A paper dollar cannot be halved and exchanged as two units of 50 cents. Carrying change is a minor annoyance.&nbsp;</span></p><p class=""><span style="font-size: 1em;">bitcoin: bitcoins can be instantly divided down to 8 decimal places, saving a trip to the bank and allowing for much greater flexibility than dollars and pennies.&nbsp;</span></p><p class=""><span style="font-size: 1em;"><i>bitcoins are much more divisible than USD.&nbsp;</i></span></p><p class=""><span style="font-size: 1em;"><b>&nbsp;4. Acceptability (ME) (SV) (UA)
+It must be universally accepted.&nbsp;</b></span></p><p class=""><span style="font-size: 1em;">Cattle and peanut butter exhibit low acceptability.&nbsp;</span></p><p class=""><span style="font-size: 1em;">USD: The USD is very flexible as a form of currency, even outside of the USA. Petroleum and gold markets use the dollar as the standard unit of currency. In addition, sovereign countries such as Ecuador and El Salvador have adopted the American Dollar as their exclusive official currency for stability and credibility reasons.&nbsp;</span></p><p class=""><span style="font-size: 1em;">This is one of the dimensions in which the dollar shines. It is also the only property that is exogenously determined.&nbsp;</span></p><p class=""><span style="font-size: 1em;">Divisibility, Fungibility, Durability – these are all intrinsic properties of the material that we are studying. Acceptability is the bridging characteristic between money and man. It reflects our society’s ability to understand and cope with change.&nbsp;</span></p><p class=""><span style="font-size: 1em;">bitcoin: At this moment, approximately 3,000 merchants accept Bitcoin worldwide. The currency has a very long path to travel towards universal acceptance, which could be blocked by central banking regulation and government policy (</span><a href="http://bitlegal.io/" target="_blank">see Russia and Vietnam</a><span style="font-size: 1em;">).&nbsp;</span></p><p class=""><span style="font-size: 1em;">Again, the legal status of Bitcoin is not an inherent property, but one determined by societal and economic forces.&nbsp;</span></p><p class=""><span style="font-size: 1em;"><i>USD is very widely accepted, bitcoin is not.&nbsp;</i></span></p><p class=""><b><span style="font-size: 1em;">5</span>. Durability (ME) (SV)&nbsp;<span style="font-size: 1em;">Money must withstand the erosion of time.&nbsp;</span></b></p><p class=""><span style="font-size: 1em;">USD:&nbsp;</span><a href="http://www.federalreserve.gov/faqs/how-long-is-the-life-span-of-us-paper-money.htm" target="_blank">Here is a chart from the Federal Reserve</a><span style="font-size: 1em;">&nbsp;that outlines the average lifespans of each denomination of USD. Each note costs anywhere from 5-13 cents to produce, which can add up. There are many downsides to maintaining a degradable currency:</span></p><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><p class=""><span style="font-size: 1em;">"The costs associated with the production, transportation, and handling of physical currency can be substantial. The estimated annual costs of handling central bank currency by US retailers and banks are $60 billion, which includes costs of processing and accounting of money, storage, transport, and security. The cost of an electronic payment system would range from one-third to one-half of a paper payment system." - "Regulating Digital Currencies: Bringing Bitcoin Within the Reach of the IMF", Plassaras (9)</span></p></blockquote><p class="">bitcoin: bitcoins (the units) will not degrade as we use them. A bitcoin will last forever, but it can also be&nbsp;<a href="http://www.nbcnews.com/news/other/it-worker-throws-out-hard-drive-loses-7-5-million-f2D11669738" target="_blank">lost forever</a>&nbsp;if you are unfortunate enough to forget or lose your private key -  loss is a problem of security, not durability.&nbsp;</p><p class=""><i>Durability is not a relevant property when we consider virtual currency.&nbsp;</i></p><p class=""><span style="font-size: 1em;"><b>6. Scarcity (SV)
+Money has a fixed, finite supply.&nbsp;</b></span></p><p class=""><span style="font-size: 1em;">USD: The USD is as scarce as the Federal Reserve wants it to be. The Federal Reserve can print money to increase the monetary base, making more cash available in the economy and driving down nominal interest rates. Given the Fed’s understanding of economics, it’s safe to say that we won’t see hyperinflation anytime soon, but the scarcity of the USD is determined exogenously.&nbsp;</span></p><p class=""><span style="font-size: 1em;">bitcoin: For now, the amount of bitcoin in the world has been capped at 21 million. Many people believe this to be a hard limit, but it is not. Theoretically, the&nbsp;</span><a href="https://bitcoin.org/en/development" target="_blank">core developers and maintainers</a><span style="font-size: 1em;">&nbsp;of the system have the power to make changes to the maximum amount of BTC, or to inject bitcoin into the system.&nbsp;</span></p><p class=""><span style="font-size: 1em;">In order for these changes to take effect, the miners and the users running the previous version of the Bitcoin node client would&nbsp;</span><a href="http://www.reddit.com/r/Bitcoin/comments/1qd0or/how_much_power_do_the_bitcoin_developers_really/" target="_blank">have to accept these changes by updating their software</a><span style="font-size: 1em;">&nbsp; which would then begin to validate transactions under the new system implemented by the developers.&nbsp;</span></p><p class=""><span style="font-size: 1em;">The Bitcoin Wiki lists a change in the hard cap as fundamental violation of the economic ideas behind Bitcoin, and that the newly altered currency&nbsp;</span><a href="https://en.bitcoin.it/wiki/Prohibited_changes" target="_blank">wouldn't be recognized as "Bitcoin"</a><span style="font-size: 1em;">&nbsp; Yet it is important to note that such a change is possible - Dogecoin took the revolutionary step of&nbsp;</span><a href="https://github.com/dogecoin/dogecoin/issues/23" target="_blank">leaving the currency uncapped</a>, as<span style="font-size: 1em;">&nbsp;the developers decided that an inflationary currency would be beneficial in the long run.&nbsp;</span></p><p class=""><span style="font-size: 1em;">Digital currency developers are quite similar to the Fed B.O.G. in that a small group of "overseers" have control over the economic policy of the governed system. One important difference is that the developers can implement changes with speed and accuracy by tweaking the algorithms behind the currency, whereas the monetary policy implemented by the Fed can take a lot longer to have an effect on the economy:&nbsp;</span></p><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><p class=""><span style="font-size: 1em;">"It can take a fairly long time for a monetary policy action to affect the economy and inflation. And the lags can vary a lot, too. For example, the major effects on output can take anywhere from three months to two years. And the effects on inflation tend to involve even longer lags, perhaps one to three years, or more." -&nbsp;</span><a href="http://www.frbsf.org/us-monetary-policy-introduction/real-interest-rates-economy/" target="_blank" style="font-style: italic;">Federal Reserve Bank of San Francisco</a></p></blockquote><p class=""><span style="font-size: 1em;">Another benefit/detriment of virtual currencies is that the miners and users have more control over what changes they are willing to accept. If a developer implements an unpopular change, the miners can simply move to another currency, rendering the old one void and null.&nbsp;</span></p><p class=""><span style="font-size: 1em;">Of course they have an incentive to stay, as what they have mined will become worthless once they leave. This leads to cooperation and mutual respect (or fear), depending on the communication between the developers and the miners.&nbsp;</span></p><p class=""><a href="https://en.bitcoin.it/wiki/Hardfork_Wishlist" target="_blank" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 2;">Here’s a wishlist of other changes</a><span style="font-size: 1em;">&nbsp;the Bitcoin community would like to see implemented. 
+Strict scarcity isn't necessary (gold standard vs. fiat currency) and might in fact hinder the flow of goods and services if there isn't enough money to represent the transactions that members of a society wish to make.&nbsp;</span></p><p class=""><span style="font-size: 1em;">This ultimately becomes an argument of whether or not you think monetary policy is effective, which school of economics you subscribe to, and how much trust you place in central banks.&nbsp;</span></p><p class=""><span style="font-size: 1em;">The scarcity of the USD is controlled by the Fed. Bitcoin is deflationary (in real terms). It is unclear which is more efficient or effective, but <i>virtual currency monetary policy can pivot more efficiently, given the cooperation of the miners.&nbsp;</i></span></p><p class=""><b><span style="font-size: 1em;">7. Security (ME) (SV)
+Each bill or coin used in a trade must be valid.&nbsp;</span>Money must be hard to steal.&nbsp;</b></p><p class="">USD: The USD uses serial numbers, security ribbons, watermarks, and&nbsp;<a href="http://www.newmoney.gov/uscurrency/redesigned100.htm" target="_blank">other security measures</a>&nbsp;to protect against counterfeiting. Approximately every 1/10,000 notes&nbsp;<a href="http://www.treasury.gov/about/organizational-structure/offices/Domestic-Finance/Documents/the use and counterfeiting of u.s. currency abroad  part 3 september2006.pdf" target="_blank">is a counterfeit</a>.&nbsp;</p><p class="">bitcoin:
+“When you transfer bitcoins to someone you don't hand over "a bitcoin". You submit a transaction to the network. The network makes sure your address is valid and has the proper value. So there is no risk of counterfeiting because there is nothing to counterfeit. There is a risk of double spending. When I transfer bitcoins from me to you the network prevents me from doing it again (and again and again ...). When you submit a transaction the network verifies that each transaction is valid before including it in the next block.&nbsp;</p><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><p class="">"IF hypothetically you had enough computing power you could cheat. You could include your invalid transaction in the block and sign it as valid. The strength of bitcoin comes from the size of the network. [Currently ~17Thash/second] An insane amount of computation power. As long as the network remains large enough and diverse enough that one entity can't control 51% there is very little risk of double spending, so long as the recipient waits for a confirmation.” -&nbsp;<a href="http://bitcoin.stackexchange.com/users/307/deathandtaxes" target="_blank">DeathAndTaxes</a>&nbsp;on&nbsp;<a href="http://bitcoin.stackexchange.com/questions/181/can-bitcoins-be-counterfeited" target="_blank" style="font-style: italic;">Stackexchange</a></p></blockquote><p class="">We can't compare the anti-counterfeiting measures of Bitcoins and dollars because Bitcoin does not require any counterfeit protection. The system will work as long as a critical mass of miners (51%) remain honest.&nbsp;</p><p class="">Even if a rogue miner, or group of miners, were able to control 51% of the computing power of the network, game theory dictates that a double spending would not be profitable.</p><blockquote style="margin: 0 0 0 40px; border: none; padding: 0px;"><p class="">"A rational player should refuse to accept <b>any</b> payments when there is a significant threat of double-spending. As a cartel must outmine the entire Bitcoin network and thus outspend the entire Bitcoin network for as long as it would remain a cartel, we believe it is very unlikely that a cartel could double-spend enough to recover the cost of the attack." - "The Economics of Bitcoin Mining, or Bitcoin in the Presence of Adversaries", Kroll, Davey, and Felten (12)</p></blockquote><p class="">What about the bitcoin thefts that seem to occur with frightening regularity in the exchanges? If you avoid storing bitcoins in an exchange wallet and simply hold them in a paper or hard drive wallet, your bitcoins are as secure as the 52-digit private key you are given to access the wallet.&nbsp;</p><p class=""><span style="font-size: 1em;">It would seem that large amounts of bitcoins are easier to steal than cash. This is the second major road bump for the alternative currency community, behind acceptability.&nbsp;</span></p><p class=""><span style="font-size: 1em;">Yet again, the problem is not intrinsic to the currency, it is generally due to incompetence or corruption on the part of exchange moderators.&nbsp;</span><a href="http://bitcoin.stackexchange.com/questions/3718/what-are-multi-signature-transactions" target="_blank">Multi-sig addresses</a><span style="font-size: 1em;">&nbsp;and&nbsp;</span><a href="https://en.bitcoin.it/wiki/Contracts#Example_2:_Escrow_and_dispute_mediation" target="_blank">escrow transactions</a><span style="font-size: 1em;">&nbsp;might help, but they have yet to be implemented in a straightforward and easy to understand manner by major exchanges.&nbsp;</span></p><p class=""><span style="font-size: 1em;">For now, security is a major concern due to a lack of knowledge around the currency and/or theft.&nbsp;</span></p><p class=""><span style="font-size: 1em;"><i>bitcoin is uncounterfeitable, but it's easier to steal large amounts of bitcoin than USD.</i>&nbsp;</span></p><h2>IN SUMMARY&nbsp;</h2><p class="">I believe in digital currency because of the gains to efficiency that we can realize through its use. If we are to use tokens to represent the memory of transactions, we might as well be using the best tokens we have at our disposal.&nbsp;</p><p class=""><b>Bitcoin is superior to the USD</b>&nbsp;on the following properties:</p><p class="">2. Fungibility (ME)&nbsp;<br><span style="font-size: 1em;">3. Divisibility (ME)
+<br>6. Scarcity (SV)&nbsp;</span></p><p class=""><span style="font-size: 1em;">Our analysis identifies pieces of the classical framework that no longer apply to digital currency. Since Bitcoin obviates the need to consider these properties, we can conclude that <b>Bitcoin is superior to USD on these characteristics</b> through the property of parsimony.&nbsp;</span></p><p class=""><span style="font-size: 1em;">1. Portability (ME)
+<br>5. Durability (ME) (SV)&nbsp;</span></p><p class=""><span style="font-size: 1em;"><b>USD is superior to Bitcoin</b> on these two important properties:</span></p><p class=""><span style="font-size: 1em;">4. Acceptability (ME) (SV) (UA)
+<br>7. Security (ME) (SV)&nbsp;</span></p><p class=""><span style="font-size: 1em;">Acceptability is arguably one of the most important properties of money, as we see that it is important in fulfilling all three functions of money. It is also exogenously determined; we will examine the institutions that control it in Part 2 - Societal Considerations.&nbsp;</span></p><p class=""><span style="font-size: 1em;">Security is also of huge concern to the holder of a currency. This will be addressed in the next post, where we will look at the frictions that, when removed, could make digital currency much more safe and secure than cash (at least for the time being).&nbsp;</span></p><p class=""><span style="font-size: 1em;">C</span>ryptocurrency is inarguably a technologically superior form of memory than cash. Is our society ready for the transition to virtual currency? &nbsp; &nbsp;&nbsp;</p>
+<footer>
+
+	<div>
+
+	<i class="kicon-clock"></i><time class="publish_date" datetime="2014-04-13T06:34:33-07:00" >
+	April 13, 2014
+</time>&nbsp;&nbsp;&nbsp;&nbsp;<i class="kicon-link"></i><a href="/essays/2014/04/bitcoin-and-classical-economics/" class="k-nav-current" data-koken-internal>Permalink</a>&nbsp;&nbsp;&nbsp;&nbsp;<div class="share_content"><i class="kicon-plus"></i><span class="share_button">Share</span><div class="kshare"><input type="text" class="kshare-input" value="http://roymurdock.com/essays/2014/04/bitcoin-and-classical-economics/" /><ul class="kshare-items"><li><a href="https://twitter.com/intent/tweet?text=Bitcoin+and+the+Classical+Theory+of+Money&url=http%3A%2F%2Froymurdock.com%2Fessays%2F2014%2F04%2Fbitcoin-and-classical-economics%2F" class="share-twitter" title="Share Bitcoin+and+the+Classical+Theory+of+Money on Twitter"><i class="kicon-twitter"></i></a></li><li><a href="https://www.facebook.com/sharer.php?u=http%3A%2F%2Froymurdock.com%2Fessays%2F2014%2F04%2Fbitcoin-and-classical-economics%2F" class="share-facebook"><i class="kicon-facebook"></i></a></li><li><a href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Froymurdock.com%2Fessays%2F2014%2F04%2Fbitcoin-and-classical-economics%2F" class="share-pinterest"><i class="kicon-pinterest"></i></a></li><li><a href="http://www.tumblr.com/share/photo?source=http%3A%2F%2Froymurdock.com%2Fkoken%2Fstorage%2Fcache%2Fimages%2Fcustom%2Fbitcoin-money-jpg%2Fmedium_large.jpg%3F1397172289&caption=%3Cp%3E%3Cstrong%3E%3Ca href=&quot;http%3A%2F%2Froymurdock.com%2Fessays%2F2014%2F04%2Fbitcoin-and-classical-economics%2F&quot; title=&quot;Bitcoin+and+the+Classical+Theory+of+Money&quot;%3EBitcoin+and+the+Classical+Theory+of+Money%3C/a%3E%3C%2Fstrong%3E%3C%2Fp%3E%3Cp%3EThis+comparative+analysis+led+me+to+discover+three+things+above+all.+One+concerns+efficiency%2C+and+the+other+concerns+our+concept+of+%22money%22+as+a+function+of+time.%3C%2Fp%3E&click_thru=http%3A%2F%2Froymurdock.com%2Fessays%2F2014%2F04%2Fbitcoin-and-classical-economics%2F" class="share-tumblr" title="Share Bitcoin+and+the+Classical+Theory+of+Money on Tumblr"><i class="kicon-tumblr"></i></a></li><li><a href="https://plus.google.com/share?url=http%3A%2F%2Froymurdock.com%2Fessays%2F2014%2F04%2Fbitcoin-and-classical-economics%2F" class="share-google"><i class="kicon-gplus"></i></a></li></ul></div></div>
+	</div>
+
+	
+	<p id="essay_categories" class="tagscats">
+	Posted in
+	<a href="/categories/bitcoin/essays/" title="View all essays in Bitcoin" data-koken-internal>	Bitcoin</a>	</p>
+	
+	<p id="essay_tags" class="tagscats tags">
+	<a href="/tags/7+minute+read/essays/" title="View all essays in 7 minute read" data-koken-internal>	#7 minute read</a>	</p>
+	
+</footer>
+
+	
+	
+	<div id="kdiscuss">
+
+	
+	<script>var disqus_identifier = "koken_disqus_essay_6";</script><div id="disqus_thread"></div>
+	
+	</div>
+
+	
+	</article>
+
+	</div>
+
+	
+	
+	</div>
+
+	</div>	<!-- close container -->
+
+	<script src="/koken/app/site/themes/common/js/share.js?0.13.0"></script>
+	<footer class="main"></footer>
+
+	<script src="/koken/storage/themes/madison/js/madison.js?1.4.7"></script>
+
+	<script>
+	$(document).ready(function() {
+	$('#mob-menu').sidr({
+	name: 'sidr-left'
+	});
+	});
+	</script>
+
+<script type="text/javascript">
+	var disqus_shortname = 'roymurdock';
+	(function() {
+	var disqus = function() {
+	if ($('#disqus_thread').length) {
+	(function() {
+	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+	} else if ($('[data-disqus-identifier]').length) {
+	(function() {
+	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+	}
+	}
+
+	$(function() {
+	if ($.pjax) {
+	$(document).on('pjax.success', function() {
+	window.setTimeout(function() {
+	if (window.DISQUS && $('#disqus_thread').length) {
+	window.DISQUS.reset({
+	reload: true,
+	config: function() {
+	this.page.url = window.location.href;
+	this.page.identifier = disqus_identifier;
+	}
+	});
+	} else {
+	disqus();
+	}
+	}, 250)
+	});
+	}
+	disqus();
+	});
+	}());
+</script></body>
+
+</html>
+

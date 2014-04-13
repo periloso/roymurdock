@@ -190,6 +190,9 @@ class Albums extends Koken_Controller {
 						}
 
 						$a->old_tags = $a->tags;
+						$a->old_created_on = $a->created_on;
+						$a->old_published_on = $a->published_on;
+
 						if (isset($_POST['tags']) && empty($_POST['tags']))
 						{
 							$_POST['tags'] = 0;

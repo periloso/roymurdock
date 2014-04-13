@@ -22,7 +22,7 @@
 
 		<article>
 
-			<koken:include file="layouts/essay.html" />
+			<koken:include file="layouts/event_essay.html" />
 
 		</article>
 

@@ -13,6 +13,10 @@
 			return <<<DOC
 <?php
 	$token = {$parent}['__loop__'][$index];
+	if (isset({$token}['__koken__']))
+	{
+		{$token}[{$token}['__koken__']] =& $token;
+	}
 ?>
 DOC;
 		}

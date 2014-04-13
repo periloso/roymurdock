@@ -52,6 +52,10 @@ class Contents extends Koken_Controller {
 							$this->error('404', "Content with ID: $id not found.");
 						}
 						$c->old_tags = $c->tags;
+						$c->old_published_on = $c->published_on;
+						$c->old_captured_on = $c->captured_on;
+						$c->old_uploaded_on = $c->uploaded_on;
+
 						if (isset($_POST['tags']) && empty($_POST['tags']))
 						{
 							$_POST['tags'] = 0;
@@ -94,6 +98,16 @@ class Contents extends Koken_Controller {
 								$path = FCPATH . 'storage' .
 										DIRECTORY_SEPARATOR . 'custom' .
 										DIRECTORY_SEPARATOR;
+								$internal_id = false;
+							}
+							else if (isset($_REQUEST['plugin']))
+							{
+								$info = pathinfo($_REQUEST['name']);
+								$path = FCPATH . 'storage' .
+										DIRECTORY_SEPARATOR . 'plugins' .
+										DIRECTORY_SEPARATOR . $_REQUEST['plugin'] .
+										DIRECTORY_SEPARATOR;
+								$file_name = $_REQUEST['basename'] . '.' . $info['extension'];
 								$internal_id = false;
 							}
 							else
@@ -232,6 +246,30 @@ class Contents extends Koken_Controller {
 						$from['internal_id'] = $internal_id;
 						$from['file_modified_on'] = time();
 					}
+					else if (isset($_POST['from_url']))
+					{
+						$filename = basename($_POST['from_url']);
+						list($internal_id, $path) = $c->generate_internal_id();
+						if ($path)
+						{
+							$path .= $filename;
+						}
+						else
+						{
+							$this->error('500', 'Unable to create directory for upload.');
+						}
+						if ($this->_download(urldecode($_POST['from_url']), $path, true) && file_exists($path))
+						{
+							$from = array();
+							$from['filename'] = $filename;
+							$from['internal_id'] = $internal_id;
+							$from['file_modified_on'] = time();
+						}
+						else
+						{
+							$this->error('500', 'Unable to import file from provided URL.');
+						}
+					}
 					else if (is_null($id))
 					{
 						$this->error('403', 'New content records must be accompanied by an upload.');
@@ -344,7 +382,7 @@ class Contents extends Koken_Controller {
 						$c->_before();
 					}
 
-					$from = Shutter::filter("api.$hook", array_merge($from, array('file' => isset($path) ? $path : $c->path_to_original() )));
+					$from = Shutter::filter("api.$hook", array_merge($from, array('id' => $id, 'file' => isset($path) ? $path : $c->path_to_original() )));
 
 					unset($from['file']);
 

@@ -37,12 +37,8 @@ if (!defined('AUTO_UPDATE')) {
 	define('AUTO_UPDATE', true);
 }
 
-if (!defined('ALLOW_BETA_BUILDS')) {
-	define('ALLOW_BETA_BUILDS', false);
-}
-
 // Director constants
-define('KOKEN_VERSION', '0.11.3');
+define('KOKEN_VERSION', '0.13.0');
 
 /* End of file koken.php */
 /* Location: ./system/application/config/koken.php */

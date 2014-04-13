@@ -327,6 +327,21 @@
 
 		</koken:if>
 
+		<koken:if true="{{ settings.content_detail_show_source }}">
+
+	    	<koken:not empty="{{ content.source.title }}">
+
+				<section>
+
+					<h4>Elsewhere</h4>
+					<a href="{{ content.source.url }}" onclick="return !window.open(this.href);" title="View at {{ content.source.title }}">View at {{ content.source.title }}</a>
+
+				</section>
+
+			</koken:not>
+
+		</koken:if>
+
 		<koken:geolocation>
 
 			<section>

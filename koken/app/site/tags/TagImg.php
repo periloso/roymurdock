@@ -131,21 +131,28 @@
 	if (\$__item)
 	{
 
-	foreach(\$__item['presets'] as \$name => \$obj)
-	{
+		if (!isset(\$__item['cache_path']))
+		{
+?>
+<img $real_params data-src="<?php echo \$__item['presets']['tiny']['url']; ?>" style="max-width:100%" />
+<?php
+		}
+		else
+		{
+			foreach(\$__item['presets'] as \$name => \$obj)
+			{
 
-		\$__presets[] = "\$name{$name_ext},{{$obj}['width']},{{$obj}['height']}";
-	}
+				\$__presets[] = "\$name{$name_ext},{{$obj}['width']},{{$obj}['height']}";
+			}
 
-	\$__presets = join(' ', \$__presets);
-
+			\$__presets = join(' ', \$__presets);
 ?>
 <noscript>
 	<img width="100%" $params src="<?php echo \$__item['presets']['large']['url']; ?>" />
 </noscript>
 <img $real_params {$size}data-respond-to="{$options['respond_to']}" data-presets="<?php echo \$__presets; ?>" data-base="<?php echo \$__item['cache_path']['prefix']; ?>" data-extension="<?php echo \$__item['cache_path']['extension']; ?>"/>
 
-<?php } ?>
+<?php } } ?>
 DOC;
 			}
 			else

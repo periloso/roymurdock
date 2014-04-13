@@ -18,29 +18,25 @@ class Update extends Koken_Controller {
 			$this->error('403', 'Forbidden');
 		}
 
-		$is_theme = $this->input->post('theme');
     	$local = $this->input->post('local_path');
     	$guid = $this->input->post('guid');
+    	$install_id = $this->input->post('uuid');
+    	$purchase = $this->input->post('purchase');
+    	$is_new = $this->input->post('new');
 
-    	$themes = FCPATH . 'storage' .
-    					DIRECTORY_SEPARATOR . ( $is_theme ? 'themes' : 'plugins' );
+    	$base = FCPATH . 'storage' . DIRECTORY_SEPARATOR;
 
-    	$tmp_path = FCPATH . 'storage' .
-    					DIRECTORY_SEPARATOR . 'tmp';
+    	$tmp_path = $base . 'tmp';
 
-    	if (ENVIRONMENT === 'development')
-    	{
-	    	$remote = KOKEN_STORE_URL . '/plugins/download/' . $guid;
-    	}
-    	else
-    	{
-	    	$remote = 'http://install.koken.me/releases/plugins/' . $guid . '.zip';
-    	}
+    	$remote = KOKEN_STORE_URL . '/plugins/download/' . $guid . '/for/' . $install_id . ($purchase ? '/' . $purchase : '');
 
     	$local_zip = $tmp_path . DIRECTORY_SEPARATOR . 'update.zip';
 
     	$updated_theme = $tmp_path . DIRECTORY_SEPARATOR . $guid;
-    	$current_path = $themes . DIRECTORY_SEPARATOR . $local;
+
+	    $current_path = $base . $local;
+
+    	$this->load->helper('file');
 
     	if (is_dir("$current_path.off"))
     	{
@@ -54,11 +50,11 @@ class Update extends Koken_Controller {
 
     	make_child_dir($tmp_path);
 
-    	$this->load->helper('file');
-
     	$success = false;
 
-    	if (ENVIRONMENT === 'development')
+		$old_mask = umask(0);
+
+    	if (ENVIRONMENT === 'development' && !$is_new)
     	{
     		$success = true;
     		sleep(3);
@@ -70,33 +66,50 @@ class Update extends Koken_Controller {
 
     		if (file_exists($updated_theme . DIRECTORY_SEPARATOR . 'info.json') || file_exists($updated_theme . DIRECTORY_SEPARATOR . 'pulse.json') || file_exists($updated_theme . DIRECTORY_SEPARATOR . 'plugin.json'))
     		{
-	    		if (rename($current_path, "$current_path.off"))
+	    		if ($is_new || rename($current_path, "$current_path.off"))
 	    		{
 	    			if (rename($updated_theme, $current_path))
 	    			{
 	    				delete_files("$current_path.off", true, 1);
 	    				$success = true;
+
+	    				if (file_exists($current_path . DIRECTORY_SEPARATOR . 'info.json'))
+	    				{
+	    					$json = $current_path . DIRECTORY_SEPARATOR . 'info.json';
+	    				}
+	    				else if (file_exists($current_path . DIRECTORY_SEPARATOR . 'pulse.json'))
+	    				{
+	    					$json = $current_path . DIRECTORY_SEPARATOR . 'pulse.json';
+	    				}
+	    				else
+	    				{
+	    					$json = $current_path . DIRECTORY_SEPARATOR . 'plugin.json';
+						}
+
+						$json = json_decode(file_get_contents($json, true));
 	    			}
 	    			else
 	    			{
-	    				// ERROR
+	    				$json = 'Could not rename folder.';
 	    			}
 	    		}
 	    		else
 	    		{
-	    			// ERROR
+	    			$json = 'Could not rename old version before upgrading';
 	    		}
     		}
     		else
     		{
-    			// ERROR
+    			$json = 'Could not download plugin ZIP.';
     		}
 
 	    	unlink($local_zip);
 	    	delete_files($updated_theme, true, 1);
     	}
 
-	    die( json_encode( array('done' => $success ) ) );
+    	umask($old_mask);
+
+	    die( json_encode( array('done' => $success, 'info' => isset($json) ? $json : array() ) ) );
 
     }
 
@@ -115,6 +128,7 @@ class Update extends Koken_Controller {
     	$this->db =& $CI->db;
 
     	$this->load->dbforge();
+		$this->load->helper('file');
 
     	if ($n === 'schema')
     	{
@@ -148,6 +162,11 @@ class Update extends Koken_Controller {
     						{
     							$compare['constraint'] = (int) $compare['max_length'];
     							unset($compare['max_length']);
+    						}
+
+    						if (in_array(strtolower($field_info['type']), array('text', 'varchar', 'longtext')))
+    						{
+    							$field_info['null'] = true;
     						}
 
     						$diff = array_diff_assoc( $field_info, $compare );
@@ -227,6 +246,8 @@ class Update extends Koken_Controller {
     			}
     		}
 
+			delete_files(FCPATH . 'app' . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'datamapper' . DIRECTORY_SEPARATOR . 'cache', true, 1);
+
     		$s = new Setting;
     		$s->where('name', 'uuid')->get();
 
@@ -258,17 +279,6 @@ class Update extends Koken_Controller {
 					$processing_string = 'ImageMagick ' . $version;
 				}
 			}
-
-			$host = new WebhostWhois;
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, KOKEN_STORE_URL . '/register?domain=' . $_SERVER['HTTP_HOST'] . '&path=/' . $base_folder . '&uuid=' . $s->value . '&php=' . PHP_VERSION . '&version=' . KOKEN_VERSION . '&ip=' . $_SERVER['SERVER_ADDR'] . '&image_processing=' . urlencode($processing_string) . '&host=' . $host->key);
-			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-			curl_setopt($curl, CURLOPT_HEADER, 0);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-			$r = curl_exec($curl);
-			curl_close($curl);
 
 			$ht_path = FCPATH . '.htaccess';
 			if (file_exists($ht_path))
@@ -337,6 +347,59 @@ class Update extends Koken_Controller {
 				}
 			}
 
+			$host = new WebhostWhois;
+
+			$data = array(
+				'domain' => $_SERVER['HTTP_HOST'],
+				'path' => '/' . $base_folder,
+				'uuid' => $s->value,
+				'php' => PHP_VERSION,
+				'version' => KOKEN_VERSION,
+				'ip' => $_SERVER['SERVER_ADDR'],
+				'image_processing' => urlencode($processing_string),
+				'host' => $host->key,
+				'plugins' => array(),
+			);
+
+			$t = new Theme;
+			$themes = $t->read();
+
+			foreach($themes as $theme)
+			{
+				if (isset($theme['koken_store_guid']))
+				{
+					$data['plugins'][] = array(
+						'guid' => $theme['koken_store_guid'],
+						'version' => $theme['version'],
+					);
+				}
+			}
+
+			$plugins = $this->parse_plugins();
+
+			foreach($plugins as $plugin)
+			{
+				if (isset($plugin['koken_store_guid']))
+				{
+					$data['plugins'][] = array(
+						'guid' => $plugin['koken_store_guid'],
+						'version' => $plugin['version'],
+					);
+				}
+			}
+
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, KOKEN_STORE_URL . '/register');
+			curl_setopt($curl, CURLOPT_POST, 1);
+		    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
+			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+			curl_setopt($curl, CURLOPT_HEADER, 0);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+			$r = curl_exec($curl);
+			curl_close($curl);
+
 			if (!isset($_COOKIE['koken_session']))
 			{
 				// Catch upgrades with old auth setup and try to keep them logged in.
@@ -375,7 +438,7 @@ class Update extends Koken_Controller {
     	}
     }
 
-	function index($v = false)
+	function index()
 	{
 
 		if ($this->method !== 'post')
@@ -397,7 +460,9 @@ class Update extends Koken_Controller {
 			die( json_encode( array('error' => $msg) ) );
 		}
 
-		if ($v) {
+		$get_core = $this->input->post('url');
+
+		if ($get_core) {
 
 			if (ENVIRONMENT === 'development')
 			{
@@ -415,19 +480,6 @@ class Update extends Koken_Controller {
 			}
 
 			$old_mask = umask(0);
-
-			// Anything with - means it is beta, rc, etc, so get edge release
-			if (strpos($v, '-') !== false)
-			{
-				$fn = 'upgrade_edge';
-			}
-			else
-			{
-				$fn = 'upgrade';
-			}
-
-			$get_core = "http://install.koken.me/releases/$fn.zip";
-			$get_lib = "http://install.koken.me/releases/pclzip.lib.txt";
 
 			$core = FCPATH . 'core.zip';
 

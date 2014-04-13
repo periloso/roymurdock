@@ -1,0 +1,101 @@
+<koken:if true="pjax">
+	<koken:title />
+<koken:else>
+	<koken:include file="layouts/header-favorites.html" />
+</koken:if>
+
+<div id="main">
+
+	<koken:load>
+
+		<koken:head>
+			<meta property="og:site_name" content="{{ site.title }}" />
+			<meta property="og:title" content="{{ labels.favorite.plural }}" />
+			<meta property="og:description" content="{{ site.description strip_html='true' }}" />
+			<meta property="og:type" content="website" />
+			<koken:first>
+			<meta property="og:image" content="{{ content.presets.medium_large.url }}" />
+			<meta property="og:image:width" content="{{ content.presets.medium_large.width }}" />
+			<meta property="og:image:height" content="{{ content.presets.medium_large.height }}" />
+			</koken:first>
+			<meta property="og:url" content="{{ location.site_url }}{{ location.here }}" />
+			<koken:not empty="profile.twitter">
+			<meta name="twitter:card" content="gallery" />
+			<meta name="twitter:site" content="@{{ profile.twitter }}" />
+			<meta name="twitter:creator" content="@{{ profile.twitter }}" />
+			<koken:loop limit="4">
+			<meta name="twitter:image{{ index }}" content="{{ content.presets.medium_large.cropped.url }}">
+			</koken:loop>
+			</koken:not>
+		</koken:head>
+
+		<div class="media">
+
+			<koken:pulse jsvar="pulse" link_to="advance" transition_type="fade" transition_duration="1000" size="expand" />
+
+			<koken:if true="settings.show_exif_fave">
+				<div class="media-meta"><ol id="fave_exif" class="exif"></ol></div>
+			</koken:if>
+
+			<span class="text">
+
+				<koken:if true="settings.show_title_fave">
+					<h2 id="fave_title"></h2>
+				</koken:if>
+
+				<koken:if true="settings.show_caption_fave">
+					<p id="fave_caption"></p>
+				</koken:if>
+
+			</span>
+
+		</div>
+
+		<script>
+			pulse.on( 'transitionstart', function(e) {
+				var data = e.data,
+					title = $('#fave_title'),
+					caption = $('#fave_caption');
+
+				if (title) {
+					title.html( data.title || data.filename );
+				}
+				if (caption) {
+					caption.html( data.caption );
+				}
+				var exif_fields = ['aperture','exposure','focal_length','iso_speed_ratings'],
+					exif_element = $('#fave_exif'),
+					wrap = $('<li/>');
+
+				var fields = $.map(e.data.exif_fields, function(field) {
+					if ($.inArray(field,exif_fields) !== -1) {
+						return $.map(e.data.exif, function (exif_val) {
+							if (exif_val.key === field) {
+								return (exif_val.clean) ? exif_val.clean : exif_val.raw;
+							}
+						});
+					}
+				});
+
+				exif_element.html($.map(fields, function(field) {
+					return wrap.clone().text(field);
+				}));
+
+			});
+		</script>
+
+	<koken:else>
+
+		This template's slideshow displays favorited content. Add some in the Libary.
+
+	</koken:load>
+
+</div>
+
+<koken:if true="pjax">
+	<script>
+		pjaxReload();
+	</script>
+<koken:else>
+	<koken:include file="layouts/footer.html" />
+</koken:not>

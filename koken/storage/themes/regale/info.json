@@ -1,14 +1,14 @@
 {
 	"name": "Regale",
-	"version": "1.3.13",
+	"version": "1.3.17",
 	"description": "Regale is a bold, assured theme that fluidly scales content across the entire browser window for larger than life photos. Includes a basic header and footer navigation, social media links, plus a configurable grid layout that allows you to control spacing and column count. Single photos presented on the content page are scaled as large as they can go for maximum impact. Theme preview photos by Daniele Zedda.",
 	"demo": "http://demo.koken.me/#regale",
 	"documentation": "http://help.koken.me/customer/portal/articles/1227391-regale-documentation",
 	"author": {
-		"name": "Sebastian Pinehurst",
-		"link": "http://koken.me"
+		"name": "Koken",
+		"link": "https://store.koken.me/authors/koken"
 	},
-	"koken_version_required": "0.10.0-beta.1",
+	"koken_version_required": "0.12.0-beta.1",
 
 	"default_front_page": "contents",
 

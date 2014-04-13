@@ -1,7 +1,7 @@
 <!-- @BEGIN App Interface Template -->
 <script id="app_interface" type="text/html">
 
-	<div id="app" data-bind="css: { update: update_available, 'upload-view': interface() === 'library' && hash() === '/library/upload' }">
+	<div id="app" data-bind="css: { update: update_available() }">
 
 		<div id="upload-queue">
    			<div class="w">
@@ -23,7 +23,7 @@
 				<nav id="main-nav">
 	    			<ul>
 		            	<li>
-			              <a class="head-link library-interface" href="#/library" title="Library" data-bind="css: { 'selected': interface() === 'library' && hash() !== '/library/upload' }"><span>Library</span></a>
+			              <a class="head-link library-interface" href="#/library" title="Library" data-bind="css: { 'selected': interface() === 'library' }"><span>Library</span></a>
 			            </li>
 			            <li>
 			              <a class="head-link text-interface" href="#/text/type:essay" title="Text" data-bind="css: { 'selected': interface() === 'text' }"><span>Text</span></a>
@@ -35,8 +35,15 @@
 			              <a class="head-link settings-interface" href="#/settings" title="Settings" data-bind="css: { 'selected': interface() === 'settings' }"><span>Settings</span></a>
 			            </li>
 			            <li>
-			              <a id="n-upload" class="head-link" href="#/library/upload" title="Upload" data-bind="css: { 'selected': hash() === '/library/upload' }"><span>Upload</span></a>
+			            	<span class="update-badge" data-bind="text: update_count, visible: update_count() > 0"></span>
+			              <a class="head-link store-interface" href="#/store" title="Store" data-bind="css: { 'selected': interface() === 'store' }"><span>Store</span></a>
 			            </li>
+			            <!-- ko foreach: channels -->
+			            <li>
+
+			              <a class="head-link" data-bind="attr: { href: '#/' + $data.id, title: $data.title || '', id: 'n-' + $data.id }, css: { 'selected': $root.hash().indexOf('/' + $data.id) !== -1 }"><span data-bind="text: $data.name"></span></a>
+			            </li>
+			            <!-- /ko -->
 		    		</ul>
 				</nav>
 
@@ -78,7 +85,7 @@
 
 		<!-- ko if: interface -->
 			<div id="interface_container" data-bind="with: interfaces[interface()].observers">
-				<!-- ko template: interface() + '_interface' --><!-- /ko -->
+				<!-- ko template: { name: interface() + '_interface', afterRender: postLoad } --><!-- /ko -->
 			</div>
 		<!-- /ko -->
 
@@ -177,7 +184,7 @@
 			<h6>Handcrafted by</h6>
 			<p style="margin-bottom:20px;"><a href="mailto:todd@koken.me" title="Email Todd">Todd Dominey</a>, <a href="mailto:brad@koken.me" title="Email Brad">Brad Daily</a>, <a href="mailto:lauren@koken.me" title="Email Lauren">Lauren Smith</a></p>
 			<p style="margin-bottom:10px;font-size:11px;"><a href="http://koken.me/eula.html" title="End user license agreement" onclick="return !window.open(this.href);" >License agreement</a> / <a href="http://koken.me/privacy.html" title="Privacy policy" onclick="return !window.open(this.href);">Privacy policy</a></p>
-			&copy; 2013 Dominey Design Inc.
+			&copy; 2013-4 Dominey Design Inc.
 		</div>
 	</div>
 </script>
@@ -425,11 +432,36 @@
 </script>
 <!-- @END Update Modal -->
 
-<!-- @BEGIN Update Modal -->
-<script id="update_theme_modal" type="text/html">
+<!-- @BEGIN Update Product Modal -->
+<script id="update_products_modal" type="text/html">
 	<div class="modal-outer" style="width:350px;">
 		<div class="wrap">
-			<h1>Updating themes</h1>
+			<h1>Downloading updates</h1>
+			<p id="product_update_label">Please wait.</p>
+			<div class="update_progress"><span></span></div>
+		</div>
+	</div>
+</script>
+<!-- @END Update Modal -->
+
+<!-- @BEGIN Update error Modal -->
+<script id="update_products_fail_modal" type="text/html">
+	<div class="modal-outer" style="width:350px;">
+		<div class="wrap">
+			<h1>Uh oh</h1>
+			<p>Koken was not able to download the new release for this product. Try setting the permissions on the Koken directory and all subdirectories and files to 777.</p>
+			<br>
+			<button id="clear_error" class="button c0">Ok</button>
+		</div>
+	</div>
+</script>
+<!-- @END Update error Modal -->
+
+<!-- @BEGIN Update Modal -->
+<script id="install_theme_modal" type="text/html">
+	<div class="modal-outer" style="width:350px;">
+		<div class="wrap">
+			<h1>Installing theme</h1>
 			<p>Please wait.</p>
 			<div class="update_progress"><span></span></div>
 		</div>
@@ -438,10 +470,10 @@
 <!-- @END Update Modal -->
 
 <!-- @BEGIN Update Modal -->
-<script id="update_plugin_modal" type="text/html">
+<script id="install_plugin_modal" type="text/html">
 	<div class="modal-outer" style="width:350px;">
 		<div class="wrap">
-			<h1>Updating plugins</h1>
+			<h1>Installing plugin</h1>
 			<p>Please wait.</p>
 			<div class="update_progress"><span></span></div>
 		</div>
@@ -454,10 +486,16 @@
 	<div class="modal-outer" style="width:350px;">
 		<div class="wrap">
 			<h1>Console error</h1>
+			<!-- ko if: modal.msg().length > 0 -->
+			<p data-bind="text: modal.msg()"></p>
+			<!-- /ko -->
+			<!-- ko if: modal.msg().length <= 0 -->
 			<p>Koken isn't able to load data. Please click the button below to try and fix the problem. If you see this error message again thereafter, please <a href="http://help.koken.me/customer/portal/emails/new" onclick="return !window.open(this.href);">contact us for support</a>.
 			</p>
+			<!-- /ko -->
 			<br>
-			<button id="keep_leave" class="button c0">Clear cache and reload</button>
+			<!-- ko if: modal.msg().length <= 0 --><button id="keep_leave" class="button c0">Clear cache and reload</button><!-- /ko -->
+			<!-- ko if: modal.msg().length > 0 --><button id="cancel_leave" class="button c0">Ok</button><!-- /ko -->
 		</div>
 	</div>
 </script>
@@ -469,32 +507,6 @@
 		<div class="wrap">
 			<h1>Uh oh</h1>
 			<p>Koken was not able to download the new release. Try setting the permissions on the Koken directory and all subdirectories and files to 777.</p>
-			<br>
-			<button id="clear_error" class="button c0">Ok</button>
-		</div>
-	</div>
-</script>
-<!-- @END Update error Modal -->
-
-<!-- @BEGIN Update error Modal -->
-<script id="update_theme_fail_modal" type="text/html">
-	<div class="modal-outer" style="width:350px;">
-		<div class="wrap">
-			<h1>Uh oh</h1>
-			<p>Koken was not able to download the theme update. Try setting the permissions on the storage/themes directory and all subdirectories and files to 777.</p>
-			<br>
-			<button id="clear_error" class="button c0">Ok</button>
-		</div>
-	</div>
-</script>
-<!-- @END Update error Modal -->
-
-<!-- @BEGIN Update error Modal -->
-<script id="update_plugin_fail_modal" type="text/html">
-	<div class="modal-outer" style="width:350px;">
-		<div class="wrap">
-			<h1>Uh oh</h1>
-			<p>Koken was not able to download the plugin update. Try setting the permissions on the storage/plugins directory and all subdirectories and files to 777.</p>
 			<br>
 			<button id="clear_error" class="button c0">Ok</button>
 		</div>
@@ -566,6 +578,12 @@
 						<span class="cell">
 								<span class="kbd">esc</span>
 								Close modal or menu
+						</span>
+					</li>
+					<li>
+						<span class="cell">
+								<span class="kbd" data-bind="text: function() { return ( $parent.interfaces.app.observers.platform() === 'mac' ) ? 'cmd' : 'ctrl' }()"></span><span class="kbd-more">+</span><span class="kbd">i</span>
+								Toggle import content sheet
 						</span>
 					</li>
 				</ul>
@@ -1016,7 +1034,7 @@
 <!-- @END Moment Template -->
 
 <script id="form_string" type="text/html">
-	<input type="text" data-bind="value: setting.value, attr: { placeholder: setting.placeholder ? setting.placeholder : '', 'data-validate': setting.validation ? setting.validation.type : null, 'data-validate-regex': setting.validation && setting.validation.rule ? setting.validation.rule : null, 'data-validate-allow-empty': setting.validation && setting.validation.allow_empty ? 'true' : null, 'data-default-value': setting.default || setting.value, name: setting.key, id: prefix + 'option_' + setting.key, class: prefix === 'shortcode_' ? 'field sheet wide' : '' }" />
+	<input type="text" data-bind="value: setting.value, attr: { placeholder: setting.placeholder ? setting.placeholder : '', 'data-validate': setting.validation ? setting.validation.type : null, 'data-validate-regex': setting.validation && setting.validation.rule ? setting.validation.rule : null, 'data-validate-allow-empty': setting.validation && setting.validation.allow_empty ? 'true' : null, 'data-send-as': setting.send_as || '', 'data-default-value': setting.default || setting.value, name: setting.key, id: prefix + 'option_' + setting.key, class: prefix === 'shortcode_' ? 'field sheet wide' : '' }" />
 	<!-- ko if: setting.validation -->
 	<span class="form-error-msg" data-bind="text: setting.validation.error_message || ''"></span>
 	<!-- /ko -->
@@ -1030,12 +1048,12 @@
 </script>
 
 <script id="form_boolean" type="text/html">
-	<input type="checkbox" value="true" data-bind="event: { change: function() { setting.value = $('#' + prefix + 'option_' + setting.key).is(':checked'); } }, checked: $data.setting.values ? setting.value === setting.values['true'] : setting.value, attr: { 'data-default-value': setting.default || setting.value ? 'true' : 'false', name: setting.key, id: prefix + 'option_' + setting.key }" />
+	<input type="checkbox" value="true" data-bind="event: { change: function() { setting.value = $('#' + prefix + 'option_' + setting.key).is(':checked'); } }, checked: $data.setting.values ? setting.value === setting.values['true'] : setting.value, attr: { 'data-send-as': setting.send_as || '', 'data-default-value': setting.default || setting.value ? 'true' : 'false', name: setting.key, id: prefix + 'option_' + setting.key }" />
 </script>
 
 <script id="form_select" type="text/html">
 	<!-- ko if: prefix === 'pulse_' && setting.key === 'transition_type' -->
-	<select class="tiny" data-bind="attr: { 'data-default-value': setting.default || setting.value, name: setting.key, id: prefix + 'option_' + setting.key }">
+	<select class="tiny" data-bind="attr: { 'data-send-as': setting.send_as || '', 'data-default-value': setting.default || setting.value, name: setting.key, id: prefix + 'option_' + setting.key }">
 		<option value="none">None</option>
 		<option value="dissolve">Dissolve</option>
 		<option value="fade">Fade</option>
@@ -1050,7 +1068,7 @@
 	</select>
 	<!-- /ko -->
 	<!-- ko ifnot: prefix === 'pulse_' && setting.key === 'transition_type' -->
-	<select data-bind="css: { tiny: prefix !== 'shortcode_' }, attr: { 'data-default-value': setting.default || setting.value, name: setting.key, id: prefix + 'option_' + setting.key }, options: setting.options, optionsText: 'label', optionsValue: 'value', value: setting.value">
+	<select data-bind="css: { tiny: prefix !== 'shortcode_' }, attr: { 'data-send-as': setting.send_as || '', 'data-default-value': setting.default || setting.value, name: setting.key, id: prefix + 'option_' + setting.key }, options: setting.options, optionsText: 'label', optionsValue: 'value', value: setting.value">
 	</select>
 	<!-- /ko -->
 </script>
@@ -1058,12 +1076,12 @@
 <script id="form_slider" type="text/html">
 	<!-- Important! value binding needs to remain after attr: {} declaration, otherwise values that fall outside of the previous min/max settings will not set properly initially. May be a bug in KO -->
 	<!-- Also important: No whitespace between closing span and /script, for slider hover cursor reasons -->
-	<input type="range" data-bind="attr: { min: setting.min, max: setting.max, step: setting.step ? setting.step : 1, 'data-default-value': setting.default || setting.value, name: setting.key, id: prefix + 'option_' + setting.key }, value: setting.value" /> <span class="display_value slider" style="vertical-align:top" data-bind="text: setting.value"></span></script>
+	<input type="range" data-bind="attr: { min: setting.min, max: setting.max, step: setting.step ? setting.step : 1, 'data-send-as': setting.send_as || '', 'data-default-value': setting.default || setting.value, name: setting.key, id: prefix + 'option_' + setting.key }, value: setting.value" /> <span class="display_value slider" style="vertical-align:top" data-bind="text: setting.value"></span></script>
 
 <script id="form_number" type="text/html">
-	<input class="field small emb" type="number" data-bind="value: setting.value, attr: { min: setting.min, max: setting.max, step: setting.step, 'data-default-value': setting.default || setting.value, name: setting.key, id: prefix + 'option_' + setting.key }" />
+	<input class="field small emb" type="number" data-bind="value: setting.value, attr: { min: setting.min, max: setting.max, step: setting.step, 'data-send-as': setting.send_as || '', 'data-default-value': setting.default || setting.value, name: setting.key, id: prefix + 'option_' + setting.key }" />
 </script>
 
 <script id="form_color" type="text/html">
-	<input type="ccolor" data-bind="value: setting.value, attr: { 'data-default-value': setting.default || setting.value, name: setting.key, id: prefix + 'option_' + setting.key }" />
+	<input type="ccolor" data-bind="value: setting.value, attr: { 'data-send-as': setting.send_as || '', 'data-default-value': setting.default || setting.value, name: setting.key, id: prefix + 'option_' + setting.key }" />
 </script>

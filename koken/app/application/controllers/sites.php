@@ -20,6 +20,70 @@ class Sites extends Koken_Controller {
     	return $value;
     }
 
+    function _setup_option($key, $option, $data, $scope, $default_style_vars, $style_vars, $send_as = false)
+    {
+    	$_t = array();
+    	$_t['key'] = $key;
+
+    	foreach($option as $name => $val)
+    	{
+    		if ($name === 'settings' && is_string($val[0]))
+    		{
+    			$_o = array();
+    			foreach($val as $v)
+    			{
+    				$_o[] = array('label' => $v, 'value' => $v);
+    			}
+    			$val = $_o;
+    		}
+    		if ($name === 'type') {
+    			$val = strtolower($val);
+    		}
+    		$_t[$name] = $val;
+    	}
+
+    	if (isset($_t['value']))
+    	{
+    		$_t['default'] = $_t['value'];
+    	}
+    	else if (isset($default_style_vars[$key]))
+    	{
+    		$_t['default'] = $default_style_vars[$key];
+    	}
+
+    	if ($send_as && isset($data[$send_as]))
+    	{
+    		$_t['value'] = $data[$send_as];
+    	}
+    	else if (isset($data[$key]))
+    	{
+    		$_t['value'] = $data[$key];
+    	}
+    	else if (isset($style_vars[$key]))
+    	{
+    		$_t['value'] = $style_vars[$key];
+    	}
+
+    	if ($send_as)
+    	{
+    		$_t['send_as'] = $send_as;
+    	}
+
+    	if (!isset($_t['scope']) && $scope)
+    	{
+    		$_t['scope'] = $scope;
+    	}
+
+    	$_t['value'] = $this->_clean_value($_t['type'], $_t['value']);
+
+    	if (isset($_t['default']))
+    	{
+    		$_t['default'] = $this->_clean_value($_t['type'], $_t['default']);
+    	}
+
+    	return $_t;
+    }
+
 	function _prep_options($options, $data = array(), $style_vars = array(), $default_style_vars = array(), $scope = false)
 	{
 
@@ -30,6 +94,12 @@ class Sites extends Koken_Controller {
 			foreach($options as $group => $opts)
 			{
 				$tmp = array( 'group' => $group, 'settings' => array() );
+
+				if (isset($opts['collapse']) && $opts['collapse'])
+				{
+					$tmp['collapse'] = true;
+					unset($opts['collapse']);
+				}
 
 				if (isset($opts['icon']))
 				{
@@ -55,58 +125,56 @@ class Sites extends Koken_Controller {
 
 				foreach($loop as $key => $arr)
 				{
-					if (isset($arr['label']))
+					if (isset($arr['value']) && (is_array($arr['value']) || isset($arr['scoped_values'])))
 					{
-						$_t = array();
-						$_t['key'] = $key;
+						$groups = array();
 
-						foreach($arr as $name => $val)
+						if (is_array($arr['value']))
 						{
-							if ($name === 'settings' && is_string($val[0]))
+							$v = array();
+							foreach($arr['value'] as $_key => $val)
 							{
-								$_o = array();
-								foreach($val as $v)
+								if (strpos($_key, ',') === false)
 								{
-									$_o[] = array('label' => $v, 'value' => $v);
+									$v[$_key] = $val;
 								}
-								$val = $_o;
+								else
+								{
+									$keys = explode(',', $_key);
+									foreach($keys as $_k)
+									{
+										$v[$_k] = $val;
+										$groups[$_k] = $key . '_' . $_key;
+									}
+								}
 							}
-							if ($name === 'type') {
-								$val = strtolower($val);
+							$arr['value'] = $v;
+						}
+
+						// Internal handling for scoped settings with unique vals
+						foreach($arr['scope'] as $template)
+						{
+							$copy = $arr;
+							$copy['value'] = is_array($arr['value']) ? $arr['value'][$template] : $arr['value'];
+							$copy['scope'] = array($template);
+							$_key = '__scoped_' . str_replace('.', '-', $template) . '_' . $key;
+							if (isset($groups[$template]))
+							{
+								$send_as = $groups[$template];
 							}
-							$_t[$name] = $val;
+							else
+							{
+								$send_as = false;
+							}
+							$_t = $this->_setup_option($_key, $copy, $data, $scope, $default_style_vars, $style_vars, $send_as);
+							$tmp['settings'][] = $_t;
+							unset($_t['key']);
+							$flat[$_key] = $_t;
 						}
-
-						if (isset($_t['value']))
-						{
-							$_t['default'] = $_t['value'];
-						}
-						else if (isset($default_style_vars[$key]))
-						{
-							$_t['default'] = $default_style_vars[$key];
-						}
-
-						if (isset($data[$key]))
-						{
-							$_t['value'] = $data[$key];
-						}
-						else if (isset($style_vars[$key]))
-						{
-							$_t['value'] = $style_vars[$key];
-						}
-
-						if (!isset($_t['scope']) && $scope)
-						{
-							$_t['scope'] = $scope;
-						}
-
-						$_t['value'] = $this->_clean_value($_t['type'], $_t['value']);
-
-						if (isset($_t['default']))
-						{
-							$_t['default'] = $this->_clean_value($_t['type'], $_t['default']);
-						}
-
+					}
+					else if (isset($arr['label']))
+					{
+						$_t = $this->_setup_option($key, $arr, $data, $scope, $default_style_vars, $style_vars);
 						$tmp['settings'][] = $_t;
 						unset($_t['key']);
 						$flat[$key] = $_t;
@@ -276,65 +344,68 @@ class Sites extends Koken_Controller {
 
 			if (isset($params['draft']))
 			{
-				$options_file = FCPATH . $ds . 'storage' . $ds . 'themes' . $ds . $draft->path . $ds . 'css' . $ds . 'settings.css.lens';
 
-				if (file_exists($options_file))
+				function get_live_updates($file, $draft, &$functions)
 				{
-
-					$functions = array();
-
-					// Strip comments so they don't confuse the parser
-					$contents = preg_replace('/\/\*.*?\*\//si', '', file_get_contents($options_file));
-
-					preg_match_all('/@import\surl\(.*\[?\$([a-z_0-9]+)\]?.*\);/', $contents, $imports);
-
-					foreach($imports[1] as $setting)
+					if (file_exists($file))
 					{
-						if (!isset($functions[$setting]))
+						// Strip comments so they don't confuse the parser
+						$contents = preg_replace('/\/\*.*?\*\//si', '', file_get_contents($file));
+
+						preg_match_all('/@import\surl\(.*\[?\$([a-z_0-9]+)\]?.*\);/', $contents, $imports);
+
+						foreach($imports[1] as $setting)
 						{
-							$functions[$setting] = 'reload';
-						}
-					}
-
-					$contents = preg_replace('/@import\surl\(.*\);/', '', $contents);
-
-					preg_match_all('/([^\{]+)\s*\{([^\}]+)\}/s', $contents, $matches);
-
-					foreach($matches[2] as $index => $block)
-					{
-						$selector = $matches[1][$index];
-						preg_match_all('/([a-z\-]+):([^;]+)( !important)?;/', $block, $rules);
-
-						foreach($rules[2] as $j => $rule)
-						{
-							$property = $rules[1][$j];
-
-							preg_match_all('/\[?\$([a-z_0-9]+)\]?/', $rule, $options);
-
-							if (count($options))
+							if (!isset($functions[$setting]))
 							{
-								foreach($options[1] as $option)
+								$functions[$setting] = 'reload';
+							}
+						}
+
+						$contents = preg_replace('/@import\surl\(.*\);/', '', $contents);
+
+						preg_match_all('/([^\{]+)\s*\{([^\}]+)\}/s', $contents, $matches);
+
+						foreach($matches[2] as $index => $block)
+						{
+							$selector = $matches[1][$index];
+							preg_match_all('/([a-z\-]+):([^;]+)( !important)?;/', $block, $rules);
+
+							foreach($rules[2] as $j => $rule)
+							{
+								$property = $rules[1][$j];
+
+								preg_match_all('/\[?\$([a-z_0-9]+)\]?/', $rule, $options);
+
+								if (count($options))
 								{
-									if (!isset($functions[$option]))
+									foreach($options[1] as $option)
 									{
-										$functions[$option] = array();
+										if (!isset($functions[$option]))
+										{
+											$functions[$option] = array();
+										}
+										else if ($functions[$option] === 'reload')
+										{
+											continue;
+										}
+										$functions[$option][] = array(
+											'selector' => trim(str_replace("\n", '', $selector)),
+											'property' => trim($property),
+											'template' => trim(str_replace('url(', "url(storage/themes/{$draft->path}/", $rule)),
+											'lightbox' => strpos($file, 'lightbox-settings.css.lens') !== false,
+										);
 									}
-									else if ($functions[$option] === 'reload')
-									{
-										continue;
-									}
-									$functions[$option][] = array(
-										'selector' => trim(str_replace("\n", '', $selector)),
-										'property' => trim($property),
-										'template' => trim(str_replace('url(', "url(storage/themes/{$draft->path}/", $rule)),
-									);
 								}
 							}
 						}
 					}
-
-					$template_info['live_updates'] = $functions;
 				}
+
+				$functions = array();
+				get_live_updates(FCPATH . $ds . 'storage' . $ds . 'themes' . $ds . $draft->path . $ds . 'css' . $ds . 'settings.css.lens', $draft, $functions);
+				get_live_updates(FCPATH . $ds . 'storage' . $ds . 'themes' . $ds . $draft->path . $ds . 'css' . $ds . 'lightbox-settings.css.lens', $draft, $functions);
+				$template_info['live_updates'] = $functions;
 			}
 
 			$pulse_settings = json_decode(file_get_contents($pulse_base), true);
@@ -625,6 +696,13 @@ class Sites extends Koken_Controller {
 								}
 
 								$a->get();
+
+								if (!$a->exists())
+								{
+									unset($items[$index]);
+									continue;
+								}
+
 								$item['path'] = str_replace(':id', $a->id, $item['path']);
 								$item['path'] = str_replace(':slug', $a->slug, $item['path']);
 								$item['path'] = str_replace(':year', date('Y', $a->created_on), $item['path']);
@@ -737,6 +815,10 @@ class Sites extends Koken_Controller {
 								{
 									$item['path'] .= 'lightbox/';
 								}
+							}
+							else if ($item['auto'] === 'tag')
+							{
+								$item['path'] = str_replace(':slug', $item['id'], $item['path']);
 							}
 						}
 
@@ -1031,6 +1113,24 @@ class Sites extends Koken_Controller {
 				$draft->live_data = $draft->data;
 				$draft->current = 1;
 				$draft->save();
+
+				$guid = FCPATH . 'storage' . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . $draft->path . DIRECTORY_SEPARATOR . 'koken.guid';
+
+				if (file_exists($guid))
+				{
+					$s = new Setting;
+					$s->where('name', 'uuid')->get();
+					$curl = curl_init();
+					curl_setopt($curl, CURLOPT_URL, KOKEN_STORE_URL . '/register?uuid=' . $s->value .
+						'&theme=' . trim(file_get_contents($guid)));
+					curl_setopt($curl, CURLOPT_HEADER, 0);
+					curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+					$r = curl_exec($curl);
+					curl_close($curl);
+				}
 				exit;
 			}
 			else
@@ -1038,7 +1138,8 @@ class Sites extends Koken_Controller {
 				$this->error('404', "Draft not found.");
 			}
 		}
-		else{
+		else
+		{
 			$this->error('400', 'This endpoint only accepts tokenized POST requests.');
 		}
 	}

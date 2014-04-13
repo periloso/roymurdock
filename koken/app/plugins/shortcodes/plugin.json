@@ -110,7 +110,7 @@
 			},
 
 			"title": "Insert video",
-			"title": "Edit video",
+			"title_alt": "Edit video",
 			"description": "Command or Control click to select multiple items",
 			"description_alt": "Replace video, display a caption or assign a hyperlink"
 

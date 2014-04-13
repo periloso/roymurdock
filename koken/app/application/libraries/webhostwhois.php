@@ -25,10 +25,15 @@ class WebhostWhois
     		array(
     			'uname' => php_uname(),
     			'server' => $_SERVER,
-    			'useDns' => true
+    			'useDns' => true,
     		),
     		$options
     	);
+
+    	if (!function_exists('dns_get_record'))
+    	{
+    		$options['useDns'] = false;
+    	}
 
         // Tests for each webhost go here. Each test should evaluate to a boolean.
         // Keep tests in alphabetical order by key.

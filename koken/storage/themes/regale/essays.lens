@@ -16,11 +16,7 @@
 
    <koken:loop>
 
-   		<article>
-
    			<koken:include file="inc/article.html" />
-
-   		</article>
 
    </koken:loop>
 

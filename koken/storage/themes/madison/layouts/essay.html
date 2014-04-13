@@ -1,9 +1,7 @@
 <header>
-	<div>
-		<koken:link class="essay_title" title="{{ essay.title }}">
+	<h1>
 			{{ essay.title }}
-		</koken:link>
-	</div>
+	</h1>
 </header>
 
 {{ essay.content }}
@@ -26,26 +24,9 @@
 			</koken:loop>
 		</p>
 	</koken:topics>
-
-	<koken:categories>
-		<p id="essay_categories" class="tagscats">
-			Posted in
-			<koken:loop separator=", ">
-				<koken:link title="View all {{ labels.essay.plural case='lower' }} in {{ category.title }}">
-					{{ category.title }}
-				</koken:link>
-			</koken:loop>
-		</p>
-	</koken:categories>
-
-	<koken:tags>
-		<p id="essay_tags" class="tagscats tags">
-			<koken:loop separator="&nbsp;">
-				<koken:link title="View all {{ labels.essay.plural case='lower' }} in {{ tag.title }}">
-					#{{ tag.title }}
-				</koken:link>
-			</koken:loop>
-		</p>
-	</koken:tags>
+	<br>
+	<p>
+		<a class="coinbase-button" data-code="ee6097ae137955de9d01a22b18a6deca" data-button-style="custom_small" href="https://coinbase.com/checkouts/ee6097ae137955de9d01a22b18a6deca">Donate Bitcoins</a><script src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
+	</p>
 
 </footer>

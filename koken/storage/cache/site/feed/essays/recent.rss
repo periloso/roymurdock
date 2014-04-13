@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:georss="http://www.georss.org/georss" xmlns:media="http://search.yahoo.com/mrss/" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+	<channel>
+	<title><![CDATA[Roy Murdock: Essays]]></title>
+	<link><![CDATA[http://roymurdock.com/]]></link>
+	<description><![CDATA[Essays from Roy Murdock]]></description>
+	<generator>http://koken.me</generator>
+	<lastBuildDate>Sun, 13 Apr 2014 08:17:59 PDT</lastBuildDate>
+	<atom:link href="http://roymurdock.com/feed/essays/recent.rss" rel="self" type="application/rss+xml" />	<item>
+	<title><![CDATA[Bitcoin and the Classical Theory of Money]]></title>
+	<link><![CDATA[http://roymurdock.com/essays/2014/04/bitcoin-and-classical-economics/]]></link>
+	<description><![CDATA[<img alt="bitcoin-money.jpg" src="http://roymurdock.com/koken/storage/cache/images/custom/bitcoin-money-jpg/medium_large.jpg?1397172289" width="480" height="270" /><p>This comparative analysis led me to discover three things above all. One concerns efficiency, and the other concerns our concept of "money" as a function of time.</p>]]></description>
+	<guid><![CDATA[http://roymurdock.com/essays/2014/04/bitcoin-and-classical-economics/]]></guid>
+	<pubDate>Sun, 13 Apr 2014 06:34:33 PDT</pubDate>
+	<media:credit role="photographer"><![CDATA[Roy Murdock]]></media:credit>
+	<dc:creator><![CDATA[Roy Murdock]]></dc:creator>
+</item>	<item>
+	<title><![CDATA[Introduction to Bitcoin]]></title>
+	<link><![CDATA[http://roymurdock.com/essays/2014/03/money-is-memory-why-i-believe-in-virtual-currency/]]></link>
+	<description><![CDATA[<img alt="bitcoin.png" src="http://roymurdock.com/koken/storage/cache/images/000/024/bitcoin,medium_large.png?1395184468" width="480" height="183" /><p>Links to all the resources you'll need to build an understanding of Bitcoin, along with updated news on the currency.</p>]]></description>
+	<guid><![CDATA[http://roymurdock.com/essays/2014/03/money-is-memory-why-i-believe-in-virtual-currency/]]></guid>
+	<pubDate>Mon, 10 Mar 2014 15:41:31 PDT</pubDate>
+	<media:credit role="photographer"><![CDATA[Roy Murdock]]></media:credit>
+	<dc:creator><![CDATA[Roy Murdock]]></dc:creator>
+</item>	<item>
+	<title><![CDATA[Am I Going Insane? Snapchat is Intrinsically Worthless]]></title>
+	<link><![CDATA[http://roymurdock.com/essays/2013/11/snapchat-is-intrinsically-worthless/]]></link>
+	<description><![CDATA[<img alt="snapchatbanner.png" src="http://roymurdock.com/koken/storage/cache/images/000/022/snapchatbanner,medium_large.png?1383598234" width="480" height="234" /><p>While Snapchat's valuation is nowhere close to that of Apple and Facebook, it is surprisingly close to stable, established companies with actual revenue streams. Why have investors put such a high price tag on what seems to be a silly messaging app?</p>]]></description>
+	<guid><![CDATA[http://roymurdock.com/essays/2013/11/snapchat-is-intrinsically-worthless/]]></guid>
+	<pubDate>Mon, 04 Nov 2013 12:43:06 PST</pubDate>
+	<media:credit role="photographer"><![CDATA[Roy Murdock]]></media:credit>
+	<dc:creator><![CDATA[Roy Murdock]]></dc:creator>
+</item>	<item>
+	<title><![CDATA[The Death of the iPhone]]></title>
+	<link><![CDATA[http://roymurdock.com/essays/2013/10/google-is-taking-apples-niche/]]></link>
+	<description><![CDATA[<img alt="custom_oembed_1.jpg" src="http://roymurdock.com/koken/storage/cache/images/custom/custom_oembed_1-jpg/medium_large.jpg?1395194380" width="480" height="360" /><p>Apple has long been the champion of meeting (and exceeding) customer expectations. What happens when big data and responsive technology enter the equation?</p>]]></description>
+	<guid><![CDATA[http://roymurdock.com/essays/2013/10/google-is-taking-apples-niche/]]></guid>
+	<pubDate>Sat, 05 Oct 2013 11:22:36 PDT</pubDate>
+	<media:credit role="photographer"><![CDATA[Roy Murdock]]></media:credit>
+	<dc:creator><![CDATA[Roy Murdock]]></dc:creator>
+</item>	<item>
+	<title><![CDATA[How Useful Is the New iPhone 5s?]]></title>
+	<link><![CDATA[http://roymurdock.com/essays/2013/09/how-useful-is-the-new-iphone/]]></link>
+	<description><![CDATA[<img alt="iphone5slarge.jpeg" src="http://roymurdock.com/koken/storage/cache/images/000/023/iphone5slarge,medium_large.jpeg?1392502122" width="480" height="288" /><p>A breakdown of the new features of the iPhone paired with an analysis of how much extra utility they bring to the table.</p>]]></description>
+	<guid><![CDATA[http://roymurdock.com/essays/2013/09/how-useful-is-the-new-iphone/]]></guid>
+	<pubDate>Sat, 21 Sep 2013 15:12:20 PDT</pubDate>
+	<media:credit role="photographer"><![CDATA[Roy Murdock]]></media:credit>
+	<dc:creator><![CDATA[Roy Murdock]]></dc:creator>
+</item>	</channel>
+</rss>

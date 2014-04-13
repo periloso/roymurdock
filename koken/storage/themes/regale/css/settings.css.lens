@@ -155,16 +155,6 @@ footer.main span.copyright {
 	display:block;
 }
 
-footer.main .social {
-	display:inline-block;
-	vertical-align: middle;
-	margin-bottom:-8px;
-}
-
-footer.main .addthis_button_facebook_like iframe {
-	margin-bottom:-5px !important;
-}
-
 div#container {
 	position:relative;
 	padding-top:[$grid_col_offset]px;
@@ -473,6 +463,11 @@ article pre, article code {
 	margin-bottom:20px;
 }
 
+.k-content-embed img {
+	max-width:100%;
+	height:auto;
+}
+
 .k-content {}
 
 .k-content-text {
@@ -516,6 +511,26 @@ div#kdiscuss {
 .social-links li {
 	display:inline-block;
 	padding-right:3px;
+}
+
+.social {
+	display:inline-block;
+	top:-1px;
+	position:relative;
+}
+
+.social span {
+	display:inline-block;
+	line-height:0;
+	font-size:0;
+}
+
+.social span.fb {
+	margin-right:5px;
+}
+
+.social iframe,.social>span {
+	vertical-align: middle !important;
 }
 
 /* MOBILE

@@ -36,7 +36,13 @@
 			$params = join(' ', $params);
 
 			return <<<DOC
-	<?php
+<?php
+	if ({$token}['html'])
+	{
+		echo str_replace('<iframe', '<iframe class="k-custom-source"', {$token}['html']);
+	}
+	else
+	{
 		if (isset({$token}['presets']) && count({$token}['presets']))
 		{
 			\$top_preset = array_pop({$token}['presets']);
@@ -46,7 +52,7 @@
 		{
 			\$poster = '';
 		}
-	?>
+?>
 <video preload="none" id="k-video-<?php echo {$token}['id']; ?>" data-src="<?php echo {$token}['original']['url']; ?>" $params <?php echo \$poster; ?>></video>
 
 <script>
@@ -69,6 +75,7 @@
 		v.attr('width', v.parent().width());
 		<?php endif; ?>
 		var m = $('#k-video-<?php echo {$token}['id']; ?>').mediaelementplayer({
+			pluginPath: \$K.location.real_root_folder + '/app/site/themes/common/js/',
 			success: function(player, dom) {
 				$(player).bind('loadedmetadata', function() {
 					v.data('aspect', this.videoWidth / this.videoHeight );
@@ -84,6 +91,8 @@
 		});
 	});
 </script>
+
+<?php } ?>
 DOC;
 		}
 

@@ -86,8 +86,8 @@
 					<li>
 					<strong>Read more:</strong>
 					<koken:loop separator=", ">
-						<koken:link>
-							{{ essay.title }}
+						<koken:link title="Read {{ title }}">
+							{{ title }}
 						</koken:link>
 					</koken:loop>
 					</li>

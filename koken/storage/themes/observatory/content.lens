@@ -52,7 +52,7 @@
 					</span>
 					<span class="m">
 						<h3>{{ content.title | content.filename }}</h3>
-						{{ content.caption }}
+						{{ content.caption paragraphs="true" }}
 					</span>
 					<span class="r">
 						<koken:next>
@@ -136,6 +136,21 @@
 			</ol>
 
 		</koken:tags>
+
+		<koken:if true="{{ settings.show_content_source }}">
+
+	    	<koken:not empty="{{ content.source.title }}">
+
+				<ol class="meta">
+					<li>
+						View at
+						<a href="{{ content.source.url }}" onclick="return !window.open(this.href);" title="View at {{ content.source.title }}">{{ content.source.title }}</a>
+					</li>
+				</ol>
+
+			</koken:not>
+
+		</koken:if>
 
 	</div>
 

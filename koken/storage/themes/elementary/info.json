@@ -1,14 +1,14 @@
 {
 	"name": "Elementary",
-	"version": "1.4.3",
-	"description": "Simple theme for browsing all uploaded content, albums and sets.",
+	"version": "1.4.7",
+	"description": "Straightforward, utilitarian theme that avoids fancy layout schemes by presenting content in a clear, simple manner. The theme is perfect for archivists or photographers with deep collections of content.",
 	"demo": "http://demo.koken.me/#elementary",
-	"documentation": "http://help.koken.me/customer/portal/articles/1227388-elementary-documentation",
+	"documentation": "https://store.koken.me/themes/elementary",
 	"author": {
-		"name": "Sebastian Pinehurst",
-		"link": "http://koken.me"
+		"name": "Koken",
+		"link": "https://store.koken.me/authors/koken"
 	},
-	"koken_version_required": "0.10.0-beta.1",
+	"koken_version_required": "0.12.0-beta.1",
 
 	"navigation_groups": {
 		"footer": {
@@ -257,76 +257,6 @@
 						{ "label": "Bitter", "value": "bitter" }
 					],
 					"value": "helvetica"
-				}
-			}
-		},
-		"Color": {
-			"icon": "color",
-			"settings": {
-				"color_bg": {
-					"label": "Background",
-					"type": "color",
-					"control_first": true
-				},
-				"color_text": {
-					"label": "Text",
-					"type": "color",
-					"control_first": true
-				},
-				"color_text_meta": {
-					"label": "Text meta",
-					"type": "color",
-					"control_first": true
-				},
-				"color_hr": {
-					"label": "Lines",
-					"type": "color",
-					"control_first": true
-				},
-				"color_links": {
-					"label": "Links",
-					"type": "color",
-					"control_first": true
-				},
-				"color_links_hover": {
-					"label": "Links hover",
-					"type": "color",
-					"control_first": true
-				},
-				"color_bq": {
-					"label": "Blockquote",
-					"type": "color",
-					"control_first": true
-				},
-				"color_h": {
-					"label": "Headers",
-					"type": "color",
-					"control_first": true
-				},
-				"color_nav": {
-					"label": "Nav",
-					"type": "color",
-					"control_first": true
-				},
-				"color_nav_hover": {
-					"label": "Nav hover",
-					"type": "color",
-					"control_first": true
-				},
-				"color_nav_current": {
-					"label": "Nav current",
-					"type": "color",
-					"control_first": true
-				},
-				"color_essay_caption": {
-					"label": "Essay caption bg",
-					"type": "color",
-					"control_first": true
-				},
-				"color_essay_caption_text": {
-					"label": "Essay caption text",
-					"type": "color",
-					"control_first": true
 				}
 			}
 		},
@@ -750,6 +680,13 @@
 					"control_first": true,
 					"scope": [ "content" ]
 				},
+				"content_detail_show_source": {
+					"label": "Show imported items source link",
+					"type": "boolean",
+					"value": true,
+					"control_first": true,
+					"scope": [ "content" ]
+				},
 				"content_detail_show_dl": {
 					"label": "Show maximum download link",
 					"type": "boolean",
@@ -938,6 +875,124 @@
 	                         }
 	                    ]
 	               	}
+				}
+			}
+		},
+		"Social": {
+			"icon":"social",
+			"settings": {
+				"show_social": {
+					"label": "Show social media buttons in footer",
+					"type": "boolean",
+					"value": false,
+					"control_first": true,
+					"reload_preview": true
+				},
+				"fb_href": {
+					"label": "Like link",
+					"type": "select",
+					"options": [
+						{ "label": "Site", "value": "site" },
+						{ "label": "Facebook profile", "value": "fbpage" }
+					],
+					"value": "site",
+					"dependencies": {
+						"evaluate": "all",
+						"conditions": [
+							{
+								"option": "show_social",
+								"equals": true
+							}
+						]
+					}
+				},
+				"social_spacing": {
+					"label": "Button spacing",
+					"type": "slider",
+					"min": 0,
+					"max": 20,
+					"step": 1,
+					"value": 5,
+					"suffix": "px",
+					"dependencies": {
+						"evaluate": "all",
+						"conditions": [
+							{
+								"option": "show_social",
+								"equals": true
+							}
+						]
+					}
+				}
+			}
+		},
+		"Color": {
+			"icon": "color",
+			"settings": {
+				"color_bg": {
+					"label": "Background",
+					"type": "color",
+					"control_first": true
+				},
+				"color_text": {
+					"label": "Text",
+					"type": "color",
+					"control_first": true
+				},
+				"color_text_meta": {
+					"label": "Text meta",
+					"type": "color",
+					"control_first": true
+				},
+				"color_hr": {
+					"label": "Lines",
+					"type": "color",
+					"control_first": true
+				},
+				"color_links": {
+					"label": "Links",
+					"type": "color",
+					"control_first": true
+				},
+				"color_links_hover": {
+					"label": "Links hover",
+					"type": "color",
+					"control_first": true
+				},
+				"color_bq": {
+					"label": "Blockquote",
+					"type": "color",
+					"control_first": true
+				},
+				"color_h": {
+					"label": "Headers",
+					"type": "color",
+					"control_first": true
+				},
+				"color_nav": {
+					"label": "Nav",
+					"type": "color",
+					"control_first": true
+				},
+				"color_nav_hover": {
+					"label": "Nav hover",
+					"type": "color",
+					"control_first": true
+				},
+				"color_nav_current": {
+					"label": "Nav current",
+					"type": "color",
+					"control_first": true
+				},
+				"color_essay_caption": {
+					"label": "Essay caption bg",
+					"type": "color",
+					"control_first": true
+				},
+				"color_essay_caption_text": {
+					"label": "Essay caption text",
+					"type": "color",
+					"control_first": true
 				}
 			}
 		}

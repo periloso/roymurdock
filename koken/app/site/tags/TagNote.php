@@ -8,7 +8,7 @@
 		{
 			return <<<DOC
 <?php
-	if (Koken::\$draft && !Koken::\$preview):
+	if (Koken::\$draft):
 ?>
 <span class="k-note">
 DOC;

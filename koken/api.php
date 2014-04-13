@@ -33,7 +33,7 @@ if (defined('ENVIRONMENT'))
 	switch (ENVIRONMENT)
 	{
 		case 'development':
-			define('KOKEN_STORE_URL', 'http://store.dev:8888');
+			define('KOKEN_STORE_URL', 'https://store.dev:8443');
 			error_reporting(E_ALL);
 		break;
 

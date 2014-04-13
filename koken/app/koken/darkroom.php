@@ -73,7 +73,7 @@ class Darkroom {
 	////
 	// The workhorse develop function
 	////
-	static function develop($options) {
+	static function develop($options, $kokenData = array()) {
 
 		$defaults = array(
 			'square' => false,
@@ -103,11 +103,6 @@ class Darkroom {
 		if (!$o['source_width'] || !$o['source_height'])
 		{
 			list($o['source_width'], $o['source_height'], $source_image_type) = getimagesize($o['source']);
-		}
-
-		if ($o['width'] == $o['source_width'] && $o['height'] == $o['source_height'] && !$o['force']) {
-			copy($o['source'], $o['destination']);
-			return;
 		}
 
 		$original_aspect = $o['source_width']/$o['source_height'];
@@ -307,6 +302,9 @@ class Darkroom {
 			{
 				$cmd = MAGICK_PATH_FINAL . $strip . " -size {$hint_w}x{$hint_h} \"{$o['source']}\" -limit memory 33554432 -limit map 67108864 -depth 8 -density 72 -quality {$o['quality']} -resize $size_str -crop {$o['width']}x{$o['height']}+{$crop_x}+{$crop_y} -page 0+0";
 			}
+
+			$o['final_width'] = $o['width'];
+			$o['final_height'] = $o['height'];
 		}
 		else
 		{
@@ -334,21 +332,42 @@ class Darkroom {
 					}
 					$bestfit = false;
 				}
+
+				if ($o['width'] == 0)
+				{
+					$o['final_height'] = $o['height'];
+					$o['final_width'] = ($o['height']*$o['source_width'])/$o['source_height'];
+				}
+				else
+				{
+					$o['final_width'] = $o['width'];
+					$o['final_height'] = ($o['width']*$o['source_height'])/$o['source_width'];
+				}
 			}
 			else
 			{
 				if ((($original_aspect >= $new_aspect && $o['width'] > $o['source_width']) || ($original_aspect < $new_aspect && $o['height'] > $o['source_height'])) && !$o['force']) {
-					copy($o['source'], $o['destination']);
-					if (isset($src_img))
-					{
-						imagedestroy($src_img);
-					}
-					return;
-				}
+					$o['width'] = $o['final_width'] = $hint_w = $o['source_width'];
+					$o['height'] = $o['final_height'] = $hint_h =  $o['source_height'];
+				} else {
+					$hint_w = $o['width'];
+					$hint_h = $o['height'];
 
-				$hint_w = $o['width'];
-				$hint_h = $o['height'];
+					if ($original_aspect >= $new_aspect)
+					{
+						$o['final_width'] = $o['width'];
+						$o['final_height'] = ($o['width']*$o['source_height'])/$o['source_width'];
+					}
+					else
+					{
+						$o['final_width'] = ($o['height']*$o['source_width'])/$o['source_height'];
+						$o['final_height'] = $o['height'];
+					}
+				}
 			}
+
+			$o['final_width'] = round($o['final_width']);
+			$o['final_height'] = round($o['final_height']);
 
 			if ($has_midsize && $hint_w <= $mid_w && $hint_h <= $mid_h)
 			{
@@ -368,34 +387,7 @@ class Darkroom {
 			}
 			else if ($lib === 'GD')
 			{
-				if ($o['width'] == 0 || $o['height'] == 0)
-				{
-					if ($o['width'] == 0)
-					{
-						$thumb_h = $o['height'];
-						$thumb_w = ($o['height']*$o['source_width'])/$o['source_height'];
-					}
-					else
-					{
-						$thumb_w = $o['width'];
-						$thumb_h = ($o['width']*$o['source_height'])/$o['source_width'];
-					}
-				}
-				else
-				{
-					if ($original_aspect >= $new_aspect)
-					{
-						$thumb_w = $o['width'];
-						$thumb_h = ($o['width']*$o['source_height'])/$o['source_width'];
-					}
-					else
-					{
-						$thumb_w = ($o['height']*$o['source_width'])/$o['source_height'];
-						$thumb_h = $o['height'];
-					}
-				}
-
-				$final_img = self::create_gd_proportional($thumb_w, $thumb_h, $o['source_width'], $o['source_height'], $src_img, $source_image_type);
+				$final_img = self::create_gd_proportional($o['final_width'], $o['final_height'], $o['source_width'], $o['source_height'], $src_img, $source_image_type);
 			}
 			else
 			{
@@ -451,6 +443,46 @@ class Darkroom {
 			}
 		}
 
+		if (!class_exists('Shutter'))
+		{
+			require dirname(dirname(__FILE__)) . '/application/libraries/shutter.php';
+
+			$api_cache_dir = dirname(dirname(dirname(__FILE__))) .
+								DIRECTORY_SEPARATOR . 'storage' .
+								DIRECTORY_SEPARATOR . 'cache' .
+								DIRECTORY_SEPARATOR . 'api';
+			$stamp = $api_cache_dir . DIRECTORY_SEPARATOR . 'stamp';
+			$cache_file = $api_cache_dir . DIRECTORY_SEPARATOR . md5('/plugins') . '.cache';
+
+			if (file_exists($cache_file) && filemtime($cache_file) >= filemtime($stamp))
+			{
+				$plugin_data = json_decode( file_get_contents($cache_file), true );
+			}
+			else
+			{
+				$curl = curl_init();
+				curl_setopt($curl, CURLOPT_URL, 'http://' . $_SERVER['HTTP_HOST'] . preg_replace('~/i\.php.*~', '', $_SERVER['SCRIPT_NAME']) . '/api.php?/plugins');
+				curl_setopt($curl, CURLOPT_HEADER, 0);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+				$plugin_data = json_decode( curl_exec($curl), true );
+			}
+
+			Shutter::finalize_plugins($plugin_data['plugins']);
+		}
+
+		if ($lib === 'Imagick')
+		{
+			$image = Shutter::filter('darkroom.render.imagick', array($image, $o, $kokenData));
+		}
+		else if ($lib === 'GD')
+		{
+			$final_img = Shutter::filter('darkroom.render.gd', array($final_img, $o, $kokenData));
+		}
+		else
+		{
+			$cmd = Shutter::filter('darkroom.render.imagemagick', array($cmd, $o, $kokenData));
+		}
+
 		if ($lib === 'Imagick')
 		{
 			$image->writeImage( $o['destination'] );
@@ -483,6 +515,8 @@ class Darkroom {
 		{
 			$icc->SaveToJPEG($o['destination']);
 		}
+
+		Shutter::hook('darkroom.render.complete', array($o['destination']));
 	}
 
 	private static function create_gd_proportional($w, $h, $source_w, $source_h, $src_img, $source_image_type)

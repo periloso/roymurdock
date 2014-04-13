@@ -28,7 +28,14 @@
 			$params = array();
 			foreach($this->parameters as $key => $val)
 			{
-				$params[] = "'$key' => \"" . $this->attr_parse($val) . '"';
+				if ($key === 'data')
+				{
+					$params[] = "'data' => " . $this->field_to_keys($val);
+				}
+				else
+				{
+					$params[] = "'$key' => \"" . $this->attr_parse($val) . '"';
+				}
 			}
 
 			return join(',', $params);
@@ -102,6 +109,19 @@
 					$f = explode('.', $p);
 					array_shift($f);
 					$prefix = 'Koken::$' . $global_matches[1];
+
+					if ($global_matches[1] === 'settings')
+					{
+						$s = array_shift($f);
+						if (isset(Koken::$settings[$s]))
+						{
+							$prefix .= "['$s']";
+						}
+						else
+						{
+							$prefix .= "['__scoped_" . str_replace('.', '-', Koken::$location['template']) . "_{$s}']";
+						}
+					}
 				}
 				else if (in_array($p, Koken::$template_variable_keys))
 				{

@@ -32,57 +32,71 @@
 
 	<koken:loop>
 
-		<div class="cell">
+		<div class="cell {{ content.file_type }}" data-aspect="{{ content.aspect_ratio }}">
 
-			<koken:if true="settings.show_share">
+			<div class="content">
 
-				<koken:if true="content.public">
+				<koken:content_image>
 
-					<div class="share_content">
+					<koken:if true="settings.show_share">
 
-						<span class="content-share share_button"><i></i></span>
+						<koken:if true="content.public">
 
-						<div class="kshare">
-							<input type="text" class="kshare-input" value="{{ content.url }}" />
-							<ul class="kshare-items">
-								<li>
-						    		<koken:if empty="profile.twitter"><a target="_blank" href="https://twitter.com/intent/tweet?text={{ content.title|content.filename url_encode="true" }}&url={{ content.url url_encode="true" }}" class="share-twitter"><koken:else><a target="_blank" href="https://twitter.com/intent/tweet?text={{ content.title|content.filename url_encode="true" }}&url={{ content.url url_encode="true" }}&via={{ profile.twitter }}" class="share-twitter"></koken:if><i class="kicon-twitter"></i></a>
-						    	</li>
-						    	<li>
-						   			 <a href="https://www.facebook.com/sharer.php?u={{ content.url url_encode="true" }}" class="share-facebook"><i class="kicon-facebook"></i></a>
-						   		</li>
-						   		<li>
-						    		<a href="http://pinterest.com/pin/create/button/?url={{ content.url url_encode="true" }}&media={{ content.presets.large.url url_encode="true" }}&description={{ content.title|content.filename url_encode="true" }}" class="share-pinterest" title="Share {{ content.title|content.filename url_encode="true" }} on Pinterest"><i class="kicon-pinterest"></i></a>
-						    	</li>
-						    	<li>
-						    		<a href="http://www.tumblr.com/share/photo?source={{ content.presets.large.url url_encode="true"  }}&caption=%3Cp%3E%3Cstrong%3E%3Ca href=&quot;{{ content.url url_encode="true" }}&quot; title=&quot;{{ content.title|content.filename }}&quot;%3E{{ content.title|content.filename }}%3C/a%3E%3C/strong%3E%3C/p%3E%3Cp%3E{{ content.caption }}%3C/p%3E&click_thru={{ content.url url_encode="true" }}" class="share-tumblr" title="Share {{ content.title|content.filename url_encode="true" }} on Tumblr"><i class="kicon-tumblr"></i></a>
-						    	</li>
-						    	<li>
-						    		<a href="https://plus.google.com/share?url={{ content.url url_encode="true" }}" class="share-google" title="Share {{ content.title|content.filename url_encode="true" }} on Google+"><i class="kicon-gplus"></i></a>
-						    	</li>
-						    	<koken:max_download>
-						    	<li>
-						    		<koken:link class="share-dl no-share" title="Download {{ max_download.width }} x {{ max_download.height }}"><i class="kicon-dl"></i></koken:link>
-						    	</li>
-							    </koken:max_download>
-						    </ul>
-				    	</div>
+							<div class="share_content">
 
-				    </div>
+								<span class="content-share share_button"><i></i></span>
+
+								<div class="kshare">
+									<input type="text" class="kshare-input" value="{{ content.url }}" />
+									<ul class="kshare-items">
+										<li>
+								    		<koken:if empty="profile.twitter"><a target="_blank" href="https://twitter.com/intent/tweet?text={{ content.title|content.filename url_encode="true" }}&url={{ content.url url_encode="true" }}" class="share-twitter"><koken:else><a target="_blank" href="https://twitter.com/intent/tweet?text={{ content.title|content.filename url_encode="true" }}&url={{ content.url url_encode="true" }}&via={{ profile.twitter }}" class="share-twitter"></koken:if><i class="kicon-twitter"></i></a>
+								    	</li>
+								    	<li>
+								   			 <a href="https://www.facebook.com/sharer.php?u={{ content.url url_encode="true" }}" class="share-facebook"><i class="kicon-facebook"></i></a>
+								   		</li>
+								   		<li>
+								    		<a href="http://pinterest.com/pin/create/button/?url={{ content.url url_encode="true" }}&media={{ content.presets.large.url url_encode="true" }}&description={{ content.title|content.filename url_encode="true" }}" class="share-pinterest" title="Share {{ content.title|content.filename url_encode="true" }} on Pinterest"><i class="kicon-pinterest"></i></a>
+								    	</li>
+								    	<li>
+								    		<a href="http://www.tumblr.com/share/photo?source={{ content.presets.large.url url_encode="true"  }}&caption=%3Cp%3E%3Cstrong%3E%3Ca href=&quot;{{ content.url url_encode="true" }}&quot; title=&quot;{{ content.title|content.filename }}&quot;%3E{{ content.title|content.filename }}%3C/a%3E%3C/strong%3E%3C/p%3E%3Cp%3E{{ content.caption }}%3C/p%3E&click_thru={{ content.url url_encode="true" }}" class="share-tumblr" title="Share {{ content.title|content.filename url_encode="true" }} on Tumblr"><i class="kicon-tumblr"></i></a>
+								    	</li>
+								    	<li>
+								    		<a href="https://plus.google.com/share?url={{ content.url url_encode="true" }}" class="share-google" title="Share {{ content.title|content.filename url_encode="true" }} on Google+"><i class="kicon-gplus"></i></a>
+								    	</li>
+								    	<koken:max_download>
+								    	<li>
+								    		<koken:link class="share-dl no-share" title="Download {{ max_download.width }} x {{ max_download.height }}"><i class="kicon-dl"></i></koken:link>
+								    	</li>
+									    </koken:max_download>
+								    </ul>
+						    	</div>
+
+						    </div>
+
+						</koken:if>
+
+					</koken:if>
+
+					<koken:img lazy="true" respond_to="height" />
+
+				</koken:content_image>
+
+				<koken:content_video>
+
+					<koken:video />
+
+				</koken:content_video>
+
+				<koken:if true="settings.show_image_caption">
+
+					<span class="caption">
+						{{ content.title }}
+					</span>
 
 				</koken:if>
 
-			</koken:if>
-
-			<koken:img lazy="true" respond_to="height" />
-
-			<koken:if true="settings.show_image_caption">
-
-				<span class="caption">
-					{{ content.title }}
-				</span>
-
-			</koken:if>
+			</div>
 
 		</div>
 

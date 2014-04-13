@@ -3,8 +3,23 @@
 	<!-- Render if event is a new album -->
 	<koken:event_album>
 
-		<!-- Display primary cover image, link to album.lens to view album -->
-		<koken:link title="View {{ album.title }}"><koken:img size="3:2" /></koken:link>
+		<!-- If an album, display primary cover image and link to album.lens to view -->
+		<koken:if data="album.album_type" equals="standard">
+			<koken:link title="View {{ album.title }}">
+				<koken:img />
+			</koken:link>
+		</koken:if>
+
+		<!-- If a set, display each cover assigned to it plus a link to set.lens to view -->
+		<koken:if data="album.album_type" equals="set">
+			<koken:link title="View {{ album.title }}">
+				<koken:covers>
+					<koken:loop>
+						<koken:img />
+					</koken:loop>
+				</koken:covers>
+			</koken:link>
+		</koken:if>
 
 		<h3>
 			<!-- Link to album.lens template to view album -->
@@ -59,7 +74,7 @@
 	<koken:event_album_update>
 
 		<!-- Link to view only these images in album.lens -->
-		<koken:link filter:order_by="uploaded_on" filter:year="{{ date date_format='Y' }}" filter:month="{{ date date_format='m' }}" filter:day="{{ date date_format='d' }}" title="View {{ album.title }}">
+		<koken:link filter:order_by="published_on" filter:year="{{ date date_format='Y' }}" filter:month="{{ date date_format='m' }}" filter:day="{{ date date_format='d' }}" title="View {{ album.title }}">
 
 			<!-- Loop over all new images that were added -->
 			<koken:loop>
@@ -72,7 +87,7 @@
 			<h3>
 
 				<!-- Link to view only these images in album.lens -->
-				<koken:link filter:order_by="uploaded_on" filter:year="{{ date date_format='Y' }}" filter:month="{{ date date_format='m' }}" filter:day="{{ date date_format='d' }}" title="View {{ album.title }}">
+				<koken:link filter:order_by="published_on" filter:year="{{ date date_format='Y' }}" filter:month="{{ date date_format='m' }}" filter:day="{{ date date_format='d' }}" title="View {{ album.title }}">
 
 					<!-- Display album title and # of items -->
 					{{ album.title }} ({{ content.length }} new {{ content.length plural="items" singular="item" }})

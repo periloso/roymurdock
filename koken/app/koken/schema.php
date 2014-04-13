@@ -342,6 +342,17 @@
 					'type' => 'VARCHAR',
 					'constraint' => 255
 				),
+				'source' => array(
+					'type' => 'VARCHAR',
+					'constraint' => 255
+				),
+				'source_url' => array(
+					'type' => 'VARCHAR',
+					'constraint' => 255
+				),
+				'html' => array(
+					'type' => 'TEXT'
+				),
 			),
 			'keys' => array(
 				'filename',

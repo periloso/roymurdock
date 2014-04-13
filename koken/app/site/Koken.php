@@ -1,5 +1,7 @@
 <?php
 
+require_once('lib/autolink.php');
+
 class Koken {
 	public static $site;
 	public static $settings = array();
@@ -42,6 +44,18 @@ class Koken {
 	private static $level = 0;
 	private static $depth;
 
+	public static function get_setting($name)
+	{
+		if (strpos($name, '.') !== false)
+		{
+			$parts = explode('.', $name);
+			return Koken::$settings['__scoped_' . str_replace('.', '-', $parts[1]) . '_' . $parts[0]];
+		}
+		else
+		{
+			return Koken::$settings[$name];
+		}
+	}
 	public static function title_from_archive($archive, $format = false)
 	{
 		if (!$archive['month'])
@@ -338,8 +352,8 @@ class Koken {
 	public static function parse($template)
 	{
 		$output = preg_replace_callback('/(<|\s)(\/)?koken\:([a-z_\-]+)([\=|\s][^\/].+?")?(\s*\/)?>/', array('Koken', 'callback'), $template);
-		$output = preg_replace('/\{\{\s*discussion\s*\}\}/', '<?php Shutter::hook(\'discussion\', Koken::$current_token); ?>', $output);
-		$output = preg_replace('/\{\{\s*discussion_count\s*\}\}/', '<?php Shutter::hook(\'discussion_count\', Koken::$current_token); ?>', $output);
+		$output = preg_replace('/\{\{\s*discussion\s*\}\}/', '<?php Shutter::hook(\'discussion\', array(Koken::$current_token)); ?>', $output);
+		$output = preg_replace('/\{\{\s*discussion_count\s*\}\}/', '<?php Shutter::hook(\'discussion_count\', array(Koken::$current_token)); ?>', $output);
 		$output = preg_replace_callback('/\{\{\s*([^\}]+)\s*\}\}/', array('Koken', 'out_callback'), $output);
 		return $output;
 	}
@@ -609,6 +623,12 @@ class Koken {
 		curl_setopt($curl, CURLOPT_URL, self::$protocol . '://' . $_SERVER['HTTP_HOST'] . self::$location['real_root_folder'] . '/api.php?' . $url);
 		curl_setopt($curl, CURLOPT_HEADER, 0);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+		if (self::$protocol === 'https')
+		{
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		}
 		return $curl;
 	}
 
@@ -855,7 +875,7 @@ class Koken {
 	}
 	public static function out($key)
 	{
-		$parameters = array( 'separator' => ' ', 'utc' => true );
+		$parameters = array( 'separator' => ' ', 'utc' => true, 'autolink' => null );
 		preg_match_all('/([a-z_]+)=["\']([^"\']+)["|\']/', $key, $matches);
 		foreach($matches[1] as $i => $name)
 		{
@@ -993,6 +1013,10 @@ class Koken {
 						}
 						unset($parameters['date_format']);
 					}
+					else if (!isset($return[$index]) && isset($global_key) && $global_key === 'settings' && isset(Koken::$settings['__scoped_' . str_replace('.', '-', Koken::$location['template']) . '_' . $index]))
+					{
+						$return = Koken::$settings['__scoped_' . str_replace('.', '-', Koken::$location['template']) . '_' . $index];
+					}
 					else
 					{
 						if (($index === 'plural' || $index === 'singular') && $is_archive && isset(self::$site['url_data'][$return]) && isset(self::$site['url_data'][$return][$index]))
@@ -1067,6 +1091,14 @@ class Koken {
 			if (isset($parameters['paragraphs']))
 			{
 				$return = self::format_paragraphs($return);
+
+				if (is_null($parameters['autolink']) || $parameters['autolink'])
+				{
+					$return = autolink($return);
+				}
+			} else if ($parameters['autolink'])
+			{
+				$return = autolink($return);
 			}
 
 			if (isset($parameters['date_format']))
@@ -1162,7 +1194,10 @@ class Koken {
 								$slim = array();
 								foreach($fields as $f)
 								{
-									$slim[$f] = $r[$f];
+									if (isset($r[$f]))
+									{
+										$slim[$f] = $r[$f];
+									}
 								}
 								$fresh[] = $slim;
 							}
@@ -1178,7 +1213,10 @@ class Koken {
 						$slim = array();
 						foreach($fields as $f)
 						{
-							$slim[$f] = $return[$f];
+							if (isset($return[$f]))
+							{
+								$slim[$f] = $return[$f];
+							}
 						}
 						$return = $slim;
 					}
@@ -1209,10 +1247,12 @@ class Koken {
 
 					$return = join($parameters['separator'], $return);
 				}
-				else {
+				else
+				{
 					$return = '';
 				}
 			}
+
 			return isset($parameters['debug']) ? var_dump($return) : $return;
 		}
 	}
@@ -1307,6 +1347,195 @@ class Koken {
 		$template = self::$location['urls'][$name];
 		preg_match('~^/([^/]+)~', $template, $matches);
 		return $matches[0];
+	}
+
+	public static function link($parameters)
+	{
+		$defaults = array(
+			'to' => false,
+			'bind_to_key' => false,
+			'url' => false,
+			'data' => false,
+			'filter:id' => false,
+			'echo' => false,
+			'lightbox' => false,
+		);
+
+		$options = array_merge($defaults, $parameters);
+
+		$attributes = array('class' => '');
+		$tail = '';
+		$type = $token = $context = false;
+		$url = '';
+
+		if ($options['bind_to_key'])
+		{
+			$attributes['data-bind-to-key'] = $options['bind_to_key'];
+		}
+
+		if ($options['to'] === 'date')
+		{
+			$type = 'event_timeline';
+		}
+		else if (in_array($options['to'], array('archive', 'tag', 'category', 'tag_contents', 'tag_albums', 'tag_essays', 'category_contents', 'category_albums', 'category_essays')))
+		{
+			$type = $options['to'];
+		}
+		else if ($options['to'] && strpos($options['to'], 'archive_'))
+		{
+			$type = str_replace('archive_', '', $options['to']);
+		}
+
+		if ($options['url'])
+		{
+			$url = $options['url'];
+		}
+		else if (!$type && $options['to'])
+		{
+			if ($options['filter:id'])
+			{
+				$model = $options['to'];
+				if ($model === 'page' || $model === 'essay')
+				{
+					$model = 'text';
+				} else if ($model !== 'content')
+				{
+					$model .= 's';
+				}
+				$data = self::api("/$model/" . $options['filter:id']);
+				$url = $data['__koken_url'];
+			}
+			else
+			{
+				if (isset(self::$location['urls'][$options['to']]))
+				{
+					$url = self::$location['urls'][$options['to']];
+				}
+				else
+				{
+					$url = '/';
+				}
+			}
+		}
+		else if ($options['data'])
+		{
+			$token = $options['data'];
+		}
+		else
+		{
+			$token = self::$current_token;
+			$check_token = self::$_parent ? self::$_parent : $token;
+
+			if (isset($check_token['context']) && isset($check_token['context']['album']))
+			{
+				$context = $check_token['context']['album'];
+			}
+			else if (isset($check_token['album']))
+			{
+				$context = $check_token['album'];
+			}
+		}
+
+		if ($token && $type)
+		{
+			if (in_array($type, array('event_timeline', 'tag', 'category', 'tag_contents', 'tag_albums', 'tag_essays', 'category_contents', 'category_albums', 'category_essays')))
+			{
+				$token['__koken__override'] = $type;
+			}
+			else if ($type === 'archive')
+			{
+				$token['__koken__override'] = 'archive_' . (isset($token['__koken__']) ? $token['__koken__'] . 's' : (isset($token['album']) ? 'albums' : ''));
+			}
+			else
+			{
+				$token['__koken__override'] = $token['__koken__'] . '_' . $type;
+			}
+		}
+
+		foreach($parameters as $key => $val)
+		{
+			if ($key === 'filter:id') continue;
+			if (strpos($key, 'filter:') === 0)
+			{
+				$tail .= str_replace('filter:', '', $key) . ':' . $val . '/';
+				if ($key === 'filter:order_by' && $token)
+				{
+					$token['__koken__override_date'] = $val;
+				}
+			}
+			else if (!array_key_exists($key, $defaults))
+			{
+				$attributes[$key] = $val;
+			}
+		}
+
+		if ($token)
+		{
+			$url = self::form_link($token, $context, $options['lightbox']);
+		}
+
+		if ($url === self::$navigation_home_path)
+		{
+			$url = '/';
+		}
+		if (($url === '/' && self::$location['here'] === '/') || preg_match('/^' . str_replace('/', '\\/', urldecode($url)) . '(\\/.*)?$/', self::$location['here']))
+		{
+			$attributes['class'] .= ' k-nav-current';
+		}
+
+		if ($options['lightbox'])
+		{
+			$attributes['class'] .= ' k-link-lightbox';
+		}
+
+		if (preg_match('~\.rss$~', $url))
+		{
+			$attributes['target'] = '_blank';
+		}
+		else if (strpos($url, '/') === 0 && !preg_match('~/lightbox/$~', $url))
+		{
+			$attributes['data-koken-internal'] = true;
+		}
+
+		if (strpos($url, '/') === 0)
+		{
+			$url = self::$location['root'] . $url . $tail;
+			if (self::$preview)
+			{
+				$url .= '&amp;preview=' . self::$preview;
+			}
+		}
+
+		if ($options['echo'])
+		{
+			if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+			{
+				$prefix = 'https:';
+			}
+			else
+			{
+				$prefix = 'http:';
+			}
+			$url = $prefix . '//' . $_SERVER['HTTP_HOST'] . $url;
+			echo $url;
+		}
+		else
+		{
+			$att = array();
+			foreach($attributes as $key => $val)
+			{
+				if ($val === true)
+				{
+					$att[] = $key;
+				}
+				else if (!empty($val))
+				{
+					$att[] = "$key=\"" . trim($val) . '"';
+				}
+			}
+			$att = join(' ', $att);
+			echo "<a href=\"$url\" $att>";
+		}
 	}
 
 	public static function form_link($obj, $ctx, $lightbox)
@@ -1414,7 +1643,10 @@ class Koken {
 						}
 						$obj['year'] = date('Y', $date['timestamp']);
 						$obj['month'] = date('m', $date['timestamp']);
-						// $obj['day'] = date('d', $obj['date']['timestamp']);
+						if (isset($type) && $type === 'event_timeline')
+						{
+							$obj['day'] = date('d', $obj['date']['timestamp']);
+						}
 					}
 
 					preg_match_all('/:([a-z_]+)/', $url, $matches);
@@ -1436,9 +1668,19 @@ class Koken {
 
 		$url = rtrim($url, '/');
 
-		if ($lightbox)
+		if ($lightbox && (!isset($obj['album_type']) || $obj['album_type'] !== 'set'))
 		{
 			$url = preg_replace('~/?lightbox$~', '', $url) . '/lightbox';
+		}
+
+		if (isset($token['__koken__override']))
+		{
+			unset($token['__koken__override']);
+		}
+
+		if (isset($token['__koken__override_date']))
+		{
+			unset($token['__koken__override_date']);
 		}
 
 		return $url . '/';
@@ -1577,7 +1819,11 @@ class Koken {
 				$o .= ' class="' . join(' ', $classes) . '"';
 			}
 
-			if (strpos($value['path'], 'http') === false && strpos($value['path'], 'mailto:') !== 0)
+			if (preg_match('~\.rss$~', $value['path']))
+			{
+				$o .= ' target="_blank"';
+			}
+			else if (strpos($value['path'], 'http') === false && strpos($value['path'], 'mailto:') !== 0 && !preg_match('~/lightbox/$~', $value['path']))
 			{
 				$o .= ' data-koken-internal';
 			}
@@ -1664,48 +1910,57 @@ class Koken {
 				}
 			}
 
-			$longest = max($w, $h);
-
-			$breakpoints = array(
-				'tiny' => 60,
-				'small' => 100,
-				'medium' => 480,
-				'medium_large' => 800,
-				'large' => 1024,
-				'xlarge' => 1600,
-				'huge' => 2048
-			);
-
-			$preset_base = '';
-			$last_len = false;
-			foreach($breakpoints as $name => $len)
+			if (!isset($content['cache_path']))
 			{
-				if ($longest <= $len)
+				$url = $content['url'];
+			}
+			else
+			{
+				$longest = max($w, $h);
+
+				$breakpoints = array(
+					'tiny' => 60,
+					'small' => 100,
+					'medium' => 480,
+					'medium_large' => 800,
+					'large' => 1024,
+					'xlarge' => 1600,
+					'huge' => 2048
+				);
+
+				$preset_base = '';
+				$last_len = false;
+				foreach($breakpoints as $name => $len)
 				{
-					$diff = $len - $longest;
-					if (!$last_len || ($longest - $last_len > $diff))
+					if ($longest <= $len)
 					{
-						$preset_base = $name;
+						$diff = $len - $longest;
+						if (!$last_len || ($longest - $last_len > $diff))
+						{
+							$preset_base = $name;
+						}
+						break;
 					}
-					break;
+					$preset_base = $name;
+					$last_len = $len;
 				}
-				$preset_base = $name;
-				$last_len = $len;
-			}
 
-			$attr[] = self::$site["image_{$preset_base}_quality"];
-			$attr[] = self::$site["image_{$preset_base}_sharpening"]*100;
+				$attr[] = self::$site["image_{$preset_base}_quality"];
+				$attr[] = self::$site["image_{$preset_base}_sharpening"]*100;
 
-			$url = $content['cache_path']['prefix'] . join('.', $attr);
-			if ($options['crop'])
-			{
-				$url .= '.crop';
+				$url = $content['cache_path']['prefix'] . join('.', $attr);
+				if ($options['crop'])
+				{
+					$url .= '.crop';
+				}
+				if ($options['hidpi'])
+				{
+					$url .= '.2x';
+				}
+				$url .= '.' . $content['cache_path']['extension'];
+
+				$params['data-longest-side'] = $longest;
 			}
-			if ($options['hidpi'])
-			{
-				$url .= '.2x';
-			}
-			$url .= '.' . $content['cache_path']['extension'];
 		}
 		else
 		{
@@ -1727,7 +1982,9 @@ class Koken {
 				}
 			}
 			$url = $content['url'];
+			$params['data-longest-side'] = max($content['width'], $content['height']);
 		}
+
 
 		if ((isset($params['class']) && strpos($params['class'], 'k-lazy-load') !== false) || $options['hidpi'])
 		{
@@ -1755,6 +2012,7 @@ class Koken {
 			$noscript_params = $params;
 			$noscript_params['src'] = $noscript_params['data-src'];
 			unset($noscript_params['data-src']);
+			unset($noscript_params['data-longest-side']);
 			$noscript = '<noscript><img ' . self::params_to_str($noscript_params) . ' /></noscript>';
 		}
 		else
@@ -2403,7 +2661,7 @@ class Koken {
 
 		// Don't timeshift dates where UTC param is false
 		// Assume these dates are hardwired, like captured_on
-		if (isset($token['utc']) || !$token['utc'])
+		if (isset($token['utc']) && !$token['utc'])
 		{
 			date_default_timezone_set('UTC');
 		}

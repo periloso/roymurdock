@@ -111,13 +111,20 @@
 				<!-- Publish the date it was captured -->
 				<koken:time />
 			</koken:link> /
-			{{ content.caption }}
+			{{ content.caption paragraphs="true" }}
 		</p>
 
 		<!-- Display uploaded date -->
 		<p>
 			<strong>Uploaded:</strong> <koken:time data="date_uploaded" />
 		</p>
+
+		<!-- Display duration if an imported video -->
+		<koken:content_video>
+			<p>
+				<strong>Duration:</strong> {{ content.duration }}
+			</p>
+		</koken:content_video>
 
 		<!-- Display assigned categories -->
 		<koken:categories>
@@ -204,6 +211,14 @@
 				</koken:link>
 			</p>
 		</koken:parent>
+
+		<!-- If content is imported from elsewhere (Vimeo, Instagram), show link to original page -->
+		<koken:not empty="{{ content.source.title }}">
+			<p>
+				<strong>Imported from:</strong>
+				<a href="{{ content.source.url }}" onclick="return !window.open(this.href);" title="View at {{ content.source.title }}">{{ content.source.title }}</a>
+			</p>
+		</koken:not>
 
 		<!-- Display a link to Google Maps to show where this photo was taken -->
 		<koken:geolocation>

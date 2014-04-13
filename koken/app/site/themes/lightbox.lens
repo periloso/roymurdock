@@ -5,19 +5,17 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
 
 	<koken:title />
 
 	<koken:asset file="lightbox.css" common="true" />
+	<koken:asset file="sharelite.js" common="true" />
 
-	<!-- enable HTML5 elements in IE7+8 -->
-	<!--[if IE]>
-		<koken:asset file="html5shiv.js" common="true" />
-	<![endif]-->
+	<koken:settings />
 </head>
 
-<body class="loading">
+<body id="k-lightbox" class="loading">
 
 	<div id="lbox">
 
@@ -45,89 +43,70 @@
 
 		<a href="#" title="Close lightbox" id="lbox-bttn-close" class="ibutton"><i class="icon-remove-sign"></i></a>
 
-		<a href="#" title="Enter fullscreen" id="lbox-bttn-fs" class="ibutton"><i class="icon-fullscreen"></i></a>
+		<a href="#" title="View fullscreen" id="lbox-bttn-fs" class="ibutton"><i class="icon-fullscreen"></i></a>
 
 		<a href="#" title="Exit fullscreen" id="lbox-bttn-ns" class="ibutton"><i class="icon-resize-small"></i></a>
 
 		<koken:next>
-			<a href="#" id="lbox-bttn-play" class="ibutton">
+			<a href="#" id="lbox-bttn-play" class="ibutton" title="Start slideshow">
 				<i class="icon-play icon-large"></i>
 			</a>
 		</koken:next>
 
-		<a href="#" id="lbox-bttn-pause" class="ibutton">
+		<a href="#" id="lbox-bttn-pause" class="ibutton" title="Stop slideshow">
 			<i class="icon-pause icon-large"></i>
 		</a>
 
 		<div id="lnav" class="tnav">
 			<koken:previous>
-				<koken:link lightbox="true" bind_to_key="left">
+				<koken:link lightbox="true" bind_to_key="left" title="View previous">
 					<span class="ibutton"><i class="icon-angle-left"></i></span>
 				</koken:link>
 			</koken:previous>
 		</div>
 
+		<div id="lbox_share">
+			<div class="lbox_toggle">
+				<a href="#" id="lbox-bttn-share" class="ibutton" title="Share this">
+					<i class="icon-export-alt icon-large"></i>
+				</a>
+				<div id="lbox_share_menu">
+					<ul class="social-links kshare">
+					<li><koken:if empty="profile.twitter"><a href="https://twitter.com/intent/tweet?text={{ content.title|content.filename url_encode="true" }}&url={{ content.url url_encode="true" }}" class="ibutton share-twitter" title="Share on Twitter"><koken:else><a href="https://twitter.com/intent/tweet?text={{ content.title|content.filename url_encode="true" }}&url={{ content.url url_encode="true" }}&via={{ profile.twitter }}" class="ibutton share-twitter" title="Share on Twitter"></koken:if><i class="icon-twitter"></i></a></li><li><a href="https://www.facebook.com/sharer.php?u={{ content.url url_encode="true" }}" class="ibutton share-facebook" title="Share on Facebook"><i class="icon-facebook"></i></a></li><li><a href="http://pinterest.com/pin/create/button/?url={{ content.url url_encode="true" }}&media={{ content.presets.large.url url_encode="true" }}&description={{ content.title|content.filename url_encode="true" }}" class="ibutton share-pinterest" title="Share on Pinterest"><i class="icon-pinterest"></i></a></li><li><a href="http://www.tumblr.com/share/photo?source={{ content.presets.large.url url_encode="true"  }}&caption=%3Cp%3E%3Cstrong%3E%3Ca href=&quot;{{ content.url url_encode="true" }}&quot; title=&quot;{{ content.title|content.filename url_encode="true" }}&quot;%3E{{ content.title|content.filename url_encode="true" }}%3C/a%3E%3C/strong%3E%3C/p%3E%3Cp%3E{{ content.caption url_encode="true" }}%3C/p%3E&click_thru={{ content.url url_encode="true" }}" class="ibutton share-tumblr" title="Share on Tumblr"><i class="icon-tumblr"></i></a></li><li><a href="https://plus.google.com/share?url={{ content.url url_encode="true" }}" class="ibutton share-google" title="Share on Google+"><i class="icon-gplus"></i></a></li><koken:max_download><li><koken:link class="ibutton share-dl no-share" title="Download {{ max_download.width }} x {{ max_download.height }}"><i class="icon-download-alt"></i></koken:link></li></koken:max_download>
+					</ul>
+				</div>
+			</div>
+		</div>
+
 		<div id="main">
 
-			<div id="spinner">
-				<div class="spin">
-					<div class="bar1"></div>
-					<div class="bar2"></div>
-					<div class="bar3"></div>
-					<div class="bar4"></div>
-					<div class="bar5"></div>
-					<div class="bar6"></div>
-					<div class="bar7"></div>
-					<div class="bar8"></div>
-					<div class="bar9"></div>
-					<div class="bar10"></div>
-					<div class="bar11"></div>
-					<div class="bar12"></div>
-			    </div>
-			</div>
+			<div class="spinner_pos active"><div class="spinner"></div></div>
 
 			<div id="content">
 
-			<koken:parent>
-			<script>
-				window.albumId = {{ album.id }};
-			</script>
-			</koken:parent>
+				<koken:parent>
+				<script>
+					window.albumId = {{ album.id }};
+				</script>
+				</koken:parent>
 
-			<script>
-				window.aspect = Number('{{ content.aspect_ratio }}');
-				window.contentId = {{ content.id }};
-				<koken:content_image>
-				window.videoFile = false;
-				window.presets = [
-					<koken:loop data="content.presets" separator=",">
-					{
-						url: '{{ url url_encode="true" }}',
-						hidpi_url: '{{ hidpi_url url_encode="true" }}',
-						width: {{ width }},
-						height: {{ height }}
-					}
-					</koken:loop>
-				];
-				</koken:content_image>
-				<koken:content_video>
-					window.videoFile = '{{ content.original.url }}';
-					window.presets = false;
-				</koken:content_video>
-			</script>
+				<script>
+					window.theContent = {{ content.to_json fields="aspect_ratio,id,presets,file_type,original,html" }};
+				</script>
 
-			<div class="caption" style="display:none">
-				<strong>{{ content.title }}</strong>
-				&nbsp;
-				{{ content.caption }}
-			</div>
+				<div class="caption" style="display:none">
+					<strong>{{ content.title }}</strong>
+					&nbsp;
+					{{ content.caption }}
+				</div>
+
 			</div>
 
 		</div>
 
 		<div id="rnav" class="tnav">
 			<koken:next>
-				<koken:link lightbox="true" bind_to_key="right">
+				<koken:link lightbox="true" bind_to_key="right" title="View next">
 					<span class="ibutton"><i class="icon-angle-right"></i></span>
 				</koken:link>
 			</koken:next>
@@ -141,11 +120,11 @@
 
 	</koken:load>
 
+	</div> <!-- close lbox -->
+
 	<koken:if true="pjax">
 		<script>update();</script>
 	<koken:else>
-
-	</div> <!-- close lbox -->
 
 	<koken:asset file="jquery.pjax.js" common="true" />
 	<koken:asset file="lightbox.js" common="true" />

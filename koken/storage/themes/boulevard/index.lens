@@ -40,7 +40,7 @@
 	<koken:loop>
 		<div class="cell">
 			<koken:link title="View {{ album.title }}">
-				<koken:img respond_to="height" lazy="true" />
+				<koken:img respond_to="height" lazy="true" data-lazy-hold="true" />
 			</koken:link>
 			<koken:if true="settings.show_strip_title">
 				<span class="caption">

@@ -1,6 +1,6 @@
 <?php
 
-class Album extends DataMapper {
+class Album extends Koken {
 
 	var $validation = array(
 		'internal_id' => array(
@@ -8,7 +8,10 @@ class Album extends DataMapper {
 			'rules' => array('internalize', 'required')
 		),
 		'created_on' => array(
-			'rules' => array('validate_created_on')
+			'rules' => array('validate_time')
+		),
+		'published_on' => array(
+			'rules' => array('validate_time')
 		),
 		'left_id' => array(
 			'rules' => array('into_tree', 'required')
@@ -93,16 +96,6 @@ class Album extends DataMapper {
 		$this->db->query("INSERT INTO {$s->table}(id) VALUES ('album.$slug')");
 
 		$this->slug = $slug;
-	}
-
-	function _validate_created_on()
-	{
-		$val = $this->created_on;
-		if (is_numeric($val))
-		{
-			return strlen($val) <= 10;
-		}
-		return false;
 	}
 
 	function update_set_counts()
@@ -811,7 +804,7 @@ class Album extends DataMapper {
 			{
 				$compare = '';
 			}
-			$this->where('YEAR(FROM_UNIXTIME(' . $date_col . $shift . '))' . $compare, $options['year']);
+			$this->where('YEAR(FROM_UNIXTIME(' . $this->table . '.' . $date_col . $shift . '))' . $compare, $options['year']);
 		}
 		if ($options['month'] || $options['month_not'])
 		{
@@ -824,7 +817,7 @@ class Album extends DataMapper {
 			{
 				$compare = '';
 			}
-			$this->where('MONTH(FROM_UNIXTIME(' . $date_col . $shift . '))' . $compare, $options['month']);
+			$this->where('MONTH(FROM_UNIXTIME(' . $this->table . '.' . $date_col . $shift . '))' . $compare, $options['month']);
 		}
 		if ($options['day'] || $options['day_not'])
 		{
@@ -837,7 +830,7 @@ class Album extends DataMapper {
 			{
 				$compare = '';
 			}
-			$this->where('DAY(FROM_UNIXTIME(' . $date_col . $shift . '))' . $compare, $options['day']);
+			$this->where('DAY(FROM_UNIXTIME(' . $this->table . '.' . $date_col . $shift . '))' . $compare, $options['day']);
 
 			if ($options['reduce'])
 			{
@@ -845,9 +838,9 @@ class Album extends DataMapper {
 				$e->select('id')
 					->where('page_type', 0)
 					->where('published', 1)
-					->where('YEAR(FROM_UNIXTIME(published_on' . $shift . '))', $options['year'])
-					->where('MONTH(FROM_UNIXTIME(published_on' . $shift . '))', $options['month'])
-					->where('DAY(FROM_UNIXTIME(published_on' . $shift . '))', $options['day'])
+					->where('YEAR(FROM_UNIXTIME(' . $this->table . '.published_on' . $shift . '))', $options['year'])
+					->where('MONTH(FROM_UNIXTIME(' . $this->table . '.published_on' . $shift . '))', $options['month'])
+					->where('DAY(FROM_UNIXTIME(' . $this->table . '.published_on' . $shift . '))', $options['day'])
 					->include_related('album', 'id')
 					->get_iterated();
 

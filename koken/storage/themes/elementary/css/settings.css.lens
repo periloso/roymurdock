@@ -28,6 +28,15 @@ img {
 	vertical-align: bottom;
 }
 
+.logo {
+
+}
+
+img.custom_logo {
+	max-width:100%;
+	height:auto;
+}
+
 .hide { display: none; }
 .clear { clear: both; }
 .fright { float:right; }
@@ -1037,6 +1046,49 @@ ul.k-mosaic.edge > li {
 	position:relative;
 }
 
+/* ----- SOCIAL ----- */
+
+.social {
+	display:inline-block;
+	float:right;
+}
+
+.social span {
+	display:inline-block;
+	line-height:0;
+	font-size:0;
+}
+
+.social span.fb {
+	margin-right:calc([$social_spacing]px - 1px);
+}
+
+.social span.tw {
+	width:75px;
+	margin-right:[$social_spacing]px;
+}
+
+.social iframe,.social>span {
+	vertical-align: middle !important;
+}
+
+.social span.gplus iframe body {
+	font-family: 'Helvetica Neue',Arial,sans-serif !important;
+}
+
+.social-links {
+	display:inline-block;
+	list-style:none;
+}
+
+.social-links li {
+	display:inline-block;
+}
+
+.social-links li:after {
+	content:"\00a0\00a0";
+}
+
 /* K CLASSES
 ----------------------------------------------- */
 
@@ -1098,15 +1150,15 @@ ul.k-mosaic.edge > li {
 	}
 
 	img.custom_logo {
-		-moz-transform: scale($site_title_img_scale_mobile);
-		-o-transform: scale($site_title_img_scale_mobile);
-		-webkit-transform: scale($site_title_img_scale_mobile);
-		transform: scale($site_title_img_scale_mobile);
-	    -moz-transform-origin: 0 100%;
-		-o-transform-origin: 0 100%;
-		-webkit-transform-origin: 0 100%;
-		transform-origin: 0 100%;
-	    -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=[$site_title_img_scale_mobile], M12=0, M21=0, M22=[$site_title_img_scale_mobile], SizingMethod='auto expand')";
+		/*-moz-transform: scale($site_title_img_scale_mobile);*/
+		/*-o-transform: scale($site_title_img_scale_mobile);*/
+		/*-webkit-transform: scale($site_title_img_scale_mobile);*/
+		/*transform: scale($site_title_img_scale_mobile);*/
+	    /*-moz-transform-origin: 0 100%;*/
+		/*-o-transform-origin: 0 100%;*/
+		/*-webkit-transform-origin: 0 100%;*/
+		/*transform-origin: 0 100%;*/
+	    /*-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=[$site_title_img_scale_mobile], M12=0, M21=0, M22=[$site_title_img_scale_mobile], SizingMethod='auto expand')";*/
 	}
 
 	ol.thumbs li {
@@ -1145,6 +1197,11 @@ ul.k-mosaic.edge > li {
 	/* not enough room */
 	header.content span.entry-type {
 		display:none;
+	}
+
+	.social {
+		float:none;
+		margin:0 0 24px 0;
 	}
 
 	/*body::before{content: "MOBILE PORTRAIT";font-weight: bold;display: block;text-align: center;background: rgba(255,255,0, 0.9);position: fixed;top: 0;left: 0;right: 0;z-index: 99;}*/

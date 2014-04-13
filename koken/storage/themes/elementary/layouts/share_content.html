@@ -15,7 +15,7 @@
     		<a href="http://pinterest.com/pin/create/button/?url={{ content.url url_encode="true" }}&media={{ content.presets.large.url url_encode="true" }}&description={{ content.title|content.filename url_encode="true" }}" class="share-pinterest" title="Share {{ content.title|content.filename url_encode="true" }} on Pinterest"><i class="kicon-pinterest"></i></a>
     	</li>
     	<li>
-    		<a href="http://www.tumblr.com/share/photo?source={{ content.presets.large.url url_encode="true"  }}&caption=%3Cp%3E%3Cstrong%3E%3Ca href=&quot;{{ content.url url_encode="true" }}&quot; title=&quot;{{ content.title|content.filename }}&quot;%3E{{ content.title|content.filename }}%3C/a%3E%3C/strong%3E%3C/p%3E%3Cp%3E{{ content.caption }}%3C/p%3E&click_thru={{ content.url url_encode="true" }}" class="share-tumblr" title="Share {{ content.title|content.filename url_encode="true" }} on Tumblr"><i class="kicon-tumblr"></i></a>
+    		<a href="http://www.tumblr.com/share/photo?source={{ content.presets.large.url url_encode="true"  }}&caption=%3Cp%3E%3Cstrong%3E%3Ca href=&quot;{{ content.url url_encode="true" }}&quot; title=&quot;{{ content.title|content.filename }}&quot;%3E{{ content.title|content.filename }}%3C/a%3E%3C/strong%3E%3C/p%3E%3Cp%3E{{ content.caption url_encode="true" }}%3C/p%3E&click_thru={{ content.url url_encode="true" }}" class="share-tumblr" title="Share {{ content.title|content.filename url_encode="true" }} on Tumblr"><i class="kicon-tumblr"></i></a>
     	</li>
     	<li>
     		<a target="_blank" href="https://plus.google.com/share?url={{ content.url url_encode="true" }}" class="share-google" title="Share {{ content.title|content.filename url_encode="true" }} on Google+"><i class="kicon-gplus"></i></a>

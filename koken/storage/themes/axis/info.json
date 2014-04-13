@@ -1,14 +1,14 @@
 {
 	"name": "Axis",
-	"version": "1.3.10",
-	"description": "Simple, elegant theme that displays content centered on a horizontal axis. Front page displays a slideshow of featured content, while album pages can be customized to display a slideshow or a thumbnail grid of their contents. Great theme for those looking to display photography in a gallery like setting. Theme preview photo by Chris Lim.",
+	"version": "1.4.2",
+	"description": "Axis is a simple, elegant theme inspired by the presentation of fine art photography in galleries and photo books. Features loads of whitespace and minimal typography to help focus a viewer's complete attention on each and every image. Axis is the perfect theme for photographers who believe less is more when it comes to presenting their photography online.",
 	"demo": "http://demo.koken.me/#axis",
-	"documentation": "http://help.koken.me/customer/portal/articles/1227384-axis-documentation",
+	"documentation": "https://store.koken.me/themes/axis",
 	"author": {
-		"name": "Sebastian Pinehurst",
-		"link": "http://koken.me"
+		"name": "Koken",
+		"link": "https://store.koken.me/authors/koken"
 	},
-	"koken_version_required": "0.8.0-beta.1",
+	"koken_version_required": "0.12.0-beta.1",
 
 	"styles": {
 		"white": {
@@ -520,6 +520,17 @@
 						]
 					}
 				},
+				"show_lightbox_link": {
+					"label": "Show lightbox link",
+					"type": "boolean",
+					"control_first": true,
+					"values": {
+						"true": "inline",
+						"false": "none"
+					},
+					"value": "inline",
+					"scope": [ "content" ]
+				},
 				"show_content_exif": {
 					"label": "Show EXIF",
 					"type": "boolean",
@@ -536,6 +547,13 @@
 				},
 				"show_content_caption": {
 					"label": "Show caption",
+					"type": "boolean",
+					"value": true,
+					"control_first": true,
+					"scope": [ "content" ]
+				},
+				"show_content_source": {
+					"label": "Show imported items source link",
 					"type": "boolean",
 					"value": true,
 					"control_first": true,
@@ -576,27 +594,12 @@
 	                    ]
 	               	}
 				},
-				"grid_link_lightbox": {
+				"link_lbox": {
 					"label": "Link images to lightbox",
 					"type": "boolean",
 					"value": false,
-					"scope": [ "album" ],
-					"control_first": true,
-					"dependencies": {
-						"evaluate": "all",
-						"conditions": [
-							{
-								"option": "album_layout",
-	                            "equals": "grid"
-							}
-						]
-					}
-				},
-				"contents_link_lbox": {
-					"label": "Link images to lightbox",
-					"type": "boolean",
-					"value": false,
-					"scope": [ "contents", "favorites" ],
+					"scope": [ "album", "contents", "favorites" ],
+					"scoped_values": true,
 					"control_first": true
 				}
 			}

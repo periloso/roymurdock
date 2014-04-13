@@ -37,14 +37,62 @@ DirectoryIndex index.php index.html
 	RewriteBase /koken
 
 	# Pass images requests back to PHP if they do not exist
+	RewriteCond %{REQUEST_METHOD} =GET
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_URI} /koken/storage/cache/images(/(([0-9]{3}/[0-9]{3})|custom)/.*)$
 	RewriteRule . /koken/i.php?path=%1 [L]
 
-	# Redirect everything else to custom site path
+	# Catch root requests (pjax)
+	RewriteCond %{REQUEST_METHOD} =GET
+	RewriteCond %{REQUEST_URI} ^/koken/?$
+	RewriteCond %{QUERY_STRING} _pjax=
+	RewriteCond %{DOCUMENT_ROOT}/koken/storage/cache/site/koken/index/cache.phtml -f
+	RewriteRule .* /koken/storage/cache/site/koken/index/cache.phtml [L]
+
+	# Catch root requests
+	RewriteCond %{REQUEST_METHOD} =GET
+	RewriteCond %{REQUEST_URI} ^/koken/?$
+	RewriteCond %{QUERY_STRING} !_pjax=
+	RewriteCond %{DOCUMENT_ROOT}/koken/storage/cache/site/koken/index/cache.html -f
+	RewriteRule .* /koken/storage/cache/site/koken/index/cache.html [L]
+
+	# Catch site requests (pjax)
+	RewriteCond %{REQUEST_METHOD} =GET
+	RewriteCond %{QUERY_STRING} _pjax=
+	RewriteCond %{DOCUMENT_ROOT}/koken/storage/cache/site%{REQUEST_URI}cache.phtml -f
+	RewriteRule . /koken/storage/cache/site%{REQUEST_URI}cache.phtml [L]
+
+	# Catch site requests
+	RewriteCond %{REQUEST_METHOD} =GET
+	RewriteCond %{QUERY_STRING} !_pjax=
+	RewriteCond %{HTTP_COOKIE} !share_to_tumblr=
+	RewriteCond %{DOCUMENT_ROOT}/koken/storage/cache/site%{REQUEST_URI}cache.html -f
+	RewriteRule . /koken/storage/cache/site%{REQUEST_URI}cache.html [L]
+
+	# CSS / RSS caching
+	RewriteCond %{REQUEST_METHOD} =GET
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{DOCUMENT_ROOT}/koken/storage/cache/site%{REQUEST_URI} -f
+	RewriteRule . /koken/storage/cache/site%{REQUEST_URI} [L]
+
+	# Rewrite any old URLs that still use index.php?/this/that syntax
+	RewriteCond %{QUERY_STRING} ^/(.*)
+	RewriteRule index.php %1? [R,L]
+
+	# Rewrite any old URLs that still use index.php/this/that syntax
+	RewriteRule index.php/(.*)$ $1 [R,L]
+
+	# Catch root requests
+	RewriteRule ^$ /koken/app/site/site.php?url=/ [L,QSA]
+
+	# Do not enable path rewriting for files that exist
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule (.*)?$ /$1 [R=301,L]
+	RewriteCond	%{REQUEST_FILENAME} !favicon.ico
+
+	# For requests that are not actual files
+	# rewrite to index.php?/PATH
+	RewriteRule ^(.*)$ /koken/app/site/site.php?url=/$1 [L,QSA]
 </IfModule>
 
 ## This ruleset ensures core Koken JS and CSS are cached
@@ -54,7 +102,18 @@ DirectoryIndex index.php index.html
 	ExpiresActive On
 	# Set default to 0 so .php/API requests are not cached
 	ExpiresDefault A0
+
+	# Do not cache MP4s, as Chrome and others tend to fail on first playback
+	<FilesMatch "\.mp4$">
+		<IfModule mod_headers.c>
+			ExpiresActive Off
+			Header set Cache-Control "private, no-cache, no-store, proxy-revalidate, no-transform"
+			Header set Pragma "no-cache"
+		</IfModule>
+	</FilesMatch>
+
 	<FilesMatch "console_.*\.(js|css)$">
+		ExpiresByType text/javascript "access plus 1 year"
 		ExpiresByType application/javascript "access plus 1 year"
 		ExpiresByType application/x-javascript "access plus 1 year"
 		ExpiresByType text/css "access plus 1 year"

@@ -1,14 +1,14 @@
 {
   "name": "Boulevard",
-  "version": "1.3.9",
-  "description": "A horizontal scroll theme designed for browsing albums and sets. Displays featured albums on its home page. Photos in preview image by Mike Monaghan.",
+  "version": "1.4.1",
+  "description": "Boulevard flips the traditional vertical web site scroll on its side for a horizontal layout that displays images back-to-back like a filmstrip. Images incrementally load into view as you scroll or swipe across the page. Especially good theme for viewing portrait and landscape images together.",
   "demo": "http://demo.koken.me/#boulevard",
-  "documentation": "http://help.koken.me/customer/portal/articles/1227385-boulevard-documentation",
+  "documentation": "https://store.koken.me/themes/boulevard",
   "author": {
-    "name": "Sebastian Pinehurst",
-    "link": "http://koken.me"
+    "name": "Koken",
+    "link": "https://store.koken.me/authors/koken"
   },
-  "koken_version_required": "0.8.0-beta.1",
+  "koken_version_required": "0.12.5-beta.1",
 
   "navigation_groups": {
     "essay_aside": {

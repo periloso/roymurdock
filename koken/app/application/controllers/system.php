@@ -173,7 +173,7 @@ class System extends Koken_Controller {
 		$t->select_max('modified_on')->get();
 
 		$webhost = new WebhostWhois(array(
-			'useDns' => !in_array($_SERVER['SERVER_ADDR'], array('127.0.0.1', '::1'))
+			'useDns' => isset($_SERVER['SERVER_ADDR']) && !in_array($_SERVER['SERVER_ADDR'], array('127.0.0.1', '::1'))
 		));
 
 		if (!defined('MAX_PARALLEL_REQUESTS'))
@@ -200,7 +200,6 @@ class System extends Koken_Controller {
 			'operating_system' => PHP_OS,
 			'memory_limit' => ini_get('memory_limit'),
 			'auto_updates' => AUTO_UPDATE,
-			'beta_builds' => ALLOW_BETA_BUILDS,
 			'php_version' => PHP_VERSION,
 			'exif_support' => is_really_callable('exif_read_data'),
 			'iptc_support' => is_really_callable('iptcparse'),
@@ -213,6 +212,7 @@ class System extends Koken_Controller {
 			'mysql_version' => $this->db->call_function('get_server_info', $this->db->conn_id),
 			'max_parallel_requests' => $parallel,
 			'webhost' => $webhost->key,
+			'store' => KOKEN_STORE_URL,
 		);
 
 		$this->set_response_data($data);

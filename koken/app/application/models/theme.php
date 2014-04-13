@@ -12,10 +12,8 @@ class Theme {
 	{
 		$this->load->helper('file');
 		$dir = get_dir_file_info(FCPATH . 'storage' . DIRECTORY_SEPARATOR . 'themes');
-
-		uksort($dir, 'strnatcmp');
-
-		$base = '//' . $_SERVER['HTTP_HOST'] . preg_replace('/api\.php(.*)?$/', '', $_SERVER['SCRIPT_NAME']) . 'storage/themes/';
+		$base_host = '//' . $_SERVER['HTTP_HOST'] . preg_replace('/api\.php(.*)?$/', '', $_SERVER['SCRIPT_NAME']);
+		$base =  $base_host . 'storage/themes/';
 		$final = array();
 
 		foreach($dir as $key => $val)
@@ -40,6 +38,7 @@ class Theme {
 					{
 						$preview = str_replace('storage/themes', 'app/site/themes', $base) . '/preview.jpg';
 					}
+					list($w, $h) = getimagesize(FCPATH . str_replace($base_host, '', $preview));
 					$a = array(
 						'name' => $info_array->name,
 						'version' => $info_array->version,
@@ -48,6 +47,7 @@ class Theme {
 						'documentation' => isset($info_array->documentation) ? $info_array->documentation : false,
 						'path' => $key,
 						'preview' => $preview,
+						'preview_aspect' => $w/$h,
 						'author' => $info_array->author
 					);
 
@@ -70,6 +70,15 @@ class Theme {
 					}
 				}
 			}
+		}
+
+		if (!$keys)
+		{
+			function sortByName($a, $b) {
+				return $a['name'] > $b['name'];
+			}
+
+			usort($final, 'sortByName');
 		}
 
 		return $final;

@@ -5,57 +5,72 @@
 
 	<div id="lay-two-col" class="Snapshot current">
 
+		<div class="ui-sheet-bg"></div>
+
 		<!-- ko with: sheets.new_api_token -->
 			<!-- ko template: 'sheets_mu' --><!-- /ko -->
 		<!-- /ko -->
 
 		<div id="two-col-left" class="ui-col">
 
-			<ol class="lib-nav" style="margin-top:10px;">
-				<li data-bind="css: { selected: state.view() == 'console' }">
-					<a href="#/settings/console" class="item"><span class="in"><span class="icon16 label-settings">Console</span></span></a>
-				</li>
-				<li data-bind="css: { selected: state.view() == 'administrator' }">
-					<a href="#/settings/administrator" class="item"><span class="in"><span class="icon16 label-admin">Administrator</span></span></a>
-				</li>
-				<li data-bind="css: { selected: state.view() == 'uploading' }">
-					<a href="#/settings/uploading" class="item"><span class="in"><span class="icon16 label-upload">Uploading</span></span></a>
-				</li>
-				<li data-bind="css: { selected: state.view() == 'publishing' }">
-					<a href="#/settings/publishing" class="item"><span class="in"><span class="icon16 label-publishing">Site publishing</span></span></a>
-				</li>
-				<li data-bind="css: { selected: state.view() == 'photos' }">
-					<a href="#/settings/photos" class="item"><span class="in"><span class="icon16 label-photo">Image publishing</span></span></a>
-				</li>
-				<li data-bind="css: { selected: state.view() == 'applications' }">
-					<a href="#/settings/applications" class="item"><span class="in"><span class="icon16 label-application">Applications</span></span></a>
-				</li>
-				<li data-bind="css: { selected: state.view() == 'system' }">
-					<a href="#/settings/system" class="item"><span class="in"><span class="icon16 label-system">System</span></span></a>
-				</li>
-				<li data-bind="css: { selected: state.view().indexOf('plugins') === 0 }">
-					<a href="#/settings/plugins" class="item">
-						<span class="item-count hot" data-bind="visible: updateable_plugins().length, text: updateable_plugins().length"></span>
-						<span class="in"><span class="icon16 label-plugins">Plugins</span>
-					</a>
-				</li>
-				<!-- <li data-bind="css: { selected: state.view() == 'cache' }">
-					<a href="#/settings/cache" class="item"><span class="in"><span class="icon16 label-cache">Cache</span></span></a>
-				</li> -->
-				<!-- <li data-bind="css: { selected: state.view() == 'advanced' }">
-					<a href="#/settings/advanced" class="item"><span class="in"><span class="icon16 label-advanced">Advanced</span></span></a>
-				</li> -->
-			</ol>
+			<div class="col-top">
+				<div class="hoffx">
+					<h5>Settings</h5>
+				</div>
+			</div>
+
+			<div id="content_subnav">
+
+				<ol class="lib-nav" style="padding-top:12px;">
+					<li data-bind="css: { selected: state.view() == 'console' }">
+						<a href="#/settings/console" class="item"><span class="in"><span class="icon16 label-settings">Console</span></span></a>
+					</li>
+					<li data-bind="css: { selected: state.view() == 'administrator' }">
+						<a href="#/settings/administrator" class="item"><span class="in"><span class="icon16 label-admin">Administrator</span></span></a>
+					</li>
+					<li data-bind="css: { selected: state.view() == 'importing' }">
+						<a href="#/settings/importing" class="item"><span class="in"><span class="icon16 label-upload">Importing</span></span></a>
+					</li>
+					<li data-bind="css: { selected: state.view() == 'publishing' }">
+						<a href="#/settings/publishing" class="item"><span class="in"><span class="icon16 label-publishing">Site publishing</span></span></a>
+					</li>
+					<li data-bind="css: { selected: state.view() == 'photos' }">
+						<a href="#/settings/photos" class="item"><span class="in"><span class="icon16 label-photo">Image publishing</span></span></a>
+					</li>
+					<li data-bind="css: { selected: state.view() == 'applications' }">
+						<a href="#/settings/applications" class="item"><span class="in"><span class="icon16 label-application">Applications</span></span></a>
+					</li>
+					<li data-bind="css: { selected: state.view() == 'system' }">
+						<a href="#/settings/system" class="item"><span class="in"><span class="icon16 label-settings">System</span></span></a>
+					</li>
+					<li data-bind="css: { selected: state.view().indexOf('plugins') === 0 }">
+						<a href="#/settings/plugins" class="item"><span class="in"><span class="icon16 label-plugins">Plugins</span></a>
+					</li>
+					<!-- <li data-bind="css: { selected: state.view() == 'cache' }">
+						<a href="#/settings/cache" class="item"><span class="in"><span class="icon16 label-cache">Cache</span></span></a>
+					</li> -->
+					<!-- <li data-bind="css: { selected: state.view() == 'advanced' }">
+						<a href="#/settings/advanced" class="item"><span class="in"><span class="icon16 label-advanced">Advanced</span></span></a>
+					</li> -->
+				</ol>
+
+			</div>
 
 		</div>
 
-		<!--
-			MAIN AREA ON RIGHT
-		-->
+		<div id="two-col-right">
 
-		<div id="two-col-right" data-bind="scrollbar: true">
+			<div class="col-top">
+				<div class="hoffx">
+					<h5 data-bind="text: state.view_clean()"></h5>
+				</div>
+			</div>
+
+			<div id="content_settings" data-bind="scrollbar: true">
 
 			<!-- ko template: { name: state.view() + '_view', afterRender: function() { $data.classes.form_validation.settings.valid('two-col-right'); } } --><!-- /ko -->
+
+			</div>
 
 		</div>
 
@@ -228,7 +243,11 @@
 
 		</div>
 
-		<p>Administrator site profile</p>
+		<div class="row subhead">
+
+			<p>Administrator site profile</p>
+
+		</div>
 
 		<div class="row">
 
@@ -354,18 +373,18 @@
 </script>
 <!-- @END Console Template -->
 
-<!-- @BEGIN Uploading Template -->
-<script id="uploading_view" type="text/html">
-<div id="Uploading" class="wrap">
+<!-- @BEGIN Importing Template -->
+<script id="importing_view" type="text/html">
+<div id="Importing" class="wrap">
 
 	<div class="head">
-		<h1>Uploading</h1>
+		<h1>Importing</h1>
 	</div>
 
 	<div class="settings-layout">
 
 		<p>
-			Default settings for all Library uploads. Edited settings will be used for your next upload session.
+			Default settings for all Library imports. Edited settings will be used for the next content you import.
 		</p>
 
 		<div class="row">
@@ -377,7 +396,7 @@
 				<div class="help-toggle">
 					<a class="toggle fright" title="More information about this setting" data-event="help">More info</a>
 					<div>
-						The default license assigned to all new uploads. You may go with the standard copyright or offer a more liberal <a href="http://www.creativecommons.org/licenses/" title="Learn more" onclick="window.open(this.href); return false;">Creative Commons</a> license to encourage re-use and sharing. You may override this setting on an individual basis in the Library.
+						Default license assigned to all newly imported items. You may apply a standard copyright or a more liberal <a href="http://www.creativecommons.org/licenses/" title="Learn more" onclick="window.open(this.href); return false;">Creative Commons</a> license to encourage re-use and sharing. You may override this setting on an individual basis in the Library.
 					</div>
 				</div>
 				<div class="mid-wrap">
@@ -418,7 +437,7 @@
 								<input id="l_y2" value="y" type="radio" name="lic2" data-bind="checked: settings.uploading_default_license().substr(0,1)" /> <label for="l_y2">Yes</label>
 							</li>
 							<li>
-								<input id="l_n2" value="n" type="radio" name="lic2" data-bind="attr: { checked: settings.uploading_default_license().substr(0,1) === 'n' || settings.uploading_default_license() == 'all' }" /> <label for="l_n2">No</label>
+								<input id="l_n2" value="n" type="radio" name="lic2" checked /> <label for="l_n2">No</label>
 							</li>
 							<li><em>Allow modifications?</em></li>
 							<li>
@@ -446,7 +465,7 @@
 					<a class="toggle fright" title="More information about this setting" data-event="help">More info</a>
 					<div>
 						<p>
-							Changes the visibility setting for all newly uploaded images and videos.
+							Changes the visibility setting for all newly imported images and videos.
 						</p>
 						<ol>
 							<li>
@@ -506,7 +525,7 @@
 
 </div>
 </script>
-<!-- @END Uploading Template -->
+<!-- @END Importing Template -->
 
 <!-- @BEGIN Application Template -->
 <script id="applications_view" type="text/html">
@@ -659,16 +678,22 @@
 		<h1 data-bind="text: 'Plugins: ' + edit_plugin().name"></h1>
 	</div>
 
-	<div class="settings-layout">
+	<div id="plugin_settings" class="settings-layout">
 
-		<p data-bind="text: edit_plugin().description"></p>
+		<p data-bind="text: edit_plugin().description_long || edit_plugin().description"></p>
 
 		<p class="plugin-error" data-bind="visible: edit_plugin_error, text: edit_plugin_error"></p>
 
+		<div id="plugin_opt_top"></div>
+
+		<!-- ko if: edit_plugin -->
 		<!-- ko foreach: edit_plugin_data -->
+		<!-- ko if: type !== 'hidden' -->
 		<div class="row">
 			<div class="left">
-				<label for="" data-bind="text: label"></label>
+				<!-- ko if: type !== 'boolean' || $data.header-->
+				<label data-bind="text: $data.header ? header : label, attr: { for: 'plugin-edit-' + key }"></label>
+				<!-- /ko -->
 			</div>
 			<div class="mid">
 				<!-- ko if: $data.info -->
@@ -677,7 +702,7 @@
 					<div data-bind="text: info"></div>
 				</div>
 				<!-- /ko -->
-				<div class="mid-wrap">
+				<div class="mid-range", data-bind="css: { rangeinput: $data.type === 'slider' }">
 					<!-- ko if: type === 'select' -->
 						<!-- ko if: $data.multi -->
 							<select data-bind="attr: { id: 'plugin-edit-' + key }" multiple>
@@ -693,13 +718,29 @@
 						<!-- /ko -->
 					<!-- /ko -->
 					<!-- ko if: type === 'boolean' -->
-					<input type="checkbox" value="true" data-bind="checked: $data.value || false, attr: { id: 'plugin-edit-' + key }" />
+					<input type="checkbox" value="true" data-bind="checked: $data.value || false, attr: { id: 'plugin-edit-' + key }" /> <label data-bind="text: label, attr: { for: 'plugin-edit-' + key }"></label>
 					<!-- /ko -->
 					<!-- ko if: type === 'string' -->
 					<input type="text" class="field full" data-bind="value: $data.value || '', attr: { placeholder: ($data.placeholder && $data.placeholder.length > 0) ? $data.placeholder : '', id: 'plugin-edit-' + key, 'data-validate': $data.validation ? $data.validation.type : null, 'data-validate-regex': $data.validation && $data.validation.rule ? $data.validation.rule : null, 'data-validate-allow-empty': $data.validation && $data.validation.allow_empty ? 'true' : null }" />
 					<!-- /ko -->
 					<!-- ko if: type === 'text' -->
 					<textarea class="field full" data-bind="value: $data.value || '', attr: { id: 'plugin-edit-' + key, 'data-validate': $data.validation ? $data.validation.type : null, 'data-validate-regex': $data.validation && $data.validation.rule ? $data.validation.rule : null, 'data-validate-allow-empty': $data.validation && $data.validation.allow_empty ? 'true' : null }"></textarea>
+					<!-- /ko -->
+					<!-- ko if: type === 'color' -->
+					<input type="ccolor" data-bind="value: $data.value || '#000', attr: { id: 'plugin-edit-' + key }" />
+					<!-- /ko -->
+					<!-- ko if: type === 'slider' -->
+					<input type="range" data-bind="attr: { min: $data.min, max: $data.max, step: $data.step ? $data.step : 1, name: $data.key, id: 'plugin-edit-' + $data.key }, value: $data.value || $data.default" /><span class="display_value slider" style="vertical-align:top" data-bind="text: $data.value || $data.default"></span><!-- ko if: $data.suffix --><span class="suffix" data-bind="text: $data.suffix, css: { slider: $data.type === 'slider' }"></span><!-- /ko -->
+					<!-- /ko -->
+					<!-- ko if: type === 'file' && $data.value.length -->
+					<div class="file_well">
+						<img data-bind="attr: { src: $root.config.paths.base + 'storage/plugins/' + $parent.edit_plugin().path + '/' + $data.value, id: 'plugin-upload-' + key + '-preview' }" />
+					</div>
+					<div style="margin-top:1em;">
+						<button class="button sm plugin-upload" data-bind="attr: { id: 'plugin-upload-' + $parent.edit_plugin().path, 'data-field': key, 'data-allowed': $data.allowed_types, 'data-basename': $data.basename, 'data-plugin': $parent.edit_plugin().path }">Upload image</button>
+					</div>
+					<input type="hidden" data-bind="value: $data.value || '', attr: { id: 'plugin-edit-' + key }" />
+
 					<!-- /ko -->
 					<!-- ko if: $data.validation -->
 					<span class="form-error-msg" data-bind="text: $data.validation.error_message || ''"></span>
@@ -708,6 +749,10 @@
 			</div>
 		</div>
 		<!-- /ko -->
+		<!-- /ko -->
+		<!-- /ko -->
+
+		<div id="plugin_opt_bot"></div>
 
 		<div class="row button-row">
 			<div class="left"></div>
@@ -732,12 +777,12 @@
 	<div class="settings-layout">
 
 		<!-- ko if: user_plugins().length -->
-		<p>The following plugins are installed. <a href="http://help.koken.me/customer/portal/topics/395519-plugins" title="Koken Plugins" onclick="return !window.open(this.href);">Download additional plugins here</a>.
-</p>
+		<p>The following plugins are installed. <a href="#/store/plugins" title="Browse plugins at the Koken Store">Download more plugins from the Koken Store</a>.
+		</p>
 		<!-- /ko -->
 
 		<!-- ko ifnot: user_plugins().length -->
-		<p>No plugins are installed. Add plugins by uploading the plugin folder to the storage/plugins directory.</p>
+		<p>No plugins installed. <a href="#/store/plugins" title="Browse plugins at the Koken Store">Download plugins from the Koken Store</a>.</p>
 		<!-- /ko -->
 
 		<!-- ko foreach: user_plugins -->
@@ -748,9 +793,7 @@
 			<div class="mid">
 				<span data-bind="text: description"></span>
 				<br>
-				Version <span data-bind="text: version"></span> by <a data-bind="text: author.name, attr: { href: author.link }"></a>
-				&nbsp;
-				<a class="button tiny c0" data-event="update_plugin" data-bind="visible: $data.koken_store_guid && $.inArray(koken_store_guid, $root.interfaces.settings.observers.updateable_plugins()) !== -1" title="Update this plugin">Update plugin</a>
+				Version <span data-bind="text: version"></span> by <a data-bind="attr: { href: author.link.indexOf('https://store.koken.me') === 0 ? '#/store' + author.link.replace('https://store.koken.me', '') : author.link }, text: author.name" target="_blank"></a>
 				<!-- ko ifnot: compatible -->
 				</br>
 				<span class="plugin-error">This plugin is not compatible with your server. The plugin returned the following error: <em data-bind="text: compatible_error"></em></span>
@@ -763,13 +806,19 @@
 			<div class="right">
 				<a class="button sm" data-bind="visible: activated && data.length, attr: { href: '#/settings/plugins/' + path }" title="Setup this plugin" style="margin-right:5px;">Setup</a>
 
-				<a href="#" class="button sm enable" data-bind="css: { c0: activated }, visible: compatible, text: activated ? 'Enabled' : 'Enable', attr: { title: activated ? 'Click to disable this plugin' : 'Click to enable this plugin' }" data-event="toggle_plugin"></a>
+				<a href="#" class="button sm enable" data-bind="css: { c0: activated }, visible: compatible, text: activated ? 'Enabled' : 'Enable', attr: { 'data-path': path, title: activated ? 'Click to disable this plugin' : 'Click to enable this plugin' }" data-event="toggle_plugin"></a>
 			</div>
 		</div>
 
 		<!-- /ko -->
 
 	</div>
+
+	<br><br>
+
+	<a class="button" href="#/store/plugins" title="Download more plugins from the Koken Store">Download plugins</a>
+
+	<br><br><br><br>
 
 </div>
 </script>
@@ -1204,7 +1253,7 @@
 					</div>
 				</div>
 				<div class="mid-wrap">
-					<input id="pub_hidpi" type="checkbox" data-bind="checked: settings.site_hidpi" /> <label for="pub_hidpi">Publish HiDPI images for high resolution screens</label>
+					<input id="pub_hidpi" type="checkbox" data-bind="checked: settings.site_hidpi" /> <label for="pub_hidpi">Publish high resolution images</label>
 				</div>
 			</div>
 		</div>

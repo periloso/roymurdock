@@ -95,6 +95,20 @@
 		</div>
 	</koken:if>
 
+	<koken:if true="{{ settings.show_content_source }}">
+
+		<koken:not empty="{{ content.source.title }}">
+
+			<section>
+
+				<a href="{{ content.source.url }}" onclick="return !window.open(this.href);" title="View at {{ content.source.title }}">View at {{ content.source.title }}</a>
+
+			</section>
+
+		</koken:not>
+
+	</koken:if>
+
 </div>
 
 <koken:if true="settings.social_bttns_show_one">

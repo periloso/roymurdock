@@ -84,7 +84,7 @@ class Draft extends DataMapper {
 
 			if (!isset($_data['timeline']))
 			{
-				$data['timeline'] = $_data['timeline'] = array(
+				$_data['timeline'] = array(
 					'singular' => 'Timeline',
 					'plural' => 'Timeline'
 				);

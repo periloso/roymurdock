@@ -19,7 +19,7 @@
 	<koken:variable name="list" value="true" />
 
 	<koken:loop>
-
+<hr>
 		<article>
 
 			<koken:include file="layouts/essay.html" />
